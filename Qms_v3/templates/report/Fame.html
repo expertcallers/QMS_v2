@@ -1,0 +1,663 @@
+{% extends "common_base.html" %}
+{% block main %}
+<style>
+    #report {
+        font-size: 18px;
+    }
+</style>
+        <!-- page content -->
+        <div class="right_col" role="main" id="report">
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12" align="center">
+                                    <h1>Audit Report - {{form.campaign}} ({{form.campaign_type}})</h1>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-12 fields">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>Associate Name</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{form.associate_name}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>Employee ID</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{form.emp_id}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>Ticket Number</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{form.ticket_no}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>Ticket Type</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{form.ticket_type}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>Transaction Handled Date</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{form.trans_date}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>Audit Date</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{form.audit_date}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>Quality Analyst</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{form.quality_analyst}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>Team Lead</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{form.team_lead}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>Manager</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{form.manager}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>AM</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{form.am}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>Week</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{form.week}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mt-3">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Immediate fails:</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Shipping product incorrectly
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5>{{form.compliance_1}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Incorrect grammar and spelling being used/illegible responses/Does not make sense.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5>{{form.compliance_2}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Blatantly incorrect or made up information provided to the customer
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5>{{form.compliance_3}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                   Sending internal notes as Public response
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5>{{form.compliance_4}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                   Responding to any ticket outside of representatives skills/assignments
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5>{{form.compliance_5}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                   Unprofessional- tone,language or content. Uses derogatory language or curse words.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5>{{form.compliance_6}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                   Not escalating a situation/Not following proper escalation procedure/Responding to an escalated ticket
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5>{{form.compliance_7}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                   Responding to Spam
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5>{{form.compliance_8}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                   Double response-w/o addressing and apologizing
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5>{{form.compliance_9}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                   Responding with personal opinions outside of company policy.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5>{{form.compliance_10}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                   Sending same macro as last agent w/o edits.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5>{{form.compliance_11}}</h5>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-12 mt-3">
+                            <div class="row">
+                                <div class="col-md-12" align="center">
+                                    <h1>Customer Response</h1>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Customer Response</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent sent response as public reply:
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cr_1">{{form.cr_1}}</h5>
+                                </div>
+                            </div>
+        
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <h4>Opening</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent greeted customer by correct name.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cr_2">{{form.opening_1}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent used correct appreciation/acknowledgement statement.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cr_3">{{form.opening_2}}</h5>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <h4>Composition</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent composed email with logical flow that makes sense.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cr_4">{{form.comp_1}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent presented information with clear formatting, correct spelling and grammar.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cr_5">{{form.comp_2}}</h5>
+                                </div>
+                            </div>
+        
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <h4>Macro Usage</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent chose correct macro(s).
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cr_6">{{form.macro_1}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent tailored macro(s) to fit the customer's question or issue.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cr_7">{{form.macro_2}}</h5>
+                                </div>
+                            </div>
+        
+        
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <h4>Closing</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent asked the customer if he/she could be of additional help.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cr_8">{{form.closing_1}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent used appropriate closing &amp; signature.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cr_9">{{form.closing_2}}</h5>
+                                </div>
+                            </div>
+        
+        
+                            <div class="row mt-3">
+                                <div class="col-md-8 score" align="center">
+                                    Customer Response Section Score
+                                </div>
+                                <div class="col-md-4">
+                                    <h5 id="cr_score"></h5>
+                                </div>
+                            </div>
+                        </div>
+        
+        
+                        <div class="col-md-12 mt-3">
+                            <div class="row">
+                                <div class="col-md-12" align="center">
+                                    <h1>Issue Resolution</h1>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <h4>Customer Issue Resolution</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent correctly identified and understood customer issue and responded accordingly (Issue Identification)
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cir_1">{{form.cir_1}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent fully resolved inquiry/issue upon first contact when possible, or clearly communicated additional information/next steps for full resolution. (Issue Resolution)
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cir_2">{{form.cir_2}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent did not deflect any questions/avoid policy communications unnecessarily. (Non-avoidance)
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cir_3">{{form.cir_3}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent conveyed correct policy information to the customer.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cir_4">{{form.cir_4}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent conveyed correct product information to the customer.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cir_5">{{form.cir_5}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent established correct timeline to resolution/ CSR did not delay resolution. (Resolution Timeline)
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cir_6">{{form.cir_6}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Rep fully and accurately helped the customer within their empowerments or escalated appropriately. (Agent Empowerments)
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="cir_7">{{form.cir_7}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8 score" align="center">
+                                    Customer Issue Resolution Score
+                                </div>
+                                <div class="col-md-4">
+                                    <h5 id="cir_score"></h5>
+                                </div>
+                            </div>
+                        </div>
+        
+        
+        
+                        <div class="col-md-12 mt-3">
+                            <div class="row">
+                                <div class="col-md-12" align="center">
+                                    <h1>Soft Skills</h1>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <h4>Etiquette</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent validated the customer's concern / questions / reason for contacting us.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="ss_1">{{form.et_1}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent offered genuine acknowledgement and empathy for customer's concern.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="ss_2">{{form.et_2}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent used positive tone and impartial language in all communications
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="ss_3">{{form.et_3}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent was professional and courteous.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="ss_4">{{form.et_4}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Representative answered in a tone consistent with UMG's core values and culture.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="ss_5">{{form.et_5}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8 score" align="center">
+                                    Soft Skills Score
+                                </div>
+                                <div class="col-md-4">
+                                    <h5 id="ss_score"></h5>
+                                </div>
+                            </div>
+                        </div>
+        
+        
+                        <div class="col-md-12 mt-3">
+                            <div class="row">
+                                <div class="col-md-12" align="center">
+                                    <h1>Documentation</h1>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>Zendesk Actions/Documentation</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent accurately completed all necessary field on the ticket.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="doc_1">{{form.doc_1}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent merged tickets properly
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="doc_2">{{form.doc_2}}</h5>
+                                </div>
+                            </div>
+        
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <h4>Shopify Actions/Documentation</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent performed all needed Shopify processes and  accurately relayed all needed information and screenshots to customer.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="doc_3">{{form.doc_3}}</h5>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    <h4>ShipHero/DOMs Actions</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    Agent completed all system processes correctly.
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="doc_4">{{form.doc_4}}</h5>
+                                </div>
+                            </div>
+        
+                            <div class="row mt-3">
+                                <div class="col-md-8 score" align="center">
+                                    Documentation Score
+                                </div>
+                                <div class="col-md-4">
+                                    <h5 id="doc_score"></h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12" id="last">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Areas of improvement</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.areas_improvement}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Positives</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.positives}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Comments</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.comments}}</p>
+                                </div>
+                            </div>
+                            <div class="row mt-5 noborder">
+                                <div class="col-md-6">
+                                    <h5>Total Score</h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4 id="tot_score">{{form.overall_score}}</h4>
+                                </div>
+                                {% if form.status == False %}
+                                <div class="col-md-12 mt-3">
+                                    <form action="/agent-respond" method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <label for="emp_com_accept">Employee Comments *</label>
+                                        <input type="hidden" name="id" value="{{form.id}}">
+                                        <input type="hidden" name="type" value="{{type}}">
+                                        <textarea class="form-control" id="emp_com_accept" required rows="4" name="emp_com_accept"></textarea>
+                                        <button class="btn btn-lg btn-success mt-2"><i class="fa fa-check"></i> Accept & Sign</button>
+                                    </form>
+                                </div>
+                                <div class="col-md-12 mt-3">
+                                    <form action="/agent-respond" method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <label for="emp_com_reject">Employee Comments *</label>
+                                        <input type="hidden" name="type" value="{{type}}">
+                                        <input type="hidden" name="id" value="{{form.id}}">
+                                        <textarea class="form-control" id="emp_com_reject" required rows="4" name="emp_com_reject"></textarea>
+                                        <button class="btn btn-lg btn-danger mt-2"><i class="fa fa-close"></i> Reject & Dispute</button>
+                                    </form>
+                                </div>
+                                {% endif %}
+                                <div class="col-md-12 mt-3" align="center">
+                                    <button class="btn btn-info btn-lg" onclick="history.back()">Back</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+ {% endblock %}
+
+
+{% block scripts %}
+<script type="text/javascript">
+    var cr_1 = parseInt($('#cr_1').html());
+    var cr_2 = parseInt($('#cr_2').html());
+    var cr_3 = parseInt($('#cr_3').html());
+    var cr_4 = parseInt($('#cr_4').html());
+    var cr_5 = parseInt($('#cr_5').html());
+    var cr_6 = parseInt($('#cr_6').html());
+    var cr_7 = parseInt($('#cr_7').html());
+    var cr_8 = parseInt($('#cr_8').html());
+    var cr_9 = parseInt($('#cr_9').html());
+    $('#cr_score').html((cr_1+cr_2+cr_3+cr_4+cr_5+cr_6+cr_7+cr_8+cr_9)*4);
+    var cir_1 = parseInt($('#cir_1').html());
+    var cir_2 = parseInt($('#cir_2').html());
+    var cir_3 = parseInt($('#cir_3').html());
+    var cir_4 = parseInt($('#cir_4').html());
+    var cir_5 = parseInt($('#cir_5').html());
+    var cir_6 = parseInt($('#cir_6').html());
+    var cir_7 = parseInt($('#cir_7').html());
+    $('#cir_score').html((cir_1+cir_2+cir_3+cir_4+cir_5+cir_6+cir_7)*4);
+    var ss_1 = parseInt($('#ss_1').html());
+    var ss_2 = parseInt($('#ss_2').html());
+    var ss_3 = parseInt($('#ss_3').html());
+    var ss_4 = parseInt($('#ss_4').html());
+    var ss_5 = parseInt($('#ss_5').html());
+    $('#ss_score').html((ss_1+ss_2+ss_3+ss_4+ss_5)*4);
+    var doc_1 = parseInt($('#doc_1').html());
+    var doc_2 = parseInt($('#doc_2').html());
+    var doc_3 = parseInt($('#doc_3').html());
+    var doc_4 = parseInt($('#doc_4').html());
+    $('#doc_score').html((doc_1+doc_2+doc_3+doc_4)*4);
+</script>
+{% endblock %}

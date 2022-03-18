@@ -143,6 +143,9 @@
             padding-top: 6px;
             margin-bottom: 0px;
         }
+        .smallp {
+            font-size: 12px;
+        }
 	</style>
           {% block style %}
           {% endblock %}
@@ -182,11 +185,8 @@
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
                 <ul class="nav side-menu">
-                  {% if request.user.profile.emp_desi == "QA" %}
-                  <li><a href="/qa-dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
-                  {% else %}
-                  <li><a href="/agent-dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
-                  {% endif %}
+                  <li><a href="/dashboard-redirect"><i class="fa fa-home"></i> Dashboard</a></li>
+                  <li><a href="#" onclick="history.back();"><i class="fa fa-arrow-left"></i> Back</a></li>
                 </ul>
               </div>
 
@@ -219,6 +219,9 @@
                   <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item"  href="/"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                   </div>
+                </li>
+                <li style="margin-top:5px !important;">
+                  Your Email: {% if request.user.profile.emp_email %}{{request.user.profile.emp_email}}{% else %} None {% endif %}
                 </li>
               </ul>
             </nav>

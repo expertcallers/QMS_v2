@@ -1,0 +1,673 @@
+{% extends "common_base.html" %}
+{% block main %}
+<style>
+    #report {
+        font-size: 18px;
+    }
+</style>
+        <!-- page content -->
+        <div class="right_col" role="main" id="report">
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12" align="center">
+                                    <h1>Audit Form - {{campaign.name}} ({{campaign.type}})</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <form action="/winopoly-submit" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-3 form-group">
+                                        <label for="empname">Associate Name</label>
+                                        <input type="text" class="form-control" name="empname" id="empname" readonly value="{{profile.emp_name}}">
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="empid">Employee ID</label>
+                                        <input type="number" class="form-control" id="empid" name="empid" readonly value="{{profile.emp_id}}">
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="zone">Zone</label>
+                                        <input type="text" class="form-control" id="zone" name="zone" required>
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="concept">Concept</label>
+                                        <input type="text" class="form-control" id="concept" name="concept" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2 form-group">
+                                        <label for="customer">Customer Name</label>
+                                        <input type="text" class="form-control" id="customer" name="customer" required>
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="customercontact">Customer Contact</label>
+                                        <input type="text" class="form-control" id="customercontact" name="customercontact" required>
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="disposition">Disposition</label>
+                                        <input type="text" class="form-control" id="disposition" name="disposition" required>
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="calldate">Call Date</label>
+                                        <input type="date" class="form-control" id="calldate" name="calldate" required="">
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="duration">Call Duration</label>
+                                        <div style="width:100%; display: inline-flex;" id="duration">
+                                            <input type="number" min="0" class="form-control" placeholder="hh" name="durationh" required="">
+                                            <input type="number" min="0" max="60" class="form-control" placeholder="mm" name="durationm" required="">
+                                            <input type="number" min="0" max="60" class="form-control" placeholder="ss" name="durations" required="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2 form-group">
+                                        <label for="auditdate">Audit Date</label>
+                                        <input type="text" class="form-control" value="{{today}}" readonly>
+                                        <input type="hidden" value="{{today}}" id="auditdate" name="auditdate">
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="qa">Quality Analyst</label>
+                                        <input type="text" class="form-control" id="qa" name="qa" value="{{request.user.profile.emp_name}}" readonly>
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="tl">Team Lead</label>
+                                        <input type="text" class="form-control" id="tl" name="tl" readonly value="{{profile.emp_rm1}}">
+                                        <input type="hidden" name="tl_id" value="{{profile.emp_rm1_id}}">
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="manager">Manager</label>
+                                        <input type="text" class="form-control" id="manager" name="manager" readonly value="{{profile.emp_rm3}}">
+                                        <input type="hidden" name="manager_id" value="{{profile.emp_rm3_id}}">
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="am">AM</label>
+                                        <input type="text" class="form-control" id="am" name="am" readonly value="{{profile.emp_rm2}}">
+                                        <input type="hidden" name="am_id" value="{{profile.emp_rm2_id}}">
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="week">Week</label>
+                                        <select class="form-control" name="week" id="week" required="">
+                                            <option value="week1">Week1</option>
+                                            <option value="week2">Week2</option>
+                                            <option value="week3">Week3</option>
+                                            <option value="week4">Week4</option>
+                                            <option value="week5">Week5</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12 mt-3">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>OPENING STATEMENT</h4>
+                                    </div>
+                                </div>
+                                <div class="row mt-3 fatal">
+                                    <div class="col-md-8">
+                                        <strong>Recording Disclosure</strong>
+                                        <p class="smallp">Agent must disclose the call is recorded</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="comp_1" onclick="os(this);" value="1" id="yes4" required="">
+                                        <label for="yes4">Pass</label>
+                                        <input type="radio" name="comp_1" onclick="os(this);" value="0" id="no4">
+                                        <label for="no4">Fail</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Rep Name</strong>
+                                        <p class="smallp">Did agent introduce her/himself during opening?</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="op_2" onclick="os(this);" value="3" id="yes5" required="">
+                                        <label for="yes5">Yes</label>
+                                        <input type="radio" name="op_2" onclick="os(this);" value="0" id="no5">
+                                        <label for="no5">No</label>
+                                        <input type="radio" name="op_2" onclick="os(this);" value="0" id="na5">
+                                        <label for="na5">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Branding/Site Name</strong>
+                                        <p class="smallp">Did the agent state the site name name in the opening?</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="op_3" onclick="os(this);" value="3" id="yes6" required="">
+                                        <label for="yes6">Yes</label>
+                                        <input type="radio" name="op_3" onclick="os(this);" value="0" id="no6">
+                                        <label for="no6">No</label>
+                                        <input type="radio" name="op_3" onclick="os(this);" value="0" id="na6">
+                                        <label for="na6">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Call Reason</strong>
+                                        <p class="smallp">Did the agent state the reason for the call? (confirmation call)</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="op_4" onclick="os(this);" value="5" id="yes7" required="">
+                                        <label for="yes7">Yes</label>
+                                        <input type="radio" name="op_4" onclick="os(this);" value="0" id="no7">
+                                        <label for="no7">No</label>
+                                        <input type="radio" name="op_4" onclick="os(this);" value="0" id="na7">
+                                        <label for="na7">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Contact Information</strong>
+                                        <p class="smallp">Did the agent verify the contact info?</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="op_5" onclick="os(this);" value="3" id="yes71" required="">
+                                        <label for="yes71">Yes</label>
+                                        <input type="radio" name="op_5" onclick="os(this);" value="0" id="no71">
+                                        <label for="no71">No</label>
+                                        <input type="radio" name="op_5" onclick="os(this);" value="0" id="na71">
+                                        <label for="na71">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8 score">
+                                        Opening Statement Score
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control scoree" name="os_score" id="os_score" value="Select appropiate option for ALL to see score" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>MATCHING PROCESS</h4>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Targeted Spotlight offer</strong>
+                                        <p class="smallp">Did the agent attempt the Targeted spotlight offer?</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="mp_1" onclick="mp(this);" value="10" id="yes72" required="">
+                                        <label for="yes72">Yes</label>
+                                        <input type="radio" name="mp_1" onclick="mp(this);" value="0" id="no72">
+                                        <label for="no72">No</label>
+                                        <input type="radio" name="mp_1" onclick="mp(this);" value="0" id="na72">
+                                        <label for="na72">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Lead offer</strong>
+                                        <p class="smallp">Did the agent attempt the lead offer?</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="mp_2" onclick="mp(this);" value="5" id="yes73" required="">
+                                        <label for="yes73">Yes</label>
+                                        <input type="radio" name="mp_2" onclick="mp(this);" value="0" id="no73">
+                                        <label for="no73">No</label>
+                                        <input type="radio" name="mp_2" onclick="mp(this);" value="0" id="na73">
+                                        <label for="na73">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Verification</strong>
+                                        <p class="smallp">Did the agent ask all verification questions were applicaple?</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="mp_3" onclick="mp(this);" value="8" id="yes74" required="">
+                                        <label for="yes74">Yes</label>
+                                        <input type="radio" name="mp_3" onclick="mp(this);" value="0" id="no74">
+                                        <label for="no74">No</label>
+                                        <input type="radio" name="mp_3" onclick="mp(this);" value="0" id="na74">
+                                        <label for="na74">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8 score">
+                                        Matching Process Score
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control scoree" name="mp_score" id="mp_score" value="Select appropiate option for ALL to see score" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>CALL HANDLING PROCESS</h4>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Excessisive off topic conversations</strong>
+                                        <p class="smallp">Did the agent avoid unnessesary off topic conversations</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="cp_1" onclick="chp(this);" value="3" id="yes75" required="">
+                                        <label for="yes75">Yes</label>
+                                        <input type="radio" name="cp_1" onclick="chp(this);" value="0" id="no75">
+                                        <label for="no75">No</label>
+                                        <input type="radio" name="cp_1" onclick="chp(this);" value="0" id="na75">
+                                        <label for="na75">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Polite</strong>
+                                        <p class="smallp">Did the agent have a polite tone and use polite verbiage</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="cp_2" onclick="chp(this);" value="5" id="yes76" required="">
+                                        <label for="yes76">Yes</label>
+                                        <input type="radio" name="cp_2" onclick="chp(this);" value="0" id="no76">
+                                        <label for="no76">No</label>
+                                        <input type="radio" name="cp_2" onclick="chp(this);" value="0" id="na76">
+                                        <label for="na76">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Positive and Upbeat</strong>
+                                        <p class="smallp">Did the agent have a positive and upbeat tone</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="cp_3" onclick="chp(this);" value="5" id="yes77" required="">
+                                        <label for="yes77">Yes</label>
+                                        <input type="radio" name="cp_3" onclick="chp(this);" value="0" id="no77">
+                                        <label for="no77">No</label>
+                                        <input type="radio" name="cp_3" onclick="chp(this);" value="0" id="na77">
+                                        <label for="na77">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Ethics</strong>
+                                        <p class="smallp">Did the agent advoid misleading information about offers</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="cp_4" onclick="chp(this);" value="5" id="yes67" required="">
+                                        <label for="yes67">Yes</label>
+                                        <input type="radio" name="cp_4" onclick="chp(this);" value="0" id="no67">
+                                        <label for="no67">No</label>
+                                        <input type="radio" name="cp_4" onclick="chp(this);" value="0" id="na67">
+                                        <label for="na67">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Call control</strong>
+                                        <p class="smallp">Did the agent take control of the call</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="cp_5" onclick="chp(this);" value="5" id="yes68" required="">
+                                        <label for="yes68">Yes</label>
+                                        <input type="radio" name="cp_5" onclick="chp(this);" value="0" id="no68">
+                                        <label for="no68">No</label>
+                                        <input type="radio" name="cp_5" onclick="chp(this);" value="0" id="na68">
+                                        <label for="na68">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Program of Interest</strong>
+                                        <p class="smallp">Did the agent match the lead to a program that they stated interest in, without having to push the lead into agreeing to the program?</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="cp_6" onclick="chp(this);" value="10" id="yes69" required="">
+                                        <label for="yes69">Yes</label>
+                                        <input type="radio" name="cp_6" onclick="chp(this);" value="0" id="no69">
+                                        <label for="no69">No</label>
+                                        <input type="radio" name="cp_6" onclick="chp(this);" value="0" id="na69">
+                                        <label for="na69">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8 score">
+                                        Call Handling Process Score
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control scoree" name="chp_score" id="chp_score" value="Select appropiate option for ALL to see score" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>TCPA CLOSE/ VIOLATION</h4>
+                                    </div>
+                                </div>
+                                <div class="row mt-3 fatal">
+                                    <div class="col-md-8">
+                                        <strong>TCPA Close</strong>
+                                        <p class="smallp">Did the rep read a TCPA statement and receive an affirmative response from the lead (Yes or Yeah)?</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="comp_2" onclick="tcpa(this);" value="1" id="b1" required="">
+                                        <label for="b1">Pass</label>
+                                        <input type="radio" name="comp_2" onclick="tcpa(this);" value="0" id="b2">
+                                        <label for="b2">Fail</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3 fatal">
+                                    <div class="col-md-8">
+                                        <strong>TCPA Close</strong>
+                                        <p class="smallp">If interrupted did the agent reread the TCPA and get an affimative response</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="comp_3" onclick="tcpa(this);" value="1" id="b3" required="">
+                                        <label for="b3">Pass</label>
+                                        <input type="radio" name="comp_3" onclick="tcpa(this);" value="0" id="b4">
+                                        <label for="b4">Fail</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3 fatal">
+                                    <div class="col-md-8">
+                                        <strong>Do Not Call Request</strong>
+                                        <p class="smallp">Agent followed DNC Request Policy</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="comp_4" onclick="tcpa(this);" value="1" id="b5" required="">
+                                        <label for="b5">Pass</label>
+                                        <input type="radio" name="comp_4" onclick="tcpa(this);" value="0" id="b6">
+                                        <label for="b6">Fail</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3 fatal">
+                                    <div class="col-md-8">
+                                        <strong>California Privacy Policy</strong>
+                                        <p class="smallp">Agent followed CA Policy Privacy by reading the written statement for CA residents</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="comp_5" onclick="tcpa(this);" value="1" id="b7" required="">
+                                        <label for="b7">Pass</label>
+                                        <input type="radio" name="comp_5" onclick="tcpa(this);" value="0" id="b8">
+                                        <label for="b8">Fail</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8 score">
+                                        TCPA Close/Violation Score
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control scoree" name="tcpa_score" id="tcpa_score" value="Select appropiate option for ALL to see score" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>TRANSFER PVL</h4>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Transfering the call</strong>
+                                        <p class="smallp">Did the agent conduct the intro on the transfer correctly?</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="tp_1" onchange="tp(this);" value="10" id="yes1" required="">
+                                        <label for="yes1">Yes</label>
+                                        <input type="radio" name="tp_1" onchange="tp(this);" value="0" id="no1">
+                                        <label for="no1">No</label>
+                                        <input type="radio" name="tp_1" onchange="tp(this);" value="0" id="na1">
+                                        <label for="na1">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Transfer Only</strong>
+                                        <p class="smallp">Did the agent conduct the intro on the transfer correctly</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="tp_2" onchange="tp(this);" value="10" id="yes21" required="">
+                                        <label for="yes21">Yes</label>
+                                        <input type="radio" name="tp_2" onchange="tp(this);" value="0" id="no21">
+                                        <label for="no21">No</label>
+                                        <input type="radio" name="tp_2" onchange="tp(this);" value="0" id="na21">
+                                        <label for="na21">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        <strong>Disposition</strong>
+                                        <p class="smallp">Did the agent used the correct disposition?</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="tp_3" onchange="tp(this);" value="10" id="yes222" required="">
+                                        <label for="yes222">Yes</label>
+                                        <input type="radio" name="tp_3" onchange="tp(this);" value="0" id="no222">
+                                        <label for="no222">No</label>
+                                        <input type="radio" name="tp_3" onchange="tp(this);" value="0" id="na222">
+                                        <label for="na222">Na</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3 fatal">
+                                    <div class="col-md-8">
+                                        <strong>Auto Fail</strong>
+                                        <p class="smallp">ZERO TOLERANCE POLICY</p>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="comp_6" onchange="tp(this);" value="1" id="yes42" required="">
+                                        <label for="yes42">Pass</label>
+                                        <input type="radio" name="comp_6" onchange="tp(this);" value="0" id="no42">
+                                        <label for="no42">Fail</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8 score">
+                                        TCPA Close/Violation Score
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="text" class="form-control scoree" name="tp_score" id="tp_score" value="Select appropiate option for ALL to see score" disabled>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mt-5">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>EVALUATORS COMMENT</h4>
+                                        <textarea name="evaluator_comment" id="evaluator_comment" cols="30" rows="5" class="form-control" required=""></textarea>
+                                    </div>
+                                    <div class="col-md-12 mt-2">
+                                        <h4>COACHING COMMENTS</h4>
+                                        <textarea name="coaching_comments" id="coaching_comments" cols="30" rows="5" class="form-control" required=""></textarea>
+                                    </div>
+                                    <div class="col-md-12 mt-5" align="center">
+                                        <button type="button" class="btn btn-lg btn-info" onclick="full_score(this)" data-toggle="modal" data-target="#viewscore">View Score</button>
+                                        <button class="btn btn-lg btn-success" onclick="return confirmm();" type="submit">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" name="campaign_name" value="{{campaign.name}}">
+                            <input type="hidden" name="campaign_type" value="{{campaign.type}}">
+                            <input type="hidden" name="start_time" value="{{start_time}}">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="viewscore" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Full Score</h5><p class="mt-2"> (Please select all the options to see score)</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div align="center">
+                    <h1 id="myscore"></h1>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+ {% endblock %}
+
+
+{% block scripts %}
+    <script>
+        $mydate = $("#auditdate").val();
+        $("#auditdate").val(moment($mydate).format("YYYY-MM-DD"));
+    </script>
+<script type="text/javascript">
+    var n=0;
+    var score1;
+    var score2;
+    var score3;
+    var score4;
+    var fatal1;
+    var fatal2;
+    var fatal3;
+    var fatal4;
+    var fatal5;
+    var fatal6;
+
+    function os(e) {
+        n=n+1;
+        var os_score = document.querySelector('input[name="os_score"]');
+        var comp_1 = parseInt(document.querySelector('input[name="comp_1"]:checked').value);
+        var op_2 = parseInt(document.querySelector('input[name="op_2"]:checked').value);
+        var op_3 = parseInt(document.querySelector('input[name="op_3"]:checked').value);
+        var op_4 = parseInt(document.querySelector('input[name="op_4"]:checked').value);
+        var op_5 = parseInt(document.querySelector('input[name="op_5"]:checked').value);
+        fatal1=comp_1;
+        for (var i = 0; i <= n; i++) {
+            os_score.value = op_2+op_3+op_4+op_5;
+        }
+        if (os_score.value < 14) {
+            os_score.classList.add("less");
+            os_score.classList.remove("perfect");
+        }
+        else {
+            os_score.classList.remove("less");
+            os_score.classList.add("perfect");
+        }
+        score1 = parseInt(os_score.value);
+    }
+    function mp(e) {
+        n=n+1;
+        var mp_score = document.querySelector('input[name="mp_score"]');
+        var mp_1 = parseInt(document.querySelector('input[name="mp_1"]:checked').value);
+        var mp_2 = parseInt(document.querySelector('input[name="mp_2"]:checked').value);
+        var mp_3 = parseInt(document.querySelector('input[name="mp_3"]:checked').value);
+        for (var i = 0; i <= n; i++) {
+            mp_score.value = mp_1+mp_2+mp_3;
+        }
+        if (mp_score.value < 23) {
+            mp_score.classList.add("less");
+            mp_score.classList.remove("perfect");
+        }
+        else {
+            mp_score.classList.remove("less");
+            mp_score.classList.add("perfect");
+        }
+        score2 = parseInt(mp_score.value);
+    }
+    function chp(e) {
+        n=n+1;
+        var chp_score = document.querySelector('input[name="chp_score"]');
+        var cp_1 = parseInt(document.querySelector('input[name="cp_1"]:checked').value);
+        var cp_2 = parseInt(document.querySelector('input[name="cp_2"]:checked').value);
+        var cp_3 = parseInt(document.querySelector('input[name="cp_3"]:checked').value);
+        var cp_4 = parseInt(document.querySelector('input[name="cp_4"]:checked').value);
+        var cp_5 = parseInt(document.querySelector('input[name="cp_5"]:checked').value);
+        var cp_6 = parseInt(document.querySelector('input[name="cp_6"]:checked').value);
+        for (var i = 0; i <= n; i++) {
+            chp_score.value = cp_1+cp_2+cp_3+cp_4+cp_5+cp_6;
+        }
+        if (chp_score.value < 23) {
+            chp_score.classList.add("less");
+            chp_score.classList.remove("perfect");
+        }
+        else {
+            chp_score.classList.remove("less");
+            chp_score.classList.add("perfect");
+        }
+        score3 = parseInt(chp_score.value);
+    }
+    function tcpa(e) {
+        n=n+1;
+        var tcpa_score = document.querySelector('input[name="tcpa_score"]');
+        var comp_2 = parseInt(document.querySelector('input[name="comp_2"]:checked').value);
+        var comp_3 = parseInt(document.querySelector('input[name="comp_3"]:checked').value);
+        var comp_4 = parseInt(document.querySelector('input[name="comp_4"]:checked').value);
+        var comp_5 = parseInt(document.querySelector('input[name="comp_5"]:checked').value);
+        fatal2=comp_2;
+        fatal3=comp_3;
+        fatal4=comp_4;
+        fatal5=comp_5;
+        if ((comp_2 == 0 ) || ( comp_3 == 0 ) || ( comp_4 == 0 ) || ( comp_5 == 0)){
+            tcpa_score.value = "Fail";
+        } else {
+            tcpa_score.value = "Pass";
+        }
+        if (tcpa_score.value == "Fail") {
+            tcpa_score.classList.add("less");
+            tcpa_score.classList.remove("perfect");
+        }
+        else {
+            tcpa_score.classList.remove("less");
+            tcpa_score.classList.add("perfect");
+        }
+        score4 = 0;
+    }
+    function tp(e) {
+        n=n+1;
+        var tp_score = document.querySelector('input[name="tp_score"]');
+        var tp_1 = parseInt(document.querySelector('input[name="tp_1"]:checked').value);
+        var tp_2 = parseInt(document.querySelector('input[name="tp_2"]:checked').value);
+        var tp_3 = parseInt(document.querySelector('input[name="tp_3"]:checked').value);
+        var comp_6 = parseInt(document.querySelector('input[name="comp_6"]:checked').value);
+        fatal6=comp_6;
+        for (var i = 0; i <= n; i++) {
+            tp_score.value = tp_1+tp_2+tp_3;
+        }
+        if (tp_score.value < 30) {
+            tp_score.classList.add("less");
+            tp_score.classList.remove("perfect");
+        }
+        else {
+            tp_score.classList.remove("less");
+            tp_score.classList.add("perfect");
+        }
+        score5 = parseInt(tp_score.value);
+    }
+    function full_score(e) {
+        n=n+1;
+        var fullscore = document.getElementById('myscore');
+        if ((fatal1 == 0 ) || ( fatal2 == 0 ) || ( fatal3 == 0 ) || ( fatal4 == 0) || ( fatal5 == 0) || ( fatal6 == 0)){
+            fullscore.innerHTML = 0;
+        }
+        else {
+            for (var i = 0; i <= n; i++) {
+                fullscore.innerHTML = (((score1+score2+score3+score4+score5)/100)*100).toFixed(2)+"%";
+            }
+        }
+    }
+
+</script>
+            {% endblock %}

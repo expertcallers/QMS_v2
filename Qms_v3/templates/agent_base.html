@@ -1,6 +1,6 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- Meta, title, CSS, favicons, etc. -->
@@ -143,6 +143,9 @@
             padding-top: 6px;
             margin-bottom: 0px;
         }
+        .smallp {
+            font-size: 12px;
+        }
 	</style>
           {% block style %}
           {% endblock %}
@@ -154,10 +157,10 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title clearfix" style="border: 0; background-color: #fff;">
-              <a href="" class="site_title">
+              <div class="site_title">
                 <img src="{% static 'assets/images/ecpl-logo-new.png' %}" class="imgmd" style="width: 100%">
                 <img src="{% static 'assets/images/expertcallers-icon.png' %}" class="imgsm" style="width: 100%">
-              </a>
+              </div>
             </div>
 
             <div class="clearfix"></div>
@@ -186,6 +189,7 @@
                   <li><a href="/emp-report/all"><i class="fa fa-database"></i> All Audits</a></li>
                   <li><a href="/emp-report/open"><i class="fa fa-pencil"></i> Open Audits</a></li>
                   <li><a href="/emp-report/dispute"><i class="fa fa-times"></i> Dispute Audits</a></li>
+                  <li><a href="/settings"><i class="fa fa-gear"></i> Settings</a></li>
                 </ul>
               </div>
 
@@ -218,6 +222,9 @@
                   <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item"  href="/"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                   </div>
+                </li>
+                <li style="margin-top:5px !important;">
+                  Your Email: {% if request.user.profile.emp_email %}{{request.user.profile.emp_email}}{% else %} None {% endif %}
                 </li>
               </ul>
             </nav>

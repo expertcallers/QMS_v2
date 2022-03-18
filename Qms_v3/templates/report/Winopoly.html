@@ -82,6 +82,16 @@
                                 <div class="col-md-4">
                                     <div class="row">
                                         <div class="col-md-6">
+                                            <h4>Disposition</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{form.disposition}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
                                             <h4>Call Date</h4>
                                         </div>
                                         <div class="col-md-6">
@@ -161,43 +171,221 @@
                                 </div>
                             </div>
                         </div>
-
+                        
                         <div class="col-md-12 mt-3">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h4>Opening and Closing</h4>
+                                    <h4>OPENING STATEMENT</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3 fatal">
+                                <div class="col-md-8">
+                                    <strong>Recording Disclosure</strong>
+                                    <p class="smallp">Agent must disclose the call is recorded</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="o_1">{% if form.comp_1 == 1 %}Pass{% else %}Fail{% endif %}</h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    Used Standard Opening Protocol
+                                    <strong>Rep Name</strong>
+                                    <p class="smallp">Did agent introduce her/himself during opening?</p>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <h5 id="oc_1">{{form.oc_1}}</h5>
+                                    <h5 id="o_2">{{form.op_2}}</h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    Introduction of Product / Branding
+                                    <strong>Branding/Site Name</strong>
+                                    <p class="smallp">Did the agent state the site name name in the opening?</p>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <h5 id="oc_2">{{form.oc_2}}</h5>
+                                    <h5 id="o_3">{{form.op_3}}</h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    Call Closing as per the Protocol
+                                    <strong>Call Reason</strong>
+                                    <p class="smallp">Did the agent state the reason for the call? (confirmation call)</p>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <h5 id="oc_3">{{form.oc_3}}</h5>
+                                    <h5 id="o_4">{{form.op_4}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    <strong>Contact Information</strong>
+                                    <p class="smallp">Did the agent verify the contact info?</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="o_5">{{form.op_5}}</h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8 score">
-                                    Opening and Closing Score
+                                    Opening Statement Score
                                 </div>
                                 <div class="col-md-4">
-                                    <h4 id="oc_score"></h4>
+                                    <h4 id="o_score"></h4>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-12 mt-3">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>MATCHING PROCESS</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    <strong>Targeted Spotlight offer</strong>
+                                    <p class="smallp">Did the agent attempt the Targeted spotlight offer?</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="m_1">{{form.mp_1}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    <strong>Lead offer</strong>
+                                    <p class="smallp">Did the agent attempt the lead offer?</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="m_2">{{form.mp_2}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    <strong>Verification</strong>
+                                    <p class="smallp">Did the agent ask all verification questions were applicaple?</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="m_3">{{form.mp_3}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8 score">
+                                    Matching Process Score
+                                </div>
+                                <div class="col-md-4">
+                                    <h4 id="m_score"></h4>
+                                </div>
+                            </div>
+                        </div>
+                                            
+                        <div class="col-md-12 mt-3">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>CALL HANDLING PROCESS</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    <strong>Excessisive off topic conversations</strong>
+                                    <p class="smallp">Did the agent avoid unnessesary off topic conversations</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="c_1">{{form.cp_1}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    <strong>Polite</strong>
+                                    <p class="smallp">Did the agent have a polite tone and use polite verbiage</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="c_2">{{form.cp_2}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    <strong>Positive and Upbeat</strong>
+                                    <p class="smallp">Did the agent have a positive and upbeat tone</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="c_3">{{form.cp_3}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    <strong>Ethics</strong>
+                                    <p class="smallp">Did the agent advoid misleading information about offers</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="c_4">{{form.cp_4}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    <strong>Call control</strong>
+                                    <p class="smallp">Did the agent take control of the call</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="c_5">{{form.cp_5}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    <strong>Program of Interest</strong>
+                                    <p class="smallp">Did the agent match the lead to a program that they stated interest in, without having to push the lead into agreeing to the program?</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="c_6">{{form.cp_6}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8 score">
+                                    Call Handling Process Score
+                                </div>
+                                <div class="col-md-4">
+                                    <h4 id="c_score"></h4>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="col-md-12 mt-3">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h4>TCPA CLOSE/ VIOLATION</h4>
+                                </div>
+                            </div>
+                            <div class="row mt-3 fatal">
+                                <div class="col-md-8">
+                                    <strong>TCPA Close</strong>
+                                    <p class="smallp">Did the rep read a TCPA statement and receive an affirmative response from the lead (Yes or Yeah)?</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="t_1">{% if form.comp_2 == 1 %}Pass{% else %}Fail{% endif %}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3 fatal">
+                                <div class="col-md-8">
+                                    <strong>TCPA Close</strong>
+                                    <p class="smallp">If interrupted did the agent reread the TCPA and get an affimative response</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="t_2">{% if form.comp_3 == 1 %}Pass{% else %}Fail{% endif %}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3 fatal">
+                                <div class="col-md-8">
+                                    <strong>Do Not Call Request</strong>
+                                    <p class="smallp">Agent followed DNC Request Policy</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="t_3">{% if form.comp_4 == 1 %}Pass{% else %}Fail{% endif %}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3 fatal">
+                                <div class="col-md-8">
+                                    <strong>California Privacy Policy</strong>
+                                    <p class="smallp">Agent followed CA Policy Privacy by reading the written statement for CA residents</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="t_4">{% if form.comp_5 == 1 %}Pass{% else %}Fail{% endif %}</h5>
                                 </div>
                             </div>
                         </div>
@@ -205,147 +393,70 @@
                         <div class="col-md-12 mt-3">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h4>Softskills</h4>
+                                    <h4>TRANSFER PVL</h4>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    Followed Hold Procedure Appropriately/Dead Air
+                                    <strong>Transfering the call</strong>
+                                    <p class="smallp">Did the agent conduct the intro on the transfer correctly?</p>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <h5 id="softskill_1">{{form.softskill_1}}</h5>
+                                    <h5 id="tp_1">{{form.tp_1}}</h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    Used Empathetic Statements whenever required
+                                    <strong>Transfer Only</strong>
+                                    <p class="smallp">Did the agent conduct the intro on the transfer correctly</p>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <h5 id="softskill_2">{{form.softskill_2}}</h5>
+                                    <h5 id="tp_2">{{form.tp_2}}</h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                   Clear Grammar &amp; Communication
+                                    <strong>Disposition</strong>
+                                    <p class="smallp">Did the agent used the correct disposition?</p>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <h5 id="softskill_3">{{form.softskill_3}}</h5>
+                                    <h5 id="tp_3">{{form.tp_3}}</h5>
                                 </div>
                             </div>
-                            <div class="row mt-3">
+                            <div class="row mt-3 fatal">
                                 <div class="col-md-8">
-                                   Acknowledged Appropriately
+                                    <strong>Auto Fail</strong>
+                                    <p class="smallp">ZERO TOLERANCE POLICY</p>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <h5 id="softskill_4">{{form.softskill_4}}</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-8">
-                                   Active Listening without Interruption
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <h5 id="softskill_5">{{form.softskill_5}}</h5>
+                                    <h5 id="tp_4">{% if form.comp_3 == 1 %}Pass{% else %}Fail{% endif %}</h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8 score">
-                                    Softskills Score
+                                    TCPA Close/Violation Score
                                 </div>
                                 <div class="col-md-4">
-                                    <h4 id="softskill_score">5</h4>
+                                    <h4 id="tp_score"></h4>
                                 </div>
                             </div>
                         </div>
 
-
-                        <div class="col-md-12 mt-3">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h4>Business &amp; Compliance</h4>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-8">
-                                    Followed Policy &amp; Procedure (Script)
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <h5 id="b_1">{{form.compliance_1}}</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-8">
-                                    Probing/Tactful finding/Rebuttal
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <h5 id="b_2">{{form.compliance_2}}</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-8">
-                                    Accurate Documentation
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <h5 id="b_3">{{form.compliance_3}}</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-8">
-                                   Disposition done correctly
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <h5 id="b_4">{{form.compliance_4}}</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-8">
-                                   Inaccurate Information
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <h5 id="b_5">{{form.compliance_5}}</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-8">
-                                   Advisor Sounding Rude / Proafinity Usage
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <h5 id="b_6">{{form.compliance_6}}</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-8 score">
-                                    Business &amp; Compliance Score
-                                </div>
-                                <div class="col-md-4">
-                                    <h4 id="b_score">5</h4>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12" id="last">
+                        <div class="col-md-12 mt-3 pb-3" id="last">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4>Areas of improvement</h4>
+                                    <h4>EVALUATORS COMMENT</h4>
                                 </div>
                                 <div class="col-md-6">
-                                    <p>{{form.areas_improvement}}</p>
+                                    <p>{{form.evaluator_comment}}</p>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4>Positives</h4>
+                                    <h4>COACHING COMMENTS</h4>
                                 </div>
                                 <div class="col-md-6">
-                                    <p>{{form.positives}}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h4>Comments</h4>
-                                </div>
-                                <div class="col-md-6">
-                                    <p>{{form.comments}}</p>
+                                    <p>{{form.coaching_comment}}</p>
                                 </div>
                             </div>
                             <div class="row mt-5 noborder">
@@ -369,22 +480,24 @@
 
 {% block scripts %}
 <script type="text/javascript">
-        var oc_1 = parseInt($('#oc_1').html());
-        var oc_2 = parseInt($('#oc_2').html());
-        var oc_3 = parseInt($('#oc_3').html());
-        $('#oc_score').html(oc_1+oc_2+oc_3);
-        var softskill_1 = parseInt($('#softskill_1').html());
-        var softskill_2 = parseInt($('#softskill_2').html());
-        var softskill_3 = parseInt($('#softskill_3').html());
-        var softskill_4 = parseInt($('#softskill_4').html());
-        var softskill_5 = parseInt($('#softskill_5').html());
-        $('#softskill_score').html(softskill_1+softskill_2+softskill_3+softskill_4+softskill_5);
-        var b_1 = parseInt($('#b_1').html());
-        var b_2 = parseInt($('#b_2').html());
-        var b_3 = parseInt($('#b_3').html());
-        var b_4 = parseInt($('#b_4').html());
-        var b_5 = parseInt($('#b_5').html());
-        var b_6 = parseInt($('#b_6').html());
-        $('#b_score').html(b_1+b_2+b_3+b_4+b_5+b_6);
+    var o_1 = parseInt($('#o_1').html());
+    var o_2 = parseInt($('#o_2').html());
+    var o_3 = parseInt($('#o_3').html());
+    var o_4 = parseInt($('#o_4').html());
+    var o_5 = parseInt($('#o_5').html());
+    $('#o_score').html(o_2+o_3+o_4+o_5);
+    var m_1 = parseInt($('#m_1').html());
+    var m_2 = parseInt($('#m_2').html());
+    var m_3 = parseInt($('#m_3').html());
+    $('#m_score').html(m_1+m_2+m_3);
+    var t_1 = parseInt($('#t_1').html());
+    var t_2 = parseInt($('#t_2').html());
+    var t_3 = parseInt($('#t_3').html());
+    var t_4 = parseInt($('#t_4').html());
+    $('#t_score').html(t_1+t_2+t_3);
+    var tp_1 = parseInt($('#tp_1').html());
+    var tp_2 = parseInt($('#tp_2').html());
+    var tp_3 = parseInt($('#tp_3').html());
+    $('#tp_score').html(tp_1+tp_2+tp_3);
 </script>
 {% endblock %}

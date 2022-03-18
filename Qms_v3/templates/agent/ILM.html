@@ -15,8 +15,13 @@
                                 <div class="col-md-12" align="center">
                                     <h1>Audit Report - {{form.campaign}} ({{form.campaign_type}})</h1>
                                 </div>
+                                <div class="col-md-12" style="display: inline-flex;">
+                                    <h1>Result: </h1>
+                                    <h1 id="result"></h1>
+                                </div>
                             </div>
                         </div>
+
                         <div class="col-md-12 bb fields">
                             <div class="row">
                                 <div class="col-md-4">
@@ -72,30 +77,30 @@
                                 <div class="col-md-4">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <h4>Customer Contact</h4>
+                                            <h4>Ticket Number/ID</h4>
                                         </div>
                                         <div class="col-md-6">
-                                            <p>{{form.customer_contact}}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <h4>Call Date</h4>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>{{form.call_date}}</p>
+                                            <p>{{form.ticket_id}}</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <h4>Call Duration</h4>
+                                            <h4>Query Type</h4>
                                         </div>
                                         <div class="col-md-6">
-                                            <p>{{form.call_duration}}</p>
+                                            <p>{{form.query_type}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4>Email/Chat date</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>{{form.email_chat_date}}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -165,39 +170,47 @@
                         <div class="col-md-12 mt-3">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h4>Opening and Closing</h4>
+                                    <h4>Solution</h4>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    Used Standard Opening Protocol
+                                    Understanding and Solved Customer's Issue
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <h5 id="oc_1">{{form.oc_1}}</h5>
+                                    <h5 id="s_1">{{form.s_1}}</h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    Introduction of Product / Branding
+                                    Gave alternatives when required/applicable &amp; Displayed expert product knowledge
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <h5 id="oc_2">{{form.oc_2}}</h5>
+                                    <h5 id="s_2">{{form.s_2}}</h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    Call Closing as per the Protocol
+                                    Coupon code added/Edited Name/Values &amp; Date//Personalised when applicable
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <h5 id="oc_3">{{form.oc_3}}</h5>
+                                    <h5 id="s_3">{{form.s_3}}</h5>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                   Answered all question effectively
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <h5 id="s_4">{{form.s_4}}</h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8 score">
-                                    Opening and Closing Score
+                                    Solution Score
                                 </div>
                                 <div class="col-md-4">
-                                    <h4 id="oc_score"></h4>
+                                    <h4 id="s_score"></h4>
                                 </div>
                             </div>
                         </div>
@@ -205,123 +218,75 @@
                         <div class="col-md-12 mt-3">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <h4>Softskills</h4>
+                                    <h4>Efficiency</h4>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    Followed Hold Procedure Appropriately/Dead Air
+                                    Resolved issue in a timely manner
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <h5 id="softskill_1">{{form.softskill_1}}</h5>
+                                    <h5 id="e_1">{{form.e_1}}</h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    Used Empathetic Statements whenever required
+                                    Categorized case properly/Check other Tickets &amp;Previous communition Merged
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <h5 id="softskill_2">{{form.softskill_2}}</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-8">
-                                   Clear Grammar &amp; Communication
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <h5 id="softskill_3">{{form.softskill_3}}</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-8">
-                                   Acknowledged Appropriately
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <h5 id="softskill_4">{{form.softskill_4}}</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-8">
-                                   Active Listening without Interruption
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <h5 id="softskill_5">{{form.softskill_5}}</h5>
+                                    <h5 id="e_2">{{form.e_2}}</h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8 score">
-                                    Softskills Score
+                                    Efficiency Score
                                 </div>
                                 <div class="col-md-4">
-                                    <h4 id="softskill_score">5</h4>
+                                    <h4 id="e_score"></h4>
                                 </div>
                             </div>
                         </div>
-
 
                         <div class="col-md-12 mt-3">
-                            <div class="row">
+                            <div class="row mt-3">
                                 <div class="col-md-12">
-                                    <h4>Business &amp; Compliance</h4>
+                                    <h4>Compliance</h4>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    Followed Policy &amp; Procedure (Script)
+                                    Appropriate use of macros
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <h5 id="b_1">{{form.compliance_1}}</h5>
+                                    <h5 id="c_1">{{form.compliance_1}}</h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    Probing/Tactful finding/Rebuttal
+                                    Magento was utilized correctly
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <h5 id="b_2">{{form.compliance_2}}</h5>
+                                    <h5 id="c_2">{{form.compliance_2}}</h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    Accurate Documentation
+                                    Identified correct order type
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <h5 id="b_3">{{form.compliance_3}}</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-8">
-                                   Disposition done correctly
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <h5 id="b_4">{{form.compliance_4}}</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-8">
-                                   Inaccurate Information
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <h5 id="b_5">{{form.compliance_5}}</h5>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-8">
-                                   Advisor Sounding Rude / Proafinity Usage
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <h5 id="b_6">{{form.compliance_6}}</h5>
+                                    <h5 id="c_3">{{form.compliance_3}}</h5>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8 score">
-                                    Business &amp; Compliance Score
+                                    Compliance Score
                                 </div>
                                 <div class="col-md-4">
-                                    <h4 id="b_score">5</h4>
+                                    <h4 id="c_score"></h4>
                                 </div>
                             </div>
                         </div>
+
 
                         <div class="col-md-12" id="last">
                             <div class="row">
@@ -355,6 +320,28 @@
                                 <div class="col-md-6">
                                     <h4 id="tot_score">{{form.overall_score}}</h4>
                                 </div>
+                                {% if form.status == False %}
+                                <div class="col-md-12 mt-3">
+                                    <form action="/agent-respond" method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <label for="emp_com_accept">Employee Comments *</label>
+                                        <input type="hidden" name="id" value="{{form.id}}">
+                                        <input type="hidden" name="type" value="{{type}}">
+                                        <textarea class="form-control" id="emp_com_accept" required rows="4" name="emp_com_accept"></textarea>
+                                        <button class="btn btn-lg btn-success mt-2"><i class="fa fa-check"></i> Accept & Sign</button>
+                                    </form>
+                                </div>
+                                <div class="col-md-12 mt-3">
+                                    <form action="/agent-respond" method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <label for="emp_com_reject">Employee Comments *</label>
+                                        <input type="hidden" name="type" value="{{type}}">
+                                        <input type="hidden" name="id" value="{{form.id}}">
+                                        <textarea class="form-control" id="emp_com_reject" required rows="4" name="emp_com_reject"></textarea>
+                                        <button class="btn btn-lg btn-danger mt-2"><i class="fa fa-close"></i> Reject & Dispute</button>
+                                    </form>
+                                </div>
+                                {% endif %}
                                 <div class="col-md-12 mt-3" align="center">
                                     <button class="btn btn-info btn-lg" onclick="history.back()">Back</button>
                                 </div>
@@ -369,22 +356,25 @@
 
 {% block scripts %}
 <script type="text/javascript">
-        var oc_1 = parseInt($('#oc_1').html());
-        var oc_2 = parseInt($('#oc_2').html());
-        var oc_3 = parseInt($('#oc_3').html());
-        $('#oc_score').html(oc_1+oc_2+oc_3);
-        var softskill_1 = parseInt($('#softskill_1').html());
-        var softskill_2 = parseInt($('#softskill_2').html());
-        var softskill_3 = parseInt($('#softskill_3').html());
-        var softskill_4 = parseInt($('#softskill_4').html());
-        var softskill_5 = parseInt($('#softskill_5').html());
-        $('#softskill_score').html(softskill_1+softskill_2+softskill_3+softskill_4+softskill_5);
-        var b_1 = parseInt($('#b_1').html());
-        var b_2 = parseInt($('#b_2').html());
-        var b_3 = parseInt($('#b_3').html());
-        var b_4 = parseInt($('#b_4').html());
-        var b_5 = parseInt($('#b_5').html());
-        var b_6 = parseInt($('#b_6').html());
-        $('#b_score').html(b_1+b_2+b_3+b_4+b_5+b_6);
+        var s_1 = parseInt($('#s_1').html());
+    var s_2 = parseInt($('#s_2').html());
+    var s_3 = parseInt($('#s_3').html());
+    var s_4 = parseInt($('#s_4').html());
+    $('#s_score').html(s_1+s_2+s_3+s_4);
+    var e_1 = parseInt($('#e_1').html());
+    var e_2 = parseInt($('#e_2').html());
+    $('#e_score').html(e_1+e_2);
+    var c_1 = parseInt($('#c_1').html());
+    var c_2 = parseInt($('#c_2').html());
+    var c_3 = parseInt($('#c_3').html());
+    $('#c_score').html(c_1+c_2+c_3);
+    var total = parseInt($('#tot_score').html());
+    if (total <= 99) {
+        $('#result').html("Fail");
+        $('#result').css("color","red");
+    } else {
+        $('#result').html("Pass");
+        $('#result').css("color","green");
+    }
 </script>
 {% endblock %}

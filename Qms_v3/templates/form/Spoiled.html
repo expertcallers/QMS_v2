@@ -17,13 +17,13 @@
                         </div>
                     </div>
                 </div>
-                <form action="/abhindalco-submit" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
+                 <form action="/spoiled-submit" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-3 form-group">
                                 <label for="empname">Associate Name</label>
-                                <input type="text" class="form-control" name="empname" id="empname" readonly value="{{profile.emp_name}}">
+                                <input type="text" class="form-control" id="empname" name="empname" readonly value="{{profile.emp_name}}">
                             </div>
                             <div class="col-md-3 form-group">
                                 <label for="empid">Employee ID</label>
@@ -44,20 +44,16 @@
                                 <input type="text" class="form-control" id="customer" name="customer" required>
                             </div>
                             <div class="col-md-3 form-group">
-                                <label for="customercontact">Customer Contact</label>
-                                <input type="text" class="form-control" id="customercontact" name="customercontact" required>
-                            </div>
-                            <div class="col-md-3 form-group">
-                                <label for="calldate">Call Date</label>
+                                <label for="calldate">Email/Chat date</label>
                                 <input type="date" class="form-control" id="calldate" name="calldate" required="">
                             </div>
                             <div class="col-md-3 form-group">
-                                <label for="duration">Call Duration</label>
-                                <div style="width:100%; display: inline-flex;" id="duration">
-                                    <input type="number" min="0" class="form-control" placeholder="hh" name="durationh" required="">
-                                    <input type="number" min="0" max="60" class="form-control" placeholder="mm" name="durationm" required="">
-                                    <input type="number" min="0" max="60" class="form-control" placeholder="ss" name="durations" required="">
-                                </div>
+                                <label for="ticketnumber">Ticket Id</label>
+                                <input type="text" class="form-control" id="ticketnumber" name="ticketnumber" required="">
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="query_type">Query Type</label>
+                                <input type="text" class="form-control" id="query_type" name="query_type" required="">
                             </div>
                         </div>
                         <div class="row">
@@ -101,108 +97,59 @@
                     <div class="col-md-12 mt-3">
                         <div class="row">
                             <div class="col-md-12">
-                                <h4>Opening and Closing</h4>
+                                <h4>Solution</h4>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-8">
-                                Used Standard Opening Protocol
+                                Understanding and Solved Customer's Issue
                             </div>
                             <div class="col-md-4 form-group">
-                                <input type="radio" name="oc_1" value="5" onchange="oc(this)" id="yes4" required="">
-                                <label for="yes4">Yes</label>
-                                <input type="radio" name="oc_1" value="0" onchange="oc(this)" id="no4">
-                                <label for="no4">No</label>
-                            </div>
-                        </div>
-                        <div class="row mt-3 fatal">
-                            <div class="col-md-8">
-                                Introduction of Product / Branding - 4 USP of eternia - WiWA, Warranty, Duranium, Eternia care Mentioning Hindalco, Aditya birla group
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <input type="radio" name="oc_2" value="20" onchange="oc(this)" id="yes5" required="">
-                                <label for="yes5">Yes</label>
-                                <input type="radio" name="oc_2" value="0" onchange="oc(this)" id="no5">
-                                <label for="no5">Fatal</label>
+                                <input type="radio" name="solution_1" onclick="soltion(this);" value="10" id="solution_yes_1" required="">
+                                <label for="solution_yes_1">Yes</label>
+                                <input type="radio" name="solution_1" onclick="soltion(this);" value="0" id="solution_no_1">
+                                <label for="solution_no_1">No</label>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-8">
-                                Call Closing as per the Protocol
+                                Gave alternatives when required/applicable & Displayed expert product knowledge
                             </div>
                             <div class="col-md-4 form-group">
-                                <input type="radio" name="oc_3" value="5" onchange="oc(this)" id="yes6" required="">
-                                <label for="yes6">Yes</label>
-                                <input type="radio" name="oc_3" value="0" onchange="oc(this)" id="no6">
-                                <label for="no6">No</label>
+                                <input type="radio" name="solution_2" onclick="soltion(this);" value="10" id="solution_yes_2" required="">
+                                <label for="solution_yes_2">Yes</label>
+                                <input type="radio" name="solution_2" onclick="soltion(this);" value="0" id="solution_no_2">
+                                <label for="solution_no_2">No</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Coupon code added/Edited Name/Values & Date//Personalised when applicable
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="solution_3" onclick="soltion(this);" value="10" id="solution_yes_3" required="">
+                                <label for="solution_yes_3">Yes</label>
+                                <input type="radio" name="solution_3" onclick="soltion(this);" value="0" id="solution_no_3">
+                                <label for="solution_no_3">No</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Answered all question effectively
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="solution_4" onclick="soltion(this);" value="10" id="solution_yes_4" required="">
+                                <label for="solution_yes_4">Yes</label>
+                                <input type="radio" name="solution_4" onclick="soltion(this);" value="0" id="solution_no_4">
+                                <label for="solution_no_4">No</label>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-8 score">
-                                Opening and Closing Score
+                                Solution Score
                             </div>
                             <div class="col-md-4">
-                                <input type="text" class="form-control scoree" name="oc_score" value="Select appropiate option for ALL to see score" disabled>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12 mt-3">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h4>Softskills</h4>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-8">
-                                Used Empathetic Statements whenever required
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <input type="radio" name="softskill_1" onchange="softskill(this)" value="10" id="b1" required="">
-                                <label for="b1">Yes</label>
-                                <input type="radio" name="softskill_1" onchange="softskill(this)" value="0" id="b2">
-                                <label for="b2">No</label>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-8">
-                                Making the conversation 2 ways, giving chance to the customer to ask question
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <input type="radio" name="softskill_2" onchange="softskill(this)" value="15" id="s3" required="">
-                                <label for="s3">Yes</label>
-                                <input type="radio" name="softskill_2" onchange="softskill(this)" value="0" id="s4">
-                                <label for="s4">No</label>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-8">
-                               Active Listening without Interruption
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <input type="radio" name="softskill_3" onchange="softskill(this)" value="10" id="s5" required="">
-                                <label for="s5">Yes</label>
-                                <input type="radio" name="softskill_3" onchange="softskill(this)" value="0" id="s6">
-                                <label for="s6">No</label>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-8">
-                               Clear Grammar & Communication
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <input type="radio" name="softskill_4" onchange="softskill(this)" value="5" id="s5_5" required="">
-                                <label for="s5_5">Yes</label>
-                                <input type="radio" name="softskill_4" onchange="softskill(this)" value="0" id="s6_5">
-                                <label for="s6_5">No</label>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-8 score">
-                                Softskills Score
-                            </div>
-                            <div class="col-md-4">
-                                <input type="text" class="form-control scoree" name="softskill_score" value="Select appropiate option for ALL to see score" disabled>
+                                <input type="text" class="form-control scoree" name="solution_score" id="solution_score" value="Select appropiate option for ALL to see score" readonly>
                             </div>
                         </div>
                     </div>
@@ -211,64 +158,91 @@
                     <div class="col-md-12 mt-3">
                         <div class="row">
                             <div class="col-md-12">
-                                <h4>Business &amp; Compliance</h4>
+                                <h4>Efficiency</h4>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-8">
-                                Followed Policy & Procedure (Script)
+                                Resolved issue in a timely manner
                             </div>
                             <div class="col-md-4 form-group">
-                                <input type="radio" name="compliance_1" onchange="compliance(this)" value="5" id="yes1" required="">
-                                <label for="yes1">Yes</label>
-                                <input type="radio" name="compliance_1" onchange="compliance(this)" value="0" id="no1">
-                                <label for="no1">No</label>
+                                <input type="radio" name="efficiency_1" onclick="eff(this);" value="10" id="efficiency_yes_1" required="">
+                                <label for="efficiency_yes_1">Yes</label>
+                                <input type="radio" name="efficiency_1" onclick="eff(this);" value="0" id="efficiency_no_1">
+                                <label for="efficiency_no_1">No</label>
                             </div>
                         </div>
-                        <div class="row mt-3 fatal">
+                        <div class="row mt-3">
                             <div class="col-md-8">
-                                Accurate Documentation with full details in ZOHO
+                                Categorized case properly/Check other Tickets & Previous communition Merged
                             </div>
                             <div class="col-md-4 form-group">
-                                <input type="radio" name="compliance_2" onchange="compliance(this)" value="10" id="yes2" required="">
-                                <label for="yes2">Yes</label>
-                                <input type="radio" name="compliance_2" onchange="compliance(this)" value="0" id="no2">
-                                <label for="no2">Fatal</label>
-                            </div>
-                        </div>
-                        <div class="row mt-3 fatal">
-                            <div class="col-md-8">
-                                Inaccurate Information : Identifying the right lead to opportunity
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <input type="radio" name="compliance_3" onchange="compliance(this)" value="10" id="yes3" required="">
-                                <label for="yes3">Yes</label>
-                                <input type="radio" name="compliance_3" onchange="compliance(this)" value="0" id="no3">
-                                <label for="no3">Fatal</label>
-                            </div>
-                        </div>
-                        <div class="row mt-3 fatal">
-                            <div class="col-md-8">
-                               Advisor Sounding Rude / Proafinity Usage
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <input type="radio" name="compliance_4" onchange="compliance(this)" value="5" id="c4" required="">
-                                <label for="c4">Yes</label>
-                                <input type="radio" name="compliance_4" onchange="compliance(this)" value="0" id="c5">
-                                <label for="c5">Fatal</label>
+                                <input type="radio" name="efficiency_2" onclick="eff(this);" value="10" id="efficiency_yes_2" required="">
+                                <label for="efficiency_yes_2">Yes</label>
+                                <input type="radio" name="efficiency_2" onclick="eff(this);" value="0" id="efficiency_no_2">
+                                <label for="efficiency_no_2">No</label>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-8 score">
-                                Business &amp; Compliance Score
+                                Efficiency Score
                             </div>
                             <div class="col-md-4">
-                                <input type="text" class="form-control scoree" name="compliance_score" value="Select appropiate option for ALL to see score" disabled>
+                                <input type="text" class="form-control scoree" name="efficiency_score" id="efficiency_score" value="Select appropiate option for ALL to see score" readonly>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-md-12 mt-3">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Compliance</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3 fatal">
+                            <div class="col-md-8">
+                                Appropriate use of macros
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_1" onclick="compliance(this);" value="10" id="compliance_pass_1" required="">
+                                <label for="compliance_pass_1">Pass</label>
+                                <input type="radio" name="compliance_1" onclick="compliance(this);" value="0" id="compliance_fatal_1">
+                                <label for="compliance_fatal_1">Fatal</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3 fatal">
+                            <div class="col-md-8">
+                                Magento was utilized correctly
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_2" onclick="compliance(this);" value="15" id="compliance_pass_2" required="">
+                                <label for="compliance_pass_2">Pass</label>
+                                <input type="radio" name="compliance_2" onclick="compliance(this);" value="0" id="compliance_fatal_2">
+                                <label for="compliance_fatal_2">Fatal</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3 fatal">
+                            <div class="col-md-8">
+                                Identified correct order type
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_3" onclick="compliance(this);" value="15" id="compliance_pass_3" required="">
+                                <label for="compliance_pass_3">Pass</label>
+                                <input type="radio" name="compliance_3" onclick="compliance(this);" value="0" id="compliance_fatal_3">
+                                <label for="compliance_fatal_3">Fatal</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8 score">
+                                Compliance Score
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control scoree" name="compliance_score" id="compliance_score" value="Select appropiate option for ALL to see score" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
                         <div class="row">
                             <div class="col-md-12">
                                 <h4>Areas of improvement</h4>
@@ -283,12 +257,12 @@
                                 <textarea name="comments" id="cfeedback" cols="30" rows="5" class="form-control" required=""></textarea>
                             </div>
                             <div class="col-md-12 mt-5" align="center">
-                                <button class="btn btn-lg btn-info" onclick="full_score(this)" data-toggle="modal" data-target="#viewscore">View Score</button>
-                                <button class="btn btn-lg btn-success" onclick="confirm('Are you sure you want to continue?');" type="submit">Submit</button>
+                                <button type="button" class="btn btn-lg btn-info" onclick="full_score(this)" data-toggle="modal" data-target="#viewscore">View Score</button>
+                                <button class="btn btn-lg btn-success" onclick="return confirmm();" type="submit">Submit</button>
                             </div>
                         </div>
                     </div>
-                       <input type="hidden" name="campaign_name" value="{{campaign.name}}">
+                      <input type="hidden" name="campaign_name" value="{{campaign.name}}">
                      <input type="hidden" name="campaign_type" value="{{campaign.type}}">
                      <input type="hidden" name="start_time" value="{{start_time}}">
                 </form>
@@ -296,7 +270,7 @@
         </div>
     </div>
 </div>
-    
+
 
     <!-- Modal -->
     <div class="modal fade" id="viewscore" tabindex="-1" role="dialog" aria-hidden="true">
@@ -310,7 +284,7 @@
           </div>
           <div class="modal-body">
             <div align="center">
-                <h1 id="myscore">Please select all the options to see score</h1>
+                <h1 id="myscore"></h1>
             </div>
           </div>
           <div class="modal-footer">
@@ -319,13 +293,13 @@
         </div>
       </div>
     </div>
+
 {% endblock %}
 {% block scripts %}
   <script>
         $mydate = $("#auditdate").val();
         $("#auditdate").val(moment($mydate).format("YYYY-MM-DD"));
     </script>
-
 <script type="text/javascript">
     var n=0;
     var score1;
@@ -334,88 +308,76 @@
     var fatal1;
     var fatal2;
     var fatal3;
-    var fatal4;
 
-    $(function() {
-        $('#cfeedback').on('keypress', function(e) {
-            if (e.which == 32){
-                return false;
-            }
-        });
-    });
-    function oc(e) {
+    function soltion(e) {
         n=n+1;
-        var oc_score = document.querySelector('input[name="oc_score"]');
-        var oc_1 = parseInt(document.querySelector('input[name="oc_1"]:checked').value);
-        var oc_2 = parseInt(document.querySelector('input[name="oc_2"]:checked').value);
-        var oc_3 = parseInt(document.querySelector('input[name="oc_3"]:checked').value);
-        fatal1 = parseInt(oc_2);
+        var soltion_score = document.querySelector('input[name="solution_score"]');
+        var soltion_1 = parseInt(document.querySelector('input[name="solution_1"]:checked').value);
+        var soltion_2 = parseInt(document.querySelector('input[name="solution_2"]:checked').value);
+        var soltion_3 = parseInt(document.querySelector('input[name="solution_3"]:checked').value);
+        var soltion_4 = parseInt(document.querySelector('input[name="solution_4"]:checked').value);
         for (var i = 0; i <= n; i++) {
-            oc_score.value = oc_1+oc_2+oc_3;
+            soltion_score.value = soltion_1+soltion_2+soltion_3+soltion_4;
         }
-        if (oc_score.value < 30) {
-            oc_score.classList.add("less");
-            oc_score.classList.remove("perfect");
+        if (soltion_score.value < 40) {
+            soltion_score.classList.add("less");
+            soltion_score.classList.remove("perfect");
         }
         else {
-            oc_score.classList.remove("less");
-            oc_score.classList.add("perfect");
+            soltion_score.classList.remove("less");
+            soltion_score.classList.add("perfect");
         }
-        score1 = parseInt(oc_score.value);
+        score1 = parseInt(soltion_score.value);
     }
-    function softskill(e) {
+    function eff(e) {
         n=n+1;
-        var softskill_score = document.querySelector('input[name="softskill_score"]');
-        var softskill_1 = parseInt(document.querySelector('input[name="softskill_1"]:checked').value);
-        var softskill_2 = parseInt(document.querySelector('input[name="softskill_2"]:checked').value);
-        var softskill_3 = parseInt(document.querySelector('input[name="softskill_3"]:checked').value);
-        var softskill_4 = parseInt(document.querySelector('input[name="softskill_4"]:checked').value);
+        var eff_score = document.querySelector('input[name="efficiency_score"]');
+        var eff_1 = parseInt(document.querySelector('input[name="efficiency_1"]:checked').value);
+        var eff_2 = parseInt(document.querySelector('input[name="efficiency_2"]:checked').value);
         for (var i = 0; i <= n; i++) {
-            softskill_score.value = softskill_1+softskill_2+softskill_3+softskill_4;
+            eff_score.value = eff_1+eff_2;
         }
-        if (softskill_score.value < 40) {
-            softskill_score.classList.add("less");
-            softskill_score.classList.remove("perfect");
+        if (eff_score.value < 20) {
+            eff_score.classList.add("less");
+            eff_score.classList.remove("perfect");
         }
         else {
-            softskill_score.classList.remove("less");
-            softskill_score.classList.add("perfect");
+            eff_score.classList.remove("less");
+            eff_score.classList.add("perfect");
         }
-        score2 = parseInt(softskill_score.value);
+        score2 = parseInt(eff_score.value);
     }
     function compliance(e) {
         n=n+1;
-        var compliance_score = document.querySelector('input[name="compliance_score"]');
-        var compliance_1 = parseInt(document.querySelector('input[name="compliance_1"]:checked').value);
-        var compliance_2 = parseInt(document.querySelector('input[name="compliance_2"]:checked').value);
-        var compliance_3 = parseInt(document.querySelector('input[name="compliance_3"]:checked').value);
-        var compliance_4 = parseInt(document.querySelector('input[name="compliance_4"]:checked').value);
-        fatal2 = parseInt(compliance_2);
-        fatal3 = parseInt(compliance_3);
-        fatal4 = parseInt(compliance_4);
+        var comp_score = document.querySelector('input[name="compliance_score"]');
+        var comp_1 = parseInt(document.querySelector('input[name="compliance_1"]:checked').value);
+        var comp_2 = parseInt(document.querySelector('input[name="compliance_2"]:checked').value);
+        var comp_3 = parseInt(document.querySelector('input[name="compliance_3"]:checked').value);
+        fatal1 = comp_1;
+        fatal2 = comp_2;
+        fatal3 = comp_3;
         for (var i = 0; i <= n; i++) {
-            compliance_score.value = compliance_1+compliance_2+compliance_3+compliance_4;
-            
+            comp_score.value = comp_1+comp_2+comp_3;
         }
-        if (compliance_score.value < 30) {
-            compliance_score.classList.add("less");
-            compliance_score.classList.remove("perfect");
+        if (comp_score.value < 40) {
+            comp_score.classList.add("less");
+            comp_score.classList.remove("perfect");
         }
         else {
-            compliance_score.classList.remove("less");
-            compliance_score.classList.add("perfect");
+            comp_score.classList.remove("less");
+            comp_score.classList.add("perfect");
         }
-        score3 = parseInt(compliance_score.value);
+        score3 = parseInt(comp_score.value);
     }
     function full_score(e) {
         n=n+1;
         var fullscore = document.getElementById('myscore');
-        if ((fatal2 == 0 ) || ( fatal1 == 0 ) || ( fatal3 == 0 ) || ( fatal4 == 0)){
+        if ((fatal1 == 0 ) || ( fatal2 == 0 ) || ( fatal3 == 0 )){
             fullscore.innerHTML = 0;
         }
         else {
             for (var i = 0; i <= n; i++) {
-                fullscore.innerHTML = score1+score2+score3+"%";
+                fullscore.innerHTML = (((score1+score2+score3)/100)*100).toFixed(2)+"%";
             }
         }
     }

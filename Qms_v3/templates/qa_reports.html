@@ -1,5 +1,4 @@
-{% extends "qa_base.html" %}
-
+{% extends "common_base.html" %}
 {% block main %}
         <!-- page content -->
         <div class="right_col" role="main">
@@ -64,7 +63,6 @@
                     <tbody>
                     {% for j in audit %}
                       {% for i in j %}
-
                       <tr>
                         <td>{{i.associate_name}}</td>
                         <td>{{i.emp_id}}</td>
@@ -98,7 +96,7 @@
                           </form>
                         </td>
                       </tr>
-                    {% endfor %}
+                      {% endfor %}
                     {% endfor %}
                     </tbody>
                   </table>
@@ -108,5 +106,4 @@
           </div>
         </div>
         <!-- /page content -->
-{% csrf_token %}
 {% endblock %}

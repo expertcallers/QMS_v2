@@ -54,9 +54,9 @@
                                     <div class="col-md-3 form-group">
                                         <label for="duration">Call Duration</label>
                                         <div style="width:100%; display: inline-flex;" id="duration">
-                                            <input type="number" class="form-control" placeholder="hh" name="durationh" required="">
-                                            <input type="number" class="form-control" placeholder="mm" name="durationm" required="">
-                                            <input type="number" class="form-control" placeholder="ss" name="durations" required="">
+                                            <input type="number" min="0" class="form-control" placeholder="hh" name="durationh" required="">
+                                            <input type="number" min="0" max="60" class="form-control" placeholder="mm" name="durationm" required="">
+                                            <input type="number" min="0" max="60" class="form-control" placeholder="ss" name="durations" required="">
                                         </div>
                                     </div>
                                 </div>

@@ -185,10 +185,11 @@
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
                 <ul class="nav side-menu">
-                  <li><a href="/qa-dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
-                  <li><a href="/qa-reports/all"><i class="fa fa-database"></i> All Audits</a></li>
-                  <li><a href="/qa-reports/open"><i class="fa fa-pencil"></i> Open Audits</a></li>
-                  <li><a href="/qa-reports/dispute"><i class="fa fa-times"></i> Dispute Audits</a></li>
+                  <li><a href="/manager-dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
+                  <li><a href="/manager-reports/all"><i class="fa fa-database"></i> All Audits</a></li>
+                  <li><a href="/manager-reports/open"><i class="fa fa-pencil"></i> Open Audits</a></li>
+                  <li><a href="/manager-reports/dispute"><i class="fa fa-times"></i> Dispute Audits</a></li>
+                  <li><a href="/add-user"><i class="fa fa-user"></i>Add User</a></li>
                   <li><a href="/settings"><i class="fa fa-gear"></i> Settings</a></li>
                 </ul>
               </div>
@@ -398,6 +399,18 @@
                 ],
               dom: '<"row"<"col-md-2"l><"col-md-6"B><"col-md-4"fr>>tip',
               responsive: true
+        });
+        $('#datatable1').DataTable( {
+            responsive: true
+        });
+        $('#datatable2').DataTable( {
+            responsive: true
+        });
+        $('#datatable3').DataTable( {
+            responsive: true
+        });
+        $('#datatable4').DataTable( {
+            responsive: true
         });
     });
 

@@ -3,31 +3,31 @@
 {% block main %}
         <!-- page content -->
         <div class="right_col" role="main">
-
           <div class="page-title">
             <div class="title_left">
               {% if type == "all" %}
               <h3>All Audits</h3>
-              {% endif %}
-              {% if type == "month" %}
+              {% elif type == "month" %}
               <h3>This Month's Audits</h3>
-              {% endif %}
-              {% if type == "open" %}
+              {% elif type == "open" %}
               <h3>Open Audits</h3>
-              {% endif %}
-              {% if type == "dispute" %}
+              {% elif type == "dispute" %}
               <h3>Dispute Audits</h3>
-              {% endif %}
-              {% if type == "fatal" %}
+              {% elif type == "fatal" %}
               <h3>This Month's Fatal Audits</h3>
-              {% endif %}
-              {% if type == "range" %}
+              {% elif type == "range" %}
               <h3>Reports</h3>
+              {% elif type == "range" %}
+              <h3>Reports</h3>
+              {% elif type == "campaign-range" %}
+              <h3>Campaign Wise Audit Report</h3>
+              {% elif type == "emp-range" %}
+              <h3>Employee Wise Audit Report</h3>
+              {% else %}
+              <h3>Audit Report</h3>
               {% endif %}
             </div>
           </div>
-
-
           <div class="row">
             <div class="col-md-12">
               <div class="card">
@@ -35,7 +35,7 @@
                   <table  id="datatablex" class="table table-striped" style="width: 100%;">
                     <thead>
                       <tr>
-                        <th>Audit Date</th>
+                        <th>Employee Name</th>
                         <th>Employee Id</th>
                         <th>Audit Date</th>
                         <th>Campaign</th>
@@ -49,7 +49,7 @@
                     </thead>
                     <tfoot>
                       <tr>
-                        <th>Audit Date</th>
+                        <th>Employee Name</th>
                         <th>Employee Id</th>
                         <th>Audit Date</th>
                         <th>Campaign</th>
@@ -62,10 +62,9 @@
                       </tr>
                     </tfoot>
                     <tbody>
-                    {% for j in audit %}
-                      {% for i in j %}
+                    {% for i in audit %}
                       <tr>
-                        <td>{{i.audit_date}}</td>
+                        <td>{{i.associate_name}}</td>
                         <td>{{i.emp_id}}</td>
                         <td>{{i.audit_date}}</td>
                         <td>{{i.campaign}}</td>
@@ -89,7 +88,7 @@
                           {% endif %}
                         </td>
                         <td>
-                          <form action="/agent-report" method="POST" enctype="multipart/form-data">
+                          <form action="/report" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <input type="hidden" name="id" value="{{i.id}}">
                             <input type="hidden" name="type" value="{{i.page_type}}">
@@ -97,7 +96,6 @@
                           </form>
                         </td>
                       </tr>
-                    {% endfor %}
                     {% endfor %}
                     </tbody>
                   </table>
@@ -107,4 +105,5 @@
           </div>
         </div>
         <!-- /page content -->
+{% csrf_token %}
 {% endblock %}

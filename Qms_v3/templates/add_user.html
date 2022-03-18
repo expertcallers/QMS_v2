@@ -1,0 +1,113 @@
+{% extends 'common_base.html' %}
+{% load static %}
+{% block main %}
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <h2>Add User</h2>
+                </div>
+                <div class="card-body">
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-3 mt-2 form-group">
+                                <label for="emp_id">Emp ID</label>
+                                <input type="text" maxlength="10" class="form-control" name="emp_id" id="emp_id" required>
+                            </div>
+                            <div class="col-md-3 mt-2 form-group">
+                                <label for="emp_name">Emp Name</label>
+                                <input type="text" maxlength="10" class="form-control" name="emp_name" id="emp_name" required>
+                            </div>
+                            <div class="col-md-3 mt-2 form-group">
+                                <label for="emp_desi">Emp Designation</label>
+                                <select name="emp_desi" id="emp_desi" class="form-control select2" onchange="changeDesi(this);" required>
+                                    <option value="" selected disabled>Please Select</option>
+                                    <option value="CRO">CRO</option>
+                                    <option value="Patrolling officer">Patrolling officer</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="AM">AM</option>
+                                    <option value="Team Leader">Team Leader</option>
+                                    <option value="QA">QA</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mt-2 form-group">
+                                <label for="emp_email">Emp Email</label>
+                                <input type="email" class="form-control" name="emp_email" id="emp_email" required>
+                            </div>
+                            <div class="col-md-3 mt-2 form-group">
+                                <label for="emp_pro">Process</label>
+                                <select name="emp_pro" id="emp_pro" class="form-control select2" required>
+                                    <option value="" selected disabled>Please Select</option>
+                                    {% for i in campaigns %}
+                                    <option value="{{i.name}}">{{i.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3 mt-2 form-group">
+                                <label for="emp_tl">Team Leader</label>
+                                <select name="emp_tl" id="emp_tl" class="form-control select2" required>
+                                    <option value="" selected disabled>Please Select</option>
+                                    {% for i in profiles %}
+                                    <option value="{{i.emp_id}}">{{i.emp_name}} ({{i.emp_id}})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3 mt-2 form-group">
+                                <label for="emp_am">AM</label>
+                                <select name="emp_am" id="emp_am" class="form-control select2" required>
+                                    <option value="" selected disabled>Please Select</option>
+                                    {% for i in profiles %}
+                                    <option value="{{i.emp_id}}">{{i.emp_name}} ({{i.emp_id}})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3 mt-2 form-group">
+                                <label for="emp_man">Manager</label>
+                                <select name="emp_man" id="emp_man" class="form-control select2" required>
+                                    <option value="" selected disabled>Please Select</option>
+                                    {% for i in profiles %}
+                                    <option value="{{i.emp_id}}">{{i.emp_name}} ({{i.emp_id}})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3 mt-2 form-group">
+                                <label for="admin_id">Admin ID</label>
+                                <input type="text" class="form-control" name="admin_id" id="admin_id" required>
+                            </div>
+                            <div class="col-md-3 mt-2 form-group">
+                                <label for="admin_pass">Admin Password</label>
+                                <input type="password" class="form-control" name="admin_pass" id="admin_pass" required>
+                            </div>
+                            <div class="col-md-6 pt-2 mt-4 form-group">
+                                <button class="form-control btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+function changeDesi(e) {
+  $desi = e.value;
+  if ( $desi == "CRO" | $desi == "Patrolling officer" ) {
+    $("#emp_email").removeAttr("required");
+  } else {
+    $("#emp_email").attr("required","");
+  }
+}
+
+
+</script>
+{% endblock %}

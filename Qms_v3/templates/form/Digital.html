@@ -23,7 +23,7 @@
                         <div class="row">
                             <div class="col-md-3 form-group">
                                 <label for="empname">Associate Name</label>
-                                <input type="text" class="form-control" id="empname" readonly name="empname" readonly value="{{profile.emp_name}}">
+                                <input type="text" class="form-control" id="empname" readonly name="empname" value="{{profile.emp_name}}">
 
                             </div>
                             <div class="col-md-3 form-group">
@@ -55,9 +55,9 @@
                             <div class="col-md-3 form-group">
                                 <label for="duration">Call Duration</label>
                                 <div style="width:100%; display: inline-flex;">
-                                    <input type="number" class="form-control" min="0" placeholder="hh" name="durationh" required="">
-                                    <input type="number" class="form-control" min="0" placeholder="mm" name="durationm" required="">
-                                    <input type="number" class="form-control" min="0" placeholder="ss" name="durations" required="">
+                                    <input type="number" min="0" class="form-control" placeholder="hh" name="durationh" required="">
+                                    <input type="number" min="0" class="form-control" max="60" placeholder="mm" name="durationm" required="">
+                                    <input type="number" min="0" class="form-control" max="60" placeholder="ss" name="durations" required="">
                                 </div>
                             </div>
                         </div>

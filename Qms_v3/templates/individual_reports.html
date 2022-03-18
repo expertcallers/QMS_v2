@@ -1,0 +1,197 @@
+{% extends "common_base.html" %}
+{% block style %}
+<style>
+  .borderpadding {
+    padding: 10px;
+  }
+  .bordercard {
+    text-align: center;
+    min-height: 200px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 10px lightgrey;
+    padding: 10px;
+    vertical-align: middle;
+  }
+  .bordercard:hover{
+    background: #2A3F54;
+    color: #fff;
+  }
+  .vertical_center {
+    margin-top: auto !important;
+    margin-bottom: auto !important;
+  }
+  .bordercard h5 {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 24px;
+   }
+</style>
+
+{% endblock %}
+{% block main %}
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+
+          <div class="page-title">
+            <div class="title_left">
+              <h3>{{profile.emp_name}} ({{profile.emp_id}})</h3>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-2 borderpadding">
+                      <div class="bordercard">
+                        <div class="vertical_center">
+                          <h5>All Audits</h5>
+                          <br>
+                          <h1>{{all_total}}</h1>
+                          <a href="/agent-report/all/{{profile.emp_id}}" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                            View
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 borderpadding">
+                      <div class="bordercard">
+                        <div class="vertical_center">
+                          <h5>This Month's Audits</h5>
+                          <br>
+                          <h1>{{month_all_total}}</h1>
+                          <a href="/agent-report/month/{{profile.emp_id}}" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                            View
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 borderpadding">
+                      <div class="bordercard">
+                        <div class="vertical_center">
+                          <h5>Open Audits</h5>
+                          <br>
+                          <h1>{{open_total}}</h1>
+                          <a href="/agent-report/open/{{profile.emp_id}}" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                            View
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 borderpadding">
+                      <div class="bordercard">
+                        <div class="vertical_center">
+                          <h5>Dispute Audits</h5>
+                          <br>
+                          <h1>{{dispute_total}}</h1>
+                          <a href="/agent-report/dispute/{{profile.emp_id}}" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                            View
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 borderpadding">
+                      <div class="bordercard">
+                        <div class="vertical_center">
+                          <h5>This Month's Fatal Audits</h5>
+                          <h1>{{fatal_total}}</h1>
+                          <a href="/agent-report/fatal/{{profile.emp_id}}" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                            View
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 borderpadding">
+                      <div class="bordercard">
+                        <div class="vertical_center">
+                          <h5>This Month's Fatals</h5>
+                          <br>
+                          <h1>{{fatal}}</h1>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 borderpadding">
+                      <div class="bordercard">
+                        <div class="vertical_center">
+                          <h5>This Month's Score</h5>
+                          <br>
+                          {% if average ==  "No Audits This Month" %}
+                          <h5>{{average}}</h5>
+                          {% else %}
+                          <h1>{{average|floatformat:2}}%</h1>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 borderpadding">
+                      <div class="bordercard">
+                        <div class="vertical_center">
+                          <h5>Coaching Closure</h5>
+                          <br>
+                          {% if coaching_closure ==  "No Audits" %}
+                          <h5>{{coaching_closure}}</h5>
+                          {% else %}
+                          <h1>{{coaching_closure|floatformat:2}}%</h1>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row pb-3">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5>Employee Campaign Wise Report</h5>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <table  id="datatablex" class="table table-striped" style="width: 100%;">
+                      <thead>
+                        <tr>
+                          <th>Campaign</th>
+                          <th>Average Score</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tfoot>
+                        <tr>
+                          <th>Campaign</th>
+                          <th>Average Score</th>
+                          <th>Action</th>
+                        </tr>
+                      </tfoot>
+                      <tbody>
+                      {% for j in audits %}
+                        {% for i in j %}
+                          <tr>
+                            <td>{{i.campaign}}</td>
+                            <td>{{i.score}}</td>
+                            <td>
+                              <form action="/campaign-agent-report" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="hidden" value="{{profile.emp_id}}" name="emp_id">
+                                <input type="hidden" value="{{i.campaign}}" name="campaign">
+                                <button class="btn-sm btn btn-info">View</button>
+                              </form>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                      {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /page content -->
+{% endblock %}

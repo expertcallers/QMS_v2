@@ -47,10 +47,10 @@
                         <div class="col-md-4">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4>Transaction Handled Date</h4>
+                                    <h4>Zone</h4>
                                 </div>
                                 <div class="col-md-6">
-                                    <p>{{form.transaction_handled_date}}</p>
+                                    <p>{{form.zone}}</p>
                                 </div>
                             </div>
                         </div>
@@ -67,20 +67,40 @@
                         <div class="col-md-4">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4>Ticket Number</h4>
+                                    <h4>Customer Name</h4>
                                 </div>
                                 <div class="col-md-6">
-                                    <p>{{form.ticket_number}}</p>
+                                    <p>{{form.customer_name}}</p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4>Evaluator Name</h4>
+                                    <h4>Email/Chat Date</h4>
                                 </div>
                                 <div class="col-md-6">
-                                    <p>{{form.evaluator_name}}</p>
+                                    <p>{{form.email_chat_date}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Ticket Id</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.ticket_id}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Query Type</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.query_type}}</p>
                                 </div>
                             </div>
                         </div>
@@ -150,51 +170,82 @@
                 <div class="col-md-12 mt-3">
                     <div class="row">
                         <div class="col-md-12">
-                            <h4>Customer Experience</h4>
+                            <h4>Solution</h4>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-8">
-                            NCE : FCI &amp; GCI: If the Messages are switched around. i,e Second message sent in the place of first message. If the task is not been cleared. If the user name is in alphanumeric then it should be used as "Hey there". If the canned response is sent twise. The CRO should make sure that #SCI 1 (FCI) is reflecting on task list. Make sure only one task due today is on the task list.
+                            Understanding and Solved Customer's Issue
                         </div>
                         <div class="col-md-4 form-group">
-                            <h5 id="ce_1">{{form.ce_1}}</h5>
+                            <h5 id="o_1">{{form.solution_1}}</h5>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-8">
-                            NCE : In YLCI ,second message is sent in the place of first message. Any unnecessary space in the FCI canned response will be a NCE.
+                            Gave alternatives when required/applicable & Displayed expert product knowledge
                         </div>
                         <div class="col-md-4 form-group">
-                            <h5 id="ce_2">{{form.ce_2}}</h5>
+                            <h5 id="o_2">{{form.solution_2}}</h5>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-8">
-                            NCE : In YLCI If the user is missed to Receive respective response for the SGM {Thanks for sticking in with noom}.
+                            Coupon code added/Edited Name/Values & Date//Personalised when applicable
                         </div>
                         <div class="col-md-4 form-group">
-                            <h5 id="ce_3">{{form.ce_3}}</h5>
+                            <h5 id="o_3">{{form.solution_3}}</h5>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-8">
-                            NCE : In YLCI if user receives the message twice. If user is missed to hit finish the task after sending the message.
+                            Answered all question effectively
                         </div>
                         <div class="col-md-4 form-group">
-                            <h5 id="ce_4">{{form.ce_4}}</h5>
+                            <h5 id="o_4">{{form.solution_4}}</h5>
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-8 score">
-                            Customer Experience Score
+                            Solution Score
                         </div>
                         <div class="col-md-4">
-                            <h4 id="ce_score">10</h4>
+                            <h4 id="o_score"></h4>
                         </div>
                     </div>
                 </div>
 
+                <div class="col-md-12 mt-3">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Efficiency</h4>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-8">
+                            Resolved issue in a timely manner
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <h5 id="c_1">{{form.efficiency_1}}</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-8">
+                            Categorized case properly/Check other Tickets & Previous communication Merged
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <h5 id="c_2">{{form.efficiency_2}}</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-8 score">
+                            Efficiency Score
+                        </div>
+                        <div class="col-md-4">
+                            <h4 id="c_score">10</h4>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="col-md-12 mt-3">
                     <div class="row">
@@ -202,52 +253,28 @@
                             <h4>Compliance</h4>
                         </div>
                     </div>
-                    <div class="row mt-3">
+                    <div class="row mt-3 fatal">
                         <div class="col-md-8">
-                            CE : FCI/GCI : If the user receive irrespective message instead of respective message I.e., sending GCI message instead of FCI message. Only first name of the user should be sent with canned message. If there is any personal reply from the user that Particular users should be Skipped.
+                            Appropriate use of macros
                         </div>
                         <div class="col-md-4 form-group">
-                            <h5 id="c_1">{{form.compliance_1}}</h5>
+                            <h5 id="t_1">{{form.compliance_1}}</h5>
                         </div>
                     </div>
-                    <div class="row mt-3">
+                    <div class="row mt-3 fatal">
                         <div class="col-md-8">
-                            CE : If the user’s message was sent After or equal to 14 days irrespective of any task, those users should to be skipped to UU auto generate. Else if any irrelevant response is sent for a user.
+                            Magento was utilized correctly
                         </div>
                         <div class="col-md-4 form-group">
-                            <h5 id="c_2">{{form.compliance_2}}</h5>
+                            <h5 id="t_2">{{form.compliance_2}}</h5>
                         </div>
                     </div>
-                    <div class="row mt-3">
+                    <div class="row mt-3 fatal">
                         <div class="col-md-8">
-                            CE : If the user’s last message be like UU response those users should be mark as inactive or skip. If the last messages looks like an acknowledgement for a UU response, those users should be skipped or Mark as inactive.
+                            Identified correct order type
                         </div>
                         <div class="col-md-4 form-group">
-                            <h5 id="c_3">{{form.compliance_3}}</h5>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-8">
-                           CE : If any "Task due today" is popped up with YLC, that user need to be sent with appropriate "Task due today" canned message. If the TDT is repeated on task list with a different date and time or different task those users needs to be skipped.
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <h5 id="c_4">{{form.compliance_4}}</h5>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-8">
-                           CE : User should be sent with the response which is loaded on Canned response list, make sure not to add any extra contents in it! If the user is skipped without a valid reason.
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <h5 id="c_5">{{form.compliance_5}}</h5>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-8">
-                           CE : In Group posting if the content/image  is missed in post. If the content/Image is swapped.
-                        </div>
-                        <div class="col-md-4 form-group">
-                            <h5 id="c_6">{{form.compliance_6}}</h5>
+                            <h5 id="t_3">{{form.compliance_3}}</h5>
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -255,7 +282,7 @@
                             Compliance Score
                         </div>
                         <div class="col-md-4">
-                            <h4 id="c_score">10</h4>
+                            <h4 id="t_score"></h4>
                         </div>
                     </div>
                 </div>
@@ -323,30 +350,33 @@
         </div>
     </div>
 </div>
+    
 {% endblock %}
 
 
 {% block scripts %}
+
 <script type="text/javascript">
-    var ce_1 = parseInt($('#ce_1').html());
-    var ce_2 = parseInt($('#ce_2').html());
-    var ce_3 = parseInt($('#ce_3').html());
-    var ce_4 = parseInt($('#ce_4').html());
-    $('#ce_score').html(ce_1+ce_2+ce_3+ce_4);
+    var o_1 = parseInt($('#o_1').html());
+    var o_2 = parseInt($('#o_2').html());
+    var o_3 = parseInt($('#o_3').html());
+    var o_4 = parseInt($('#o_4').html());
+    $('#o_score').html(o_1+o_2+o_3+o_4);
     var c_1 = parseInt($('#c_1').html());
     var c_2 = parseInt($('#c_2').html());
-    var c_3 = parseInt($('#c_3').html());
-    var c_4 = parseInt($('#c_4').html());
-    var c_5 = parseInt($('#c_5').html());
-    var c_6 = parseInt($('#c_6').html());
-    $('#c_score').html(c_1+c_2+c_3+c_4+c_5+c_6);
-        var total = parseInt($('#tot_score').html());
-        if (total <= 99) {
-            $('#result').html("Fail");
-            $('#result').css("color","red");
-        } else {
-            $('#result').html("Pass");
-            $('#result').css("color","green");
-        }
+    $('#c_score').html(c_1+c_2);
+    var t_1 = parseInt($('#t_1').html());
+    var t_2 = parseInt($('#t_2').html());
+    var t_3 = parseInt($('#t_3').html());
+    $('#t_score').html(t_1+t_2+t_3);
+
+    var total = parseInt($('#tot_score').html());
+    if (total <= 99) {
+        $('#result').html("Fail");
+        $('#result').css("color","red");
+    } else {
+        $('#result').html("Pass");
+        $('#result').css("color","green");
+    }
 </script>
 {% endblock %}

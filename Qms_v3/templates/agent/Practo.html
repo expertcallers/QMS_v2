@@ -1,0 +1,782 @@
+{% extends "common_base.html" %}
+{% block main %}
+<style>
+    #report {
+        font-size: 18px;
+    }
+</style>
+<!-- page content -->
+     <div class="right_col" role="main" id="report">
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12" align="center">
+                                <h1>Audit Report - {{form.campaign}} ({{form.campaign_type}})</h1>
+                            </div>
+                            <div class="col-md-12" style="display: inline-flex;">
+                                <h1>Result: </h1>
+                                <h1 id="result"></h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 fields">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Associate Name</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.associate_name}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Employee ID</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.emp_id}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Zone</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.zone}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Concept</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.concept}}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Case Number/Chat Link</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.case_no}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Query Type</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.query_type}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Sub-Query Type</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.sub_query_type}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Chat Date</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.chat_date}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>CSAT</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.csat}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Product</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.product}}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Audit Date</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.audit_date}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Quality Analyst</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.qa}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Team Lead</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.team_lead}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Manager</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.manager}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>AM</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.am}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Week</h4>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p>{{form.week}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12 mt-3">
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Chat Opening (Greetings &amp; being attentive) &amp; Closing</strong>
+                                <p class="smallp">PSS should greet the user,at the opening of the chat. PSS should be attentive and use correct greeting based on the time. PSS should offer further assistance and follow the chat closing script. Branding, PSS introduction should be present, If the user has already mentioned about the query then, avoid asking "How may I assist you?"</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_1">{{form.p_1}}</h5>
+                            </div>
+                        </div>
+                        {% if form.p_1 == 0 %}
+                            <div class="row mt-3 ml-4" id="chat">
+                                <div class="col-md-8">
+                                   Standard script Opening
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p1_s1}}
+                                </div>
+                                <div class="col-md-8">
+                                    Greeting
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p1_s2}}
+                                </div>
+                                <div class="col-md-8">
+                                    Standard script Closing
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p1_s3}}
+                                </div>
+                                <div class="col-md-8">
+                                    Being Attentive
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p1_s4}}
+                                </div>
+                                <div class="col-md-8">
+                                    Offering further assistance
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p1_s5}}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>FRTAT</strong>
+                                <p class="smallp">PSS Should start the chat conversation within 1 minute from the time of chat allocation.</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_2">{{form.p_2}}</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Addressing the user/Personalisation of chat</strong>
+                                <p class="smallp">PSS should address the user with his/her name when the name displayed on the chat with appropriate title. If the user has updated some other name like cookies, unicorn, ball etc, probe for the user's anme aand then address the user's name.</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_3">{{form.p_3}}</h5>
+                            </div>
+                        </div>
+                        {% if form.p_3 == 0 %}
+                            <div class="row mt-3 ml-4" id="personalisation">
+                                <div class="col-md-8">
+                                   No Attempt
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p3_s1}}
+                                </div>
+                                <div class="col-md-8">
+                                    First Name
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p3_s2}}
+                                </div>
+                                <div class="col-md-8">
+                                    No. of Times
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p3_s3}}
+                                </div>
+                                <div class="col-md-8">
+                                    Didn't Probe for name
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p3_s4}}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Assurance &amp; Acknowledgement</strong>
+                                <p class="smallp">PSS should provide the assurance to the user on the issue resolution/query. PSS should also acknowledge the user's query and provide timely acknowledgements throughout the chat. For eg. I do understand your concern, I will certainly help you with this, Glad to hear that, I certainly get your point and I will definitely see what best I can do for you etc</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_4">{{form.p_4}}</h5>
+                            </div>
+                        </div>
+                        {% if form.p_4 == 0 %}
+                            <div class="row mt-3 ml-4" id="assurance">
+                                <div class="col-md-8">
+                                   Acknowledgement Missing
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p4_s1}}
+                                </div>
+                                <div class="col-md-8">
+                                    Assurance Missing
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p4_s2}}
+                                </div>
+                                <div class="col-md-8">
+                                    Wasn't Done Throughout Chat
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p4_s3}}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Coherence (understanding the issue) being attentive on chat.</strong>
+                                <p class="smallp">PSS should be attentive, read and understand the user's query carefully and pay attention to the details provided by the user</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_5">{{form.p_5}}</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Probing</strong>
+                                <p class="smallp">PSS should do relevant probing and probe the user correctly to identify the root cause. PSS should be attentive and avoid unnecessary probing. PSS should never assume and provide resolution and it should be confirmed with the user on the chat.</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_6">{{form.p_6}}</h5>
+                            </div>
+                        </div>
+                        {% if form.p_6 == 0 %}
+                            <div class="row mt-3 ml-4" id="probing">
+                                <div class="col-md-8">
+                                   Irrelevant Probing
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p6_s1}}
+                                </div>
+                                <div class="col-md-8">
+                                    Incomplete Probing
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p6_s2}}
+                                </div>
+                                <div class="col-md-8">
+                                    Didn't Attempt to Probe
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p6_s3}}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Interaction: Empathy , Profressional, care</strong>
+                                <p class="smallp">PSS should empathize/apologize to the user at the right time and provide assurance whenever required in the chat. PSS should maintain professionalism in his/her responses, should display emapthy and care.</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_7">{{form.p_7}}</h5>
+                            </div>
+                        </div>
+                        {% if form.p_7 == 0 %}
+                            <div class="row mt-3 ml-4" id="interaction">
+                                <div class="col-md-8">
+                                   No Empathy
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p7_s1}}
+                                </div>
+                                <div class="col-md-8">
+                                    Lack of Professionalism
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p7_s2}}
+                                </div>
+                                <div class="col-md-8">
+                                    Lack of Care
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p7_s3}}
+                                </div>
+                                <div class="col-md-8">
+                                    Lack of Empathy
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p7_s4}}
+                                </div>
+                                <div class="col-md-8">
+                                    Inappropriate empathy
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p7_s5}}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Grammar:</strong>
+                                <p class="smallp">PSS should use correct punctuation, capitalization and proofread for inaccuracies/typos and spacing errors.</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_8">{{form.p_8}}</h5>
+                            </div>
+                        </div>
+                        {% if form.p_8 == 0 %}
+                            <div class="row mt-3 ml-4" id="grammer">
+                                <div class="col-md-8">
+                                   Punctuation
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p8_s1}}
+                                </div>
+                                <div class="col-md-8">
+                                    Capitalization
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p8_s2}}
+                                </div>
+                                <div class="col-md-8">
+                                    Typing Error
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p8_s3}}
+                                </div>
+                                <div class="col-md-8">
+                                    Sentence Formation
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p8_s4}}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Relavant responses</strong>
+                                <p class="smallp">Sharing incorrect or wrong message (Incorrect window). Shared a wrong/irrelevant response wih the user.</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_9">{{form.p_9}}</h5>
+                            </div>
+                        </div>
+                        {% if form.p_9 == 0 %}
+                            <div class="row mt-3 ml-4" id="relavant">
+                                <div class="col-md-8">
+                                   Incorrect Window
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p9_s1}}
+                                </div>
+                                <div class="col-md-8">
+                                    Not related to query
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p9_s2}}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Being courteous &amp; using plesantries</strong>
+                                <p class="smallp">PSS should be courteous &amp; use pleasantries in the chat. Example: while probing the user/When the user agreed to wait/Thanking the user for sharing the information/Customer connect. Any feel good statements - It was pleasure assisting you etc</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_10">{{form.p_10}}</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Process followed</strong>
+                                <p class="smallp">PSS should follow the set process(SOP) for any given query. Follow the escalation metrics. PSS should use all the relevant tools in order to provide resolution. Checking the details in the respective dashboard, updating and checking the trackers, slack channel, PE process document and then providing the resolution etc. Following the appropriate and standard format while sending emails to the internal team whereaver applicable. Following the verification process for the medicines order.</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_11">{{form.p_11}}</h5>
+                            </div>
+                        </div>
+                        {% if form.p_11 == 0 %}
+                            <div class="row mt-3 ml-4" id="process">
+                                <div class="col-md-8">
+                                   Dashboard/Slack
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p11_s1}}
+                                </div>
+                                <div class="col-md-8">
+                                    Trackers
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p11_s2}}
+                                </div>
+                                <div class="col-md-8">
+                                    SOP/Process doc/SME
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p11_s3}}
+                                </div>
+                                <div class="col-md-8">
+                                    Verification Process
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p11_s4}}
+                                </div>
+                                <div class="col-md-8">
+                                    Email Format
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p11_s5}}
+                                </div>
+                                <div class="col-md-8">
+                                    Links (webpage)
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p11_s6}}
+                                </div>
+                                <div class="col-md-8">
+                                    Ticket creation
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p11_s7}}
+                                </div>
+                                <div class="col-md-8">
+                                    Assignment of chat
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p11_s8}}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Explanation skills (Reasoning) &amp; Rebuttal Handling</strong>
+                                <p class="smallp">PSS should provide proper explanation/reasoning in the chat. The resolution needs to be explained in a simple manner specifying all the details available and should not use any jargons, like "Inventory unavailable, moderation dashboard, fulfillment pending stage" etc. Pss should not sound repititive, and should attempt a different approach to explain the response instead of copy pasting the same response. Sharing the alternatives whenever applicable. PSS should handle the customer objections in an effective manner.</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_12">{{form.p_12}}</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Sharing the information in a sequential manner</strong>
+                                <p class="smallp">Sharing the information in a sequential and understandable manner. In case of multiple queries, resolution needs to be provided in a sequential manner, also In case where we need to provide Prime online or inclinic book steps it should be always followed by the doctor's or enahnced listing URL. If there is cancellation as the user wanted inclinic instead of onlone consultation, then after confirming for the cancellation and refund process, share the link and the steps followed by the refund details.</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_13">{{form.p_13}}</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Case Documentation</strong>
+                                <p class="smallp">PSS should update respective dashboard link for that particular transaction, Remedy dashboard link/Consult dashboardlink/Diagnostic dashboard link/ ARM/Payment/Plus etc in the private note. In case of any query leading to cancellation, payment dashboard link of that particular transaction needs to be documented.</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_14">{{form.p_14}}</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Curation</strong>
+                                <p class="smallp">PSS should select the correct issue type and sub-issue types in every chat.(labels)</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_15">{{form.p_15}}</h5>
+                            </div>
+                        </div>
+                        {% if form.p_15 == 0 %}
+                            <div class="row mt-3 ml-4" id="curation">
+                                <div class="col-md-8">
+                                   Incomplete
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p15_s1}}
+                                </div>
+                                <div class="col-md-8">
+                                    Inappropriate
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p15_s2}}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Average speed of answer</strong>
+                                <p class="smallp">Pss should provide timely responses throughout the chat(2mins). PSS should retreive the chat from hold as per the promised time.</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_16">{{form.p_16}}</h5>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Chat Hold Procedure &amp;: Taking Perrmission before putting the chat on hold.</strong>
+                                <p class="smallp">PSS should provide responses within 2 minutes unless hold procedure is being followed. PSS should refresh the hold time or respond to the user within 5 minutes from the holdtime. A hold time of 5-10 minutes can be followed while checking with the backend team when required(RX, Book, DX, and Consult). PSS should thank the user after refreshing/released the hold.</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="p_17">{{form.p_17}}</h5>
+                            </div>
+                        </div>
+                        {% if form.p_17 == 0 %}
+                            <div class="row mt-3 ml-4" id="chathold">
+                                <div class="col-md-8">
+                                   Script
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p17_s1}}
+                                </div>
+                                <div class="col-md-8">
+                                    Duration
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p17_s2}}
+                                </div>
+                                <div class="col-md-8">
+                                    Didn't thank the user
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.p17_s3}}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row mt-3">
+                            <div class="col-md-8 score">
+                                Section Score
+                            </div>
+                            <div class="col-md-4">
+                                <h4 id="p_score"></h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Fatal</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>Expectations: Setting correct expectations about issue resolution</strong>
+                                <p class="smallp">PSS should share correct, complete and accurate information. PSS should refrain from setting any wrong expectation with the user.</p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="f_1">{{form.compliance_1}}</h5>
+                            </div>
+                        </div>
+                        {% if form.compliance_1 == "fatal" %}
+                            <div class="row mt-3 ml-4" id="expectations">
+                                <div class="col-md-8">
+                                   Incomplete Resolution
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.compliance1_s1}}
+                                </div>
+                                <div class="col-md-8">
+                                    Incorrect Resolution
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.compliance1_s2}}
+                                </div>
+                                <div class="col-md-8">
+                                    Process breach
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    {{form.compliance1_s3}}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                <strong>ZTP(Zero Tolerance Policy)</strong>
+                                <p class="smallp">
+                                    <ol style="margin-left: 30px; margin-top: -20px;">
+                                        <li>For any rude/abusive/sarcastic behaviour.</li>
+                                        <li>Abrupt closure/transfer of the chat.</li>
+                                        <li>Asking for user's personal details</li>
+                                        <li>Asking for user's and doctor's consultation screenshots etc</li>
+                                        <li>Any willingness issues to assist the user</li>
+                                        <li>Any unethical practices followed in the interaction</li>
+                                    </ol>
+                                </p>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <h5 id="f_2">{{form.compliance_2}}</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12" id="last">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Areas of improvement</h4>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{form.areas_improvement}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Positives</h4>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{form.positives}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Comments</h4>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{form.comments}}</p>
+                            </div>
+                        </div>
+                        <div class="row mt-5 noborder">
+                            <div class="col-md-6">
+                                <h5>Total Score</h5>
+                            </div>
+                            <div class="col-md-6">
+                                <h4 id="tot_score">{{form.overall_score}}</h4>
+                            </div>
+                            {% if form.status == False %}
+                            <div class="col-md-12 mt-3">
+                                <form action="/agent-respond" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <label for="emp_com_accept">Employee Comments *</label>
+                                    <input type="hidden" name="id" value="{{form.id}}">
+                                    <input type="hidden" name="type" value="{{type}}">
+                                    <textarea class="form-control" id="emp_com_accept" required rows="4" name="emp_com_accept"></textarea>
+                                    <button class="btn btn-lg btn-success mt-2"><i class="fa fa-check"></i> Accept & Sign</button>
+                                </form>
+                            </div>
+                            <div class="col-md-12 mt-3">
+                                <form action="/agent-respond" method="POST" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    <label for="emp_com_reject">Employee Comments *</label>
+                                    <input type="hidden" name="type" value="{{type}}">
+                                    <input type="hidden" name="id" value="{{form.id}}">
+                                    <textarea class="form-control" id="emp_com_reject" required rows="4" name="emp_com_reject"></textarea>
+                                    <button class="btn btn-lg btn-danger mt-2"><i class="fa fa-close"></i> Reject & Dispute</button>
+                                </form>
+                            </div>
+                            {% endif %}
+                            <div class="col-md-12 mt-3" align="center">
+                                <button class="btn btn-info btn-lg" onclick="history.back()">Back</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ {% endblock %}
+
+
+{% block scripts %}
+<script type="text/javascript">
+        var p_1 = parseInt($('#p_1').html());
+        var p_2 = parseInt($('#p_2').html());
+        var p_3 = parseInt($('#p_3').html());
+        var p_4 = parseInt($('#p_4').html());
+        var p_5 = parseInt($('#p_5').html());
+        var p_6 = parseInt($('#p_6').html());
+        var p_7 = parseInt($('#p_7').html());
+        var p_8 = parseInt($('#p_8').html());
+        var p_9 = parseInt($('#p_9').html());
+        var p_10 = parseInt($('#p_10').html());
+        var p_11 = parseInt($('#p_11').html());
+        var p_12 = parseInt($('#p_12').html());
+        var p_13 = parseInt($('#p_13').html());
+        var p_14 = parseInt($('#p_14').html());
+        var p_15 = parseInt($('#p_15').html());
+        var p_16 = parseInt($('#p_16').html());
+        var p_17 = parseInt($('#p_17').html());
+        $('#p_score').html(p_1+p_2+p_3+p_4+p_5+p_6+p_7+p_8+p_9+p_10+p_11+p_12+p_13+p_14+p_15+p_16+p_17);
+        var total = parseInt($('#tot_score').html());
+        if (total <= 99) {
+            $('#result').html("Fail");
+            $('#result').css("color","red");
+        } else {
+            $('#result').html("Pass");
+            $('#result').css("color","green");
+        }
+</script>
+{% endblock %}

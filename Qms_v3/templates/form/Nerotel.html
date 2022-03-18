@@ -17,8 +17,9 @@
                         </div>
                     </div>
                 </div>
-                <form action="/abhindalco-submit" method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
+                 <form action="/nerotel-submit" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-3 form-group">
@@ -101,48 +102,114 @@
                     <div class="col-md-12 mt-3">
                         <div class="row">
                             <div class="col-md-12">
-                                <h4>Opening and Closing</h4>
+                                <h4>Engagement</h4>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-8">
-                                Used Standard Opening Protocol
+                                Greeting?
                             </div>
                             <div class="col-md-4 form-group">
-                                <input type="radio" name="oc_1" value="5" onchange="oc(this)" id="yes4" required="">
-                                <label for="yes4">Yes</label>
-                                <input type="radio" name="oc_1" value="0" onchange="oc(this)" id="no4">
-                                <label for="no4">No</label>
-                            </div>
-                        </div>
-                        <div class="row mt-3 fatal">
-                            <div class="col-md-8">
-                                Introduction of Product / Branding - 4 USP of eternia - WiWA, Warranty, Duranium, Eternia care Mentioning Hindalco, Aditya birla group
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <input type="radio" name="oc_2" value="20" onchange="oc(this)" id="yes5" required="">
-                                <label for="yes5">Yes</label>
-                                <input type="radio" name="oc_2" value="0" onchange="oc(this)" id="no5">
-                                <label for="no5">Fatal</label>
+                                <input type="radio" name="e_1" value="3" onchange="eng(this)" id="e_1_yes" required="">
+                                <label for="e_1_yes">Yes</label>
+                                <input type="radio" name="e_1" value="0" onchange="eng(this)" id="e_1_no">
+                                <label for="e_1_no">No</label>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-8">
-                                Call Closing as per the Protocol
+                                Value Proposition?
                             </div>
                             <div class="col-md-4 form-group">
-                                <input type="radio" name="oc_3" value="5" onchange="oc(this)" id="yes6" required="">
-                                <label for="yes6">Yes</label>
-                                <input type="radio" name="oc_3" value="0" onchange="oc(this)" id="no6">
-                                <label for="no6">No</label>
+                                <input type="radio" name="e_2" value="3" onchange="eng(this)" id="e_2_yes" required="">
+                                <label for="e_2_yes">Yes</label>
+                                <input type="radio" name="e_2" value="0" onchange="eng(this)" id="e_2_no">
+                                <label for="e_2_no">No</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Tone and Pace?
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="e_3" value="4" onchange="eng(this)" id="e_3_yes" required="">
+                                <label for="e_3_yes">Yes</label>
+                                <input type="radio" name="e_3" value="0" onchange="eng(this)" id="e_3_no">
+                                <label for="e_3_no">No</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Screening Questions?
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="e_4" value="4" onchange="eng(this)" id="e_4_yes" required="">
+                                <label for="e_4_yes">Yes</label>
+                                <input type="radio" name="e_4" value="0" onchange="eng(this)" id="e_4_no">
+                                <label for="e_4_no">No</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                How clear and concise was the rep's vocalization and pronunciation?
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="e_5" value="4" onchange="eng(this)" id="e_5_yes" required="">
+                                <label for="e_5_yes">Yes</label>
+                                <input type="radio" name="e_5" value="0" onchange="eng(this)" id="e_5_no">
+                                <label for="e_5_no">No</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Did the rep use the correct hold procedure?
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="e_6" value="5" onchange="eng(this)" id="e_6_yes" required="">
+                                <label for="e_6_yes">Yes</label>
+                                <input type="radio" name="e_6" value="0" onchange="eng(this)" id="e_6_no">
+                                <label for="e_6_no">No</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Providing Solutions?
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="e_7" value="5" onchange="eng(this)" id="e_7_yes" required="">
+                                <label for="e_7_yes">Yes</label>
+                                <input type="radio" name="e_7" value="0" onchange="eng(this)" id="e_7_no">
+                                <label for="e_7_no">No</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Did the rep display active listening skills?
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="e_8" value="5" onchange="eng(this)" id="e_8_yes" required="">
+                                <label for="e_8_yes">Yes</label>
+                                <input type="radio" name="e_8" value="0" onchange="eng(this)" id="e_8_no">
+                                <label for="e_8_no">No</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Call closure phase? Last Checks ?
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="e_9" value="4" onchange="eng(this)" id="e_9_yes" required="">
+                                <label for="e_9_yes">Yes</label>
+                                <input type="radio" name="e_9" value="0" onchange="eng(this)" id="e_9_no">
+                                <label for="e_9_no">No</label>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-8 score">
-                                Opening and Closing Score
+                                Engagement Section Score
                             </div>
                             <div class="col-md-4">
-                                <input type="text" class="form-control scoree" name="oc_score" value="Select appropiate option for ALL to see score" disabled>
+                                <input type="text" class="form-control scoree" name="eng_score" value="Select appropiate option for ALL to see score" readonly>
                             </div>
                         </div>
                     </div>
@@ -150,125 +217,124 @@
                     <div class="col-md-12 mt-3">
                         <div class="row">
                             <div class="col-md-12">
-                                <h4>Softskills</h4>
+                                <h4>Resolution</h4>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-8">
-                                Used Empathetic Statements whenever required
+                                Confirmation?
                             </div>
                             <div class="col-md-4 form-group">
-                                <input type="radio" name="softskill_1" onchange="softskill(this)" value="10" id="b1" required="">
-                                <label for="b1">Yes</label>
-                                <input type="radio" name="softskill_1" onchange="softskill(this)" value="0" id="b2">
-                                <label for="b2">No</label>
+                                <input type="radio" name="res_1" onchange="resolution(this)" value="5" id="res_1_yes" required="">
+                                <label for="res_1_yes">Yes</label>
+                                <input type="radio" name="res_1" onchange="resolution(this)" value="0" id="res_1_no">
+                                <label for="res_1_no">No</label>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-8">
-                                Making the conversation 2 ways, giving chance to the customer to ask question
+                                Preparation?
                             </div>
                             <div class="col-md-4 form-group">
-                                <input type="radio" name="softskill_2" onchange="softskill(this)" value="15" id="s3" required="">
-                                <label for="s3">Yes</label>
-                                <input type="radio" name="softskill_2" onchange="softskill(this)" value="0" id="s4">
-                                <label for="s4">No</label>
+                                <input type="radio" name="res_2" onchange="resolution(this)" value="4" id="res_2_yes" required="">
+                                <label for="res_2_yes">Yes</label>
+                                <input type="radio" name="res_2" onchange="resolution(this)" value="0" id="res_2_no">
+                                <label for="res_2_no">No</label>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-8">
-                               Active Listening without Interruption
+                                Clinic Procedures?
                             </div>
                             <div class="col-md-4 form-group">
-                                <input type="radio" name="softskill_3" onchange="softskill(this)" value="10" id="s5" required="">
-                                <label for="s5">Yes</label>
-                                <input type="radio" name="softskill_3" onchange="softskill(this)" value="0" id="s6">
-                                <label for="s6">No</label>
+                                <input type="radio" name="res_3" onchange="resolution(this)" value="4" id="res_3_yes" required="">
+                                <label for="res_3_yes">Yes</label>
+                                <input type="radio" name="res_3" onchange="resolution(this)" value="0" id="res_3_no">
+                                <label for="res_3_no">No</label>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-8">
-                               Clear Grammar & Communication
+                                Did the rep manage time effectively?
                             </div>
                             <div class="col-md-4 form-group">
-                                <input type="radio" name="softskill_4" onchange="softskill(this)" value="5" id="s5_5" required="">
-                                <label for="s5_5">Yes</label>
-                                <input type="radio" name="softskill_4" onchange="softskill(this)" value="0" id="s6_5">
-                                <label for="s6_5">No</label>
+                                <input type="radio" name="res_4" onchange="resolution(this)" value="5" id="res_4_yes" required="">
+                                <label for="res_4_yes">Yes</label>
+                                <input type="radio" name="res_4" onchange="resolution(this)" value="0" id="res_4_no">
+                                <label for="res_4_no">No</label>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-8 score">
-                                Softskills Score
+                                Resolution Section Score
                             </div>
                             <div class="col-md-4">
-                                <input type="text" class="form-control scoree" name="softskill_score" value="Select appropiate option for ALL to see score" disabled>
+                                <input type="text" class="form-control scoree" name="resolution_score" value="Select appropiate option for ALL to see score" readonly>
                             </div>
                         </div>
                     </div>
-
 
                     <div class="col-md-12 mt-3">
                         <div class="row">
                             <div class="col-md-12">
-                                <h4>Business &amp; Compliance</h4>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-8">
-                                Followed Policy & Procedure (Script)
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <input type="radio" name="compliance_1" onchange="compliance(this)" value="5" id="yes1" required="">
-                                <label for="yes1">Yes</label>
-                                <input type="radio" name="compliance_1" onchange="compliance(this)" value="0" id="no1">
-                                <label for="no1">No</label>
+                                <h4>Business needs</h4>
                             </div>
                         </div>
                         <div class="row mt-3 fatal">
                             <div class="col-md-8">
-                                Accurate Documentation with full details in ZOHO
+                                Documentation?
                             </div>
                             <div class="col-md-4 form-group">
-                                <input type="radio" name="compliance_2" onchange="compliance(this)" value="10" id="yes2" required="">
-                                <label for="yes2">Yes</label>
-                                <input type="radio" name="compliance_2" onchange="compliance(this)" value="0" id="no2">
-                                <label for="no2">Fatal</label>
+                                <input type="radio" name="busi_1" onchange="busi(this)" value="10" id="busi_1_yes" required="">
+                                <label for="busi_1_yes">PASS</label>
+                                <input type="radio" name="busi_1" onchange="busi(this)" value="0" id="busi_1_no">
+                                <label for="busi_1_no">FATAL</label>
                             </div>
                         </div>
                         <div class="row mt-3 fatal">
                             <div class="col-md-8">
-                                Inaccurate Information : Identifying the right lead to opportunity
+                                Patient Details?
                             </div>
                             <div class="col-md-4 form-group">
-                                <input type="radio" name="compliance_3" onchange="compliance(this)" value="10" id="yes3" required="">
-                                <label for="yes3">Yes</label>
-                                <input type="radio" name="compliance_3" onchange="compliance(this)" value="0" id="no3">
-                                <label for="no3">Fatal</label>
+                                <input type="radio" name="busi_2" onchange="busi(this)" value="12" id="busi_2_yes" required="">
+                                <label for="busi_2_yes">PASS</label>
+                                <input type="radio" name="busi_2" onchange="busi(this)" value="0" id="busi_2_no">
+                                <label for="busi_2_no">FATAL</label>
                             </div>
                         </div>
                         <div class="row mt-3 fatal">
                             <div class="col-md-8">
-                               Advisor Sounding Rude / Proafinity Usage
+                                Discovery Questions?
                             </div>
                             <div class="col-md-4 form-group">
-                                <input type="radio" name="compliance_4" onchange="compliance(this)" value="5" id="c4" required="">
-                                <label for="c4">Yes</label>
-                                <input type="radio" name="compliance_4" onchange="compliance(this)" value="0" id="c5">
-                                <label for="c5">Fatal</label>
+                                <input type="radio" name="busi_3" onchange="busi(this)" value="13" id="busi_3_yes" required="">
+                                <label for="busi_3_yes">PASS</label>
+                                <input type="radio" name="busi_3" onchange="busi(this)" value="0" id="busi_3_no">
+                                <label for="busi_3_no">FATAL</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3 fatal">
+                            <div class="col-md-8">
+                                Was agent rude on the call
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="busi_4" onchange="busi(this)" value="10" id="busi_4_yes" required="">
+                                <label for="busi_4_yes">PASS</label>
+                                <input type="radio" name="busi_4" onchange="busi(this)" value="0" id="busi_4_no">
+                                <label for="busi_4_no">FATAL</label>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-8 score">
-                                Business &amp; Compliance Score
+                                Business needs Section Score
                             </div>
                             <div class="col-md-4">
-                                <input type="text" class="form-control scoree" name="compliance_score" value="Select appropiate option for ALL to see score" disabled>
+                                <input type="text" class="form-control scoree" name="compliance_score" value="Select appropiate option for ALL to see score" readonly>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-md-12 mt-3">
                         <div class="row">
                             <div class="col-md-12">
                                 <h4>Areas of improvement</h4>
@@ -283,12 +349,12 @@
                                 <textarea name="comments" id="cfeedback" cols="30" rows="5" class="form-control" required=""></textarea>
                             </div>
                             <div class="col-md-12 mt-5" align="center">
-                                <button class="btn btn-lg btn-info" onclick="full_score(this)" data-toggle="modal" data-target="#viewscore">View Score</button>
-                                <button class="btn btn-lg btn-success" onclick="confirm('Are you sure you want to continue?');" type="submit">Submit</button>
+                                <button type="button" class="btn btn-lg btn-info" onclick="full_score(this)" data-toggle="modal" data-target="#viewscore">View Score</button>
+                                <button class="btn btn-lg btn-success" onclick="return confirmm();" type="submit">Submit</button>
                             </div>
                         </div>
                     </div>
-                       <input type="hidden" name="campaign_name" value="{{campaign.name}}">
+                      <input type="hidden" name="campaign_name" value="{{campaign.name}}">
                      <input type="hidden" name="campaign_type" value="{{campaign.type}}">
                      <input type="hidden" name="start_time" value="{{start_time}}">
                 </form>
@@ -310,7 +376,7 @@
           </div>
           <div class="modal-body">
             <div align="center">
-                <h1 id="myscore">Please select all the options to see score</h1>
+                <h1 id="myscore"></h1>
             </div>
           </div>
           <div class="modal-footer">
@@ -319,13 +385,13 @@
         </div>
       </div>
     </div>
+
 {% endblock %}
 {% block scripts %}
   <script>
         $mydate = $("#auditdate").val();
         $("#auditdate").val(moment($mydate).format("YYYY-MM-DD"));
     </script>
-
 <script type="text/javascript">
     var n=0;
     var score1;
@@ -335,69 +401,70 @@
     var fatal2;
     var fatal3;
     var fatal4;
-
-    $(function() {
-        $('#cfeedback').on('keypress', function(e) {
-            if (e.which == 32){
-                return false;
-            }
-        });
-    });
-    function oc(e) {
+    function eng(e) {
         n=n+1;
-        var oc_score = document.querySelector('input[name="oc_score"]');
-        var oc_1 = parseInt(document.querySelector('input[name="oc_1"]:checked').value);
-        var oc_2 = parseInt(document.querySelector('input[name="oc_2"]:checked').value);
-        var oc_3 = parseInt(document.querySelector('input[name="oc_3"]:checked').value);
-        fatal1 = parseInt(oc_2);
+        var eng_score = document.querySelector('input[name="eng_score"]');
+        var e_1 = parseInt(document.querySelector('input[name="e_1"]:checked').value);
+        var e_2 = parseInt(document.querySelector('input[name="e_2"]:checked').value);
+        var e_3 = parseInt(document.querySelector('input[name="e_3"]:checked').value);
+        var e_4 = parseInt(document.querySelector('input[name="e_4"]:checked').value);
+        var e_5 = parseInt(document.querySelector('input[name="e_5"]:checked').value);
+        var e_6 = parseInt(document.querySelector('input[name="e_6"]:checked').value);
+        var e_7 = parseInt(document.querySelector('input[name="e_7"]:checked').value);
+        var e_8 = parseInt(document.querySelector('input[name="e_8"]:checked').value);
+        var e_9 = parseInt(document.querySelector('input[name="e_9"]:checked').value);
         for (var i = 0; i <= n; i++) {
-            oc_score.value = oc_1+oc_2+oc_3;
+            eng_score.value = e_1+e_2+e_3+e_4+e_5+e_6+e_7+e_8+e_9;
         }
-        if (oc_score.value < 30) {
-            oc_score.classList.add("less");
-            oc_score.classList.remove("perfect");
+        if (eng_score.value < 37) {
+            eng_score.classList.add("less");
+            eng_score.classList.remove("perfect");
         }
         else {
-            oc_score.classList.remove("less");
-            oc_score.classList.add("perfect");
+            eng_score.classList.remove("less");
+            eng_score.classList.add("perfect");
         }
-        score1 = parseInt(oc_score.value);
+        score1 = parseInt(eng_score.value);
     }
-    function softskill(e) {
+    function resolution(e) {
         n=n+1;
-        var softskill_score = document.querySelector('input[name="softskill_score"]');
-        var softskill_1 = parseInt(document.querySelector('input[name="softskill_1"]:checked').value);
-        var softskill_2 = parseInt(document.querySelector('input[name="softskill_2"]:checked').value);
-        var softskill_3 = parseInt(document.querySelector('input[name="softskill_3"]:checked').value);
-        var softskill_4 = parseInt(document.querySelector('input[name="softskill_4"]:checked').value);
+        var resolution_score = document.querySelector('input[name="resolution_score"]');
+        var res_1 = parseInt(document.querySelector('input[name="res_1"]:checked').value);
+        var res_2 = parseInt(document.querySelector('input[name="res_2"]:checked').value);
+        var res_3 = parseInt(document.querySelector('input[name="res_3"]:checked').value);
+        var res_4 = parseInt(document.querySelector('input[name="res_4"]:checked').value);
         for (var i = 0; i <= n; i++) {
-            softskill_score.value = softskill_1+softskill_2+softskill_3+softskill_4;
+            resolution_score.value = res_1+res_2+res_3+res_4;
         }
-        if (softskill_score.value < 40) {
-            softskill_score.classList.add("less");
-            softskill_score.classList.remove("perfect");
+        if (resolution_score.value < 18) {
+            resolution_score.classList.add("less");
+            resolution_score.classList.remove("perfect");
         }
         else {
-            softskill_score.classList.remove("less");
-            softskill_score.classList.add("perfect");
+            resolution_score.classList.remove("less");
+            resolution_score.classList.add("perfect");
         }
-        score2 = parseInt(softskill_score.value);
+        score2 = parseInt(resolution_score.value);
     }
-    function compliance(e) {
+    function busi(e) {
         n=n+1;
         var compliance_score = document.querySelector('input[name="compliance_score"]');
-        var compliance_1 = parseInt(document.querySelector('input[name="compliance_1"]:checked').value);
-        var compliance_2 = parseInt(document.querySelector('input[name="compliance_2"]:checked').value);
-        var compliance_3 = parseInt(document.querySelector('input[name="compliance_3"]:checked').value);
-        var compliance_4 = parseInt(document.querySelector('input[name="compliance_4"]:checked').value);
-        fatal2 = parseInt(compliance_2);
-        fatal3 = parseInt(compliance_3);
-        fatal4 = parseInt(compliance_4);
+        var busi_1 = parseInt(document.querySelector('input[name="busi_1"]:checked').value);
+        var busi_2 = parseInt(document.querySelector('input[name="busi_2"]:checked').value);
+        var busi_3 = parseInt(document.querySelector('input[name="busi_3"]:checked').value);
+        var busi_4 = parseInt(document.querySelector('input[name="busi_4"]:checked').value);
+        fatal1 = busi_1;
+        fatal2 = busi_2;
+        fatal3 = busi_3;
+        fatal4 = busi_4;
         for (var i = 0; i <= n; i++) {
-            compliance_score.value = compliance_1+compliance_2+compliance_3+compliance_4;
-            
+            if ((busi_1 == 0) || (busi_2 == 0) || (busi_3 == 0) || (busi_4 == 0)) {
+                compliance_score.value = 0
+            } else {
+                compliance_score.value = busi_1+busi_2+busi_3+busi_4;
+            }
         }
-        if (compliance_score.value < 30) {
+        if (compliance_score.value < 45) {
             compliance_score.classList.add("less");
             compliance_score.classList.remove("perfect");
         }
@@ -415,10 +482,9 @@
         }
         else {
             for (var i = 0; i <= n; i++) {
-                fullscore.innerHTML = score1+score2+score3+"%";
+                fullscore.innerHTML = score1+score2+score3;
             }
         }
     }
-
 </script>
 {% endblock %}

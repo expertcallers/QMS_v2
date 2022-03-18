@@ -1,0 +1,1000 @@
+{% extends "common_base.html" %}
+{% block main %}
+<style>
+    #report {
+        font-size: 18px;
+    }
+</style>
+<!-- page content -->
+<div class="right_col" role="main" id="report">
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12" align="center">
+                            <h1>Audit Form - {{campaign.name}} ({{campaign.type}})</h1>
+                        </div>
+                    </div>
+                </div>
+                <form action="/fame-submit" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-3 form-group">
+                                <label for="empname">Associate Name</label>
+                                <input type="text" class="form-control" name="empname" id="empname" readonly value="{{profile.emp_name}}">
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="empid">Employee ID</label>
+                                <input type="number" class="form-control" id="empid" name="empid" readonly value="{{profile.emp_id}}">
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="qa">Quality Analyst</label>
+                                <input type="text" class="form-control" id="qa" name="qa" value="{{request.user.profile.emp_name}}" readonly>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="tl">Team Lead</label>
+                                <input type="text" class="form-control" id="tl" name="tl" readonly value="{{profile.emp_rm1}}">
+                                <input type="hidden" name="tl_id" value="{{profile.emp_rm1_id}}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 form-group">
+                                <input type="hidden" class="form-control" name="campaign1" value="Amerisave">
+                                <label for="ticketnumber">Ticket Number</label>
+                                <input type="text" class="form-control" id="ticketnumber" name="ticketnumber" required="">
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="transdate">Transaction Handled Date</label>
+                                <input type="date" class="form-control" id="transdate" name="transdate" required="">
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="tickettype">Ticket Type</label>
+                                <select class="form-control select2" name="ticket_type" id="tickettype" required="">
+                                    <option value="" selected disabled>Please Select</option>
+                                    <option value="Address update">Address update</option>
+                                     <option value="Billing Inquiry">Billing Inquiry</option>
+                                     <option value="Cancel/Order item">Cancel/Order item</option>
+                                     <option value="Change Order request">Change Order request</option>
+                                     <option value="Damage">Damage</option>
+                                     <option value="Digital Download">Digital Download</option>
+                                     <option value="Exchange Request">Exchange Request</option>
+                                     <option value="Incorrect item">Incorrect item</option>
+                                     <option value="Lost in Transit">Lost in Transit</option>
+                                     <option value="Missing Item">Missing Item</option>
+                                     <option value="Order Status">Order Status</option>
+                                     <option value="Pre-Order Delay">Pre-Order Delay</option>
+                                     <option value="Product inquiry">Product inquiry</option>
+                                     <option value="Quality Concern">Quality Concern</option>
+                                     <option value="Refund Inquiry">Refund Inquiry</option>
+                                     <option value="Return request">Return request</option>
+                                     <option value="Tracking and shipping Issues">Tracking and shipping Issues</option>
+                                     <option value="General Questions/ Others">General Questions/ Others</option>
+                                     <option value="Ticketing/Touring/Fan Request">Ticketing/Touring/Fan Request</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="week">Week</label>
+                                <select class="form-control" name="week" id="week" required="">
+                                    <option value="week1">Week1</option>
+                                    <option value="week2">Week2</option>
+                                    <option value="week3">Week3</option>
+                                    <option value="week4">Week4</option>
+                                    <option value="week5">Week5</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                <label for="auditdate">Audit Date</label>
+                                <input type="text" class="form-control" value="{{today}}" readonly>
+                                <input type="hidden" value="{{today}}" id="auditdate" name="auditdate">
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label for="manager">Manager</label>
+                                <input type="text" class="form-control" id="manager" name="manager" readonly value="{{profile.emp_rm3}}">
+                                <input type="hidden" name="manager_id" value="{{profile.emp_rm3_id}}">
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label for="am">AM</label>
+                                <input type="text" class="form-control" id="am" name="am" readonly value="{{profile.emp_rm2}}">
+                                <input type="hidden" name="am_id" value="{{profile.emp_rm2_id}}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Immediate fails:</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Shipping product incorrectly
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_1" value="1" id="yes24" required="">
+                                <label for="yes24">Pass</label>
+                                <input type="radio" name="compliance_1" value="0" id="no24">
+                                <label for="no24">Fail</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Incorrect grammar and spelling being used/illegible responses/Does not make sense.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_2" onchange="compliance(this)" value="1" id="yes_2" required="">
+                                <label for="yes_2">Pass</label>
+                                <input type="radio" name="compliance_2" onchange="compliance(this)" value="0" id="no_2">
+                                <label for="no_2">Fail</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Blatantly incorrect or made up information provided to the customer
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_3" onchange="compliance(this)" value="1" id="yes_3" required="">
+                                <label for="yes_3">Pass</label>
+                                <input type="radio" name="compliance_3" onchange="compliance(this)" value="0" id="no_3">
+                                <label for="no_3">Fail</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                               Sending internal notes as Public response
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_4" onchange="compliance(this)" value="1" id="c4" required="">
+                                <label for="c4">Pass</label>
+                                <input type="radio" name="compliance_4" onchange="compliance(this)" value="0" id="c5">
+                                <label for="c5">Fail</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                               Responding to any ticket outside of representatives skills/assignments
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_5" onchange="compliance(this)" value="1" id="c5_1" required="">
+                                <label for="c5_1">Pass</label>
+                                <input type="radio" name="compliance_5" onchange="compliance(this)" value="0" id="c5_2">
+                                <label for="c5_2">Fail</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                               Unprofessional- tone,language or content. Uses derogatory language or curse words.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_6" onchange="compliance(this)" value="1" id="c6_1" required="">
+                                <label for="c6_1">Pass</label>
+                                <input type="radio" name="compliance_6" onchange="compliance(this)" value="0" id="c6_2">
+                                <label for="c6_2">Fail</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                               Not escalating a situation/Not following proper escalation procedure/Responding to an escalated ticket
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_7" onchange="compliance(this)" value="1" id="c7_1" required="">
+                                <label for="c7_1">Pass</label>
+                                <input type="radio" name="compliance_7" onchange="compliance(this)" value="0" id="c7_2">
+                                <label for="c7_2">Fail</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                               Responding to Spam
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_8" onchange="compliance(this)" value="1" id="c8_1" required="">
+                                <label for="c8_1">Pass</label>
+                                <input type="radio" name="compliance_8" onchange="compliance(this)" value="0" id="c8_2">
+                                <label for="c8_2">Fail</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                               Double response-w/o addressing and apologizing
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_9" onchange="compliance(this)" value="1" id="c9_1" required="">
+                                <label for="c9_1">Pass</label>
+                                <input type="radio" name="compliance_9" onchange="compliance(this)" value="0" id="c9_2">
+                                <label for="c9_2">Fail</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                               Responding with personal opinions outside of company policy.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_10" onchange="compliance(this)" value="1" id="c10_1" required="">
+                                <label for="c10_1">Pass</label>
+                                <input type="radio" name="compliance_10" onchange="compliance(this)" value="0" id="c10_2">
+                                <label for="c10_2">Fail</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                               Sending same macro as last agent w/o edits.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_11" onchange="compliance(this)" value="1" id="c11_1" required="">
+                                <label for="c11_1">Pass</label>
+                                <input type="radio" name="compliance_11" onchange="compliance(this)" value="0" id="c11_2">
+                                <label for="c11_2">Fail</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <div class="row">
+                            <div class="col-md-12" align="center">
+                                <h1>Customer Response</h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Customer Response</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent sent response as public reply:
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="cr_1" onchange="cr(this)" value="1" id="yes1" required="">
+                                <label for="yes1">Yes</label>
+                                <input type="radio" name="cr_1" onchange="cr(this)" value="0" id="no1">
+                                <label for="no1">No</label>
+                                <input type="radio" name="cr_1" onchange="cr(this)" value="NA" id="na1">
+                                <label for="na1">NA</label>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <h4>Opening</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent greeted customer by correct name.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="opening_1" onchange="cr(this)" value="1" id="yes2" required="">
+                                    <label for="yes2">Yes</label>
+                                    <input type="radio" name="opening_1" onchange="cr(this)" value="0" id="no2">
+                                    <label for="no2">No</label>
+                                    <input type="radio" name="opening_1" onchange="cr(this)" value="NA" id="na2">
+                                    <label for="na2">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent used correct appreciation/acknowledgement statement.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="opening_2" onchange="cr(this)" value="1" id="yes3" required="">
+                                    <label for="yes3">Yes</label>
+                                    <input type="radio" name="opening_2" onchange="cr(this)" value="0" id="no3">
+                                    <label for="no3">No</label>
+                                    <input type="radio" name="opening_2" onchange="cr(this)" value="NA" id="na3">
+                                    <label for="na3">NA</label>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <h4>Composition</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent composed email with logical flow that makes sense.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="comp_1" onchange="cr(this)" value="1" id="yes4" required="">
+                                    <label for="yes4">Yes</label>
+                                    <input type="radio" name="comp_1" onchange="cr(this)" value="0" id="no4">
+                                    <label for="no4">No</label>
+                                    <input type="radio" name="comp_1" onchange="cr(this)" value="NA" id="na4">
+                                    <label for="na4">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent presented information with clear formatting, correct spelling and grammar.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="comp_2" onchange="cr(this)" value="1" id="yes5" required="">
+                                    <label for="yes5">Yes</label>
+                                    <input type="radio" name="comp_2" onchange="cr(this)" value="0" id="no5">
+                                    <label for="no5">No</label>
+                                    <input type="radio" name="comp_2" onchange="cr(this)" value="NA" id="na5">
+                                    <label for="na5">NA</label>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <h4>Macro Usage</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent chose correct macro(s).
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="macro_1" onchange="cr(this)" value="1" id="yes6" required="">
+                                    <label for="yes6">Yes</label>
+                                    <input type="radio" name="macro_1" onchange="cr(this)" value="0" id="no6">
+                                    <label for="no6">No</label>
+                                    <input type="radio" name="macro_1" onchange="cr(this)" value="NA" id="na6">
+                                    <label for="na6">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent tailored macro(s) to fit the customer's question or issue.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="macro_2" onchange="cr(this)" value="1" id="yes7" required="">
+                                    <label for="yes7">Yes</label>
+                                    <input type="radio" name="macro_2" onchange="cr(this)" value="0" id="no7">
+                                    <label for="no7">No</label>
+                                    <input type="radio" name="macro_2" onchange="cr(this)" value="NA" id="na7">
+                                    <label for="na7">NA</label>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <h4>Closing</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent asked the customer if he/she could be of additional help.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="closing_1" onchange="cr(this)" value="1" id="yes8" required="">
+                                    <label for="yes8">Yes</label>
+                                    <input type="radio" name="closing_1" onchange="cr(this)" value="0" id="no8">
+                                    <label for="no8">No</label>
+                                    <input type="radio" name="closing_1" onchange="cr(this)" value="NA" id="na8">
+                                    <label for="na8">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent used appropriate closing &amp; signature.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="closing_2" onchange="cr(this)" value="1" id="yes9" required="">
+                                    <label for="yes9">Yes</label>
+                                    <input type="radio" name="closing_2" onchange="cr(this)" value="0" id="no9">
+                                    <label for="no9">No</label>
+                                    <input type="radio" name="closing_2" onchange="cr(this)" value="NA" id="na9">
+                                    <label for="na9">NA</label>
+                            </div>
+                        </div>
+
+
+                        <div class="row mt-3">
+                            <div class="col-md-8 score" align="center">
+                                Customer Response Section Score
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control scoree" id="cr_section_score" name="cr_section_score" value="Select appropiate option for ALL to see score" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <div class="row">
+                            <div class="col-md-12" align="center">
+                                <h1>Issue Resolution</h1>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <h4>Customer Issue Resolution</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent correctly identified and understood customer issue and responded accordingly (Issue Identification)
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="cir_1" onchange="ir(this)" value="1" id="yes10" required="">
+                                    <label for="yes10">Yes</label>
+                                    <input type="radio" name="cir_1" onchange="ir(this)" value="0" id="no10">
+                                    <label for="no10">No</label>
+                                    <input type="radio" name="cir_1" onchange="ir(this)" value="NA" id="na10">
+                                    <label for="na10">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent fully resolved inquiry/issue upon first contact when possible, or clearly communicated additional information/next steps for full resolution. (Issue Resolution)
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="cir_2" onchange="ir(this)" value="1" id="yes11" required="">
+                                    <label for="yes11">Yes</label>
+                                    <input type="radio" name="cir_2" onchange="ir(this)" value="0" id="no11">
+                                    <label for="no11">No</label>
+                                    <input type="radio" name="cir_2" onchange="ir(this)" value="NA" id="na11">
+                                    <label for="na11">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent did not deflect any questions/avoid policy communications unnecessarily. (Non-avoidance)
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="cir_3" onchange="ir(this)" value="1" id="yes12" required="">
+                                    <label for="yes12">Yes</label>
+                                    <input type="radio" name="cir_3" onchange="ir(this)" value="0" id="no12">
+                                    <label for="no12">No</label>
+                                    <input type="radio" name="cir_3" onchange="ir(this)" value="NA" id="na12">
+                                    <label for="na12">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent conveyed correct policy information to the customer.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="cir_4" onchange="ir(this)" value="1" id="yes13" required="">
+                                    <label for="yes13">Yes</label>
+                                    <input type="radio" name="cir_4" onchange="ir(this)" value="0" id="no13">
+                                    <label for="no13">No</label>
+                                    <input type="radio" name="cir_4" onchange="ir(this)" value="NA" id="na13">
+                                    <label for="na13">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent conveyed correct product information to the customer.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="cir_5" onchange="ir(this)" value="1" id="yes14" required="">
+                                    <label for="yes14">Yes</label>
+                                    <input type="radio" name="cir_5" onchange="ir(this)" value="0" id="no14">
+                                    <label for="no14">No</label>
+                                    <input type="radio" name="cir_5" onchange="ir(this)" value="NA" id="na14">
+                                    <label for="na14">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent established correct timeline to resolution/ CSR did not delay resolution. (Resolution Timeline)
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="cir_6" onchange="ir(this)" value="1" id="yes15" required="">
+                                    <label for="yes15">Yes</label>
+                                    <input type="radio" name="cir_6" onchange="ir(this)" value="0" id="no15">
+                                    <label for="no15">No</label>
+                                    <input type="radio" name="cir_6" onchange="ir(this)" value="NA" id="na15">
+                                    <label for="na15">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Rep fully and accurately helped the customer within their empowerments or escalated appropriately. (Agent Empowerments)
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="cir_7" onchange="ir(this)" value="1" id="yes16" required="">
+                                    <label for="yes16">Yes</label>
+                                    <input type="radio" name="cir_7" onchange="ir(this)" value="0" id="no16">
+                                    <label for="no16">No</label>
+                                    <input type="radio" name="cir_7" onchange="ir(this)" value="NA" id="na16">
+                                    <label for="na16">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8 score" align="center">
+                                Customer Issue Resolution Score
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control scoree" name="ir_score" value="Select appropiate option for ALL to see score" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <div class="row">
+                            <div class="col-md-12" align="center">
+                                <h1>Soft Skills</h1>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <h4>Etiquette</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent validated the customer's concern / questions / reason for contacting us.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="et_1" onchange="sss(this)" value="1" id="yes17" required="">
+                                    <label for="yes17">Yes</label>
+                                    <input type="radio" name="et_1" onchange="sss(this)" value="0" id="no17">
+                                    <label for="no17">No</label>
+                                    <input type="radio" name="et_1" onchange="sss(this)" value="NA" id="na17">
+                                    <label for="na17">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent offered genuine acknowledgement and empathy for customer's concern.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="et_2" onchange="sss(this)" value="1" id="yes18" required="">
+                                    <label for="yes18">Yes</label>
+                                    <input type="radio" name="et_2" onchange="sss(this)" value="0" id="no18">
+                                    <label for="no18">No</label>
+                                    <input type="radio" name="et_2" onchange="sss(this)" value="NA" id="na18">
+                                    <label for="na18">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent used positive tone and impartial language in all communications
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="et_3" onchange="sss(this)" value="1" id="yes19" required="">
+                                    <label for="yes19">Yes</label>
+                                    <input type="radio" name="et_3" onchange="sss(this)" value="0" id="no19">
+                                    <label for="no19">No</label>
+                                    <input type="radio" name="et_3" onchange="sss(this)" value="NA" id="na19">
+                                    <label for="na19">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent was professional and courteous.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="et_4" onchange="sss(this)" value="1" id="yes200" required="">
+                                    <label for="yes200">Yes</label>
+                                    <input type="radio" name="et_4" onchange="sss(this)" value="0" id="no200">
+                                    <label for="no200">No</label>
+                                    <input type="radio" name="et_4" onchange="sss(this)" value="NA" id="na200">
+                                    <label for="na200">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Representative answered in a tone consistent with UMG's core values and culture.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="et_5" onchange="sss(this)" value="1" id="yes20" required="">
+                                    <label for="yes20">Yes</label>
+                                    <input type="radio" name="et_5" onchange="sss(this)" value="0" id="no20">
+                                    <label for="no20">No</label>
+                                    <input type="radio" name="et_5" onchange="sss(this)" value="NA" id="na20">
+                                    <label for="na20">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8 score" align="center">
+                                Soft Skills Score
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control scoree" name="sss_score" value="Select appropiate option for ALL to see score" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <div class="row">
+                            <div class="col-md-12" align="center">
+                                <h1>Documentation</h1>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Zendesk Actions/Documentation</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent accurately completed all necessary field on the ticket.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="doc_1" onchange="doc(this)" value="1" id="yes21" required="">
+                                    <label for="yes21">Yes</label>
+                                    <input type="radio" name="doc_1" onchange="doc(this)" value="0" id="no21">
+                                    <label for="no21">No</label>
+                                    <input type="radio" name="doc_1" onchange="doc(this)" value="NA" id="na21">
+                                    <label for="na21">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent merged tickets properly
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="doc_2" onchange="doc(this)" value="1" id="yes22" required="">
+                                    <label for="yes22">Yes</label>
+                                    <input type="radio" name="doc_2" onchange="doc(this)" value="0" id="no22">
+                                    <label for="no22">No</label>
+                                    <input type="radio" name="doc_2" onchange="doc(this)" value="NA" id="na22">
+                                    <label for="na22">NA</label>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <h4>Shopify Actions/Documentation</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent performed all needed Shopify processes and  accurately relayed all needed information and screenshots to customer.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="doc_3" onchange="doc(this)" value="1" id="yes23" required="">
+                                    <label for="yes23">Yes</label>
+                                    <input type="radio" name="doc_3" onchange="doc(this)" value="0" id="no23">
+                                    <label for="no23">No</label>
+                                    <input type="radio" name="doc_3" onchange="doc(this)" value="NA" id="na23">
+                                    <label for="na23">NA</label>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <h4>ShipHero/DOMs Actions</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Agent completed all system processes correctly.
+                            </div>
+                            <div class="col-md-4 form-group">
+                                    <input type="radio" name="doc_4" onchange="doc(this)" value="1" id="yes" required="">
+                                    <label for="yes">Yes</label>
+                                    <input type="radio" name="doc_4" onchange="doc(this)" value="0" id="no">
+                                    <label for="no">No</label>
+                                    <input type="radio" name="doc_4" onchange="doc(this)" value="NA" id="na">
+                                    <label for="na">NA</label>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-8 score" align="center">
+                                Documentation Score
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control scoree" name="doc_score" value="Select appropiate option for ALL to see score" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Areas of improvement</h4>
+                                <textarea name="areaimprovement" id="areaimp" cols="30" rows="5" class="form-control" required="" pattern="(/^[A-Za-z]+$/)"></textarea>
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <h4>Positives</h4>
+                                <textarea name="positives" id="positives" cols="30" rows="5" class="form-control" required="" pattern="(/^[A-Za-z]+$/)"></textarea>
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <h4>Comments</h4>
+                                <textarea name="comments" id="cfeedback" cols="30" rows="5" class="form-control" required="" pattern="(/^[A-Za-z]+$/)"></textarea>
+                            </div>
+                            <div class="col-md-12 mt-5" align="center">
+                                <button type="button" class="btn btn-lg btn-info" onclick="full_score(this)" data-toggle="modal" data-target="#viewscore">View Score</button>
+                                <button class="btn btn-lg btn-success" onclick="return confirmm();" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="campaign_name" value="{{campaign.name}}">
+                    <input type="hidden" name="campaign_type" value="{{campaign.type}}">
+                    <input type="hidden" name="start_time" value="{{start_time}}">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="viewscore" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Full Score</h5><p class="mt-2"> (Please select all the options to see score)</p>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div align="center">
+                <h1 id="myscore"></h1>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+  <script>
+        $mydate = $("#auditdate").val();
+        $("#auditdate").val(moment($mydate).format("YYYY-MM-DD"));
+    </script>
+
+<script type="text/javascript">
+    var n=0;
+    var score1;
+    var score2;
+    var score3;
+    var score4;
+
+
+    function cr(e) {
+        n=n+1;
+        var cr_section_score = document.querySelector('input[name="cr_section_score"]');
+        var cr_1 = document.querySelector('input[name="cr_1"]:checked').value;
+        var opening_1 = document.querySelector('input[name="opening_1"]:checked').value;
+        var opening_2 = document.querySelector('input[name="opening_2"]:checked').value;
+        var opening_2 = document.querySelector('input[name="opening_2"]:checked').value;
+        var comp_1 = document.querySelector('input[name="comp_1"]:checked').value;
+        var comp_2 = document.querySelector('input[name="comp_2"]:checked').value;
+        var macro_1 = document.querySelector('input[name="macro_1"]:checked').value;
+        var macro_2 = document.querySelector('input[name="macro_2"]:checked').value;
+        var closing_1 = document.querySelector('input[name="closing_1"]:checked').value;
+        var closing_2 = document.querySelector('input[name="closing_2"]:checked').value;
+        if (cr_1 == "NA") {
+            cr_1=1;
+        } else{
+            cr_1=parseInt(document.querySelector('input[name="cr_1"]:checked').value);
+        }
+        if (opening_1 == "NA") {
+            opening_1=1;
+        } else{
+            opening_1=parseInt(document.querySelector('input[name="opening_1"]:checked').value);
+        }
+        if (opening_2 == "NA") {
+            opening_2=1;
+        } else{
+            opening_2=parseInt(document.querySelector('input[name="opening_2"]:checked').value);
+        }
+        if (comp_1 == "NA") {
+            comp_1=1;
+        } else{
+            comp_1=parseInt(document.querySelector('input[name="comp_1"]:checked').value);
+        }
+        if (comp_2 == "NA") {
+            comp_2=1;
+        } else{
+            comp_2=parseInt(document.querySelector('input[name="comp_2"]:checked').value);
+        }
+        if (macro_1 == "NA") {
+            macro_1=1;
+        } else{
+            macro_1=parseInt(document.querySelector('input[name="macro_1"]:checked').value);
+        }
+        if (macro_2 == "NA") {
+            macro_2=1;
+        } else{
+            macro_2=parseInt(document.querySelector('input[name="macro_2"]:checked').value);
+        }
+        if (closing_1 == "NA") {
+            closing_1=1;
+        } else{
+            closing_1=parseInt(document.querySelector('input[name="closing_1"]:checked').value);
+        }
+        if (closing_2 == "NA") {
+            closing_2=1;
+        } else{
+            closing_2=parseInt(document.querySelector('input[name="closing_2"]:checked').value);
+        }
+        for (var i = 0; i <= n; i++) {
+            cr_section_score.value = (cr_1+opening_2+opening_1+comp_1+comp_2+macro_1+macro_2+closing_1+closing_2)*4;
+        }
+        if (cr_section_score.value < 36) {
+            cr_section_score.classList.add("less");
+            cr_section_score.classList.remove("perfect");
+        }
+        else {
+            cr_section_score.classList.remove("less");
+            cr_section_score.classList.add("perfect");
+        }
+        score1= parseInt(cr_section_score.value);
+    }
+
+
+    function ir(e) {
+        n=n+1;
+        var ir_score = document.querySelector('input[name="ir_score"]');
+        var cir_1 = document.querySelector('input[name="cir_1"]:checked').value;
+        var cir_2 = document.querySelector('input[name="cir_2"]:checked').value;
+        var cir_3 = document.querySelector('input[name="cir_3"]:checked').value;
+        var cir_4 = document.querySelector('input[name="cir_4"]:checked').value;
+        var cir_5 = document.querySelector('input[name="cir_5"]:checked').value;
+        var cir_6 = document.querySelector('input[name="cir_6"]:checked').value;
+        var cir_7 = document.querySelector('input[name="cir_7"]:checked').value;
+        if (cir_1 == "NA") {
+            cir_1=1;
+        } else{
+            cir_1=parseInt(document.querySelector('input[name="cir_1"]:checked').value);
+        }
+        if (cir_2 == "NA") {
+            cir_2=1;
+        } else{
+            cir_2=parseInt(document.querySelector('input[name="cir_2"]:checked').value);
+        }
+        if (cir_3 == "NA") {
+            cir_3=1;
+        } else{
+            cir_3=parseInt(document.querySelector('input[name="cir_3"]:checked').value);
+        }
+        if (cir_4 == "NA") {
+            cir_4=1;
+        } else{
+            cir_4=parseInt(document.querySelector('input[name="cir_4"]:checked').value);
+        }
+        if (cir_5 == "NA") {
+            cir_5=1;
+        } else{
+            cir_5=parseInt(document.querySelector('input[name="cir_5"]:checked').value);
+        }
+        if (cir_6 == "NA") {
+            cir_6=1;
+        } else{
+            cir_6=parseInt(document.querySelector('input[name="cir_6"]:checked').value);
+        }
+        if (cir_7 == "NA") {
+            cir_7=1;
+        } else{
+            cir_7=parseInt(document.querySelector('input[name="cir_7"]:checked').value);
+        }
+        for (var i = 0; i <= n; i++) {
+            ir_score.value = (cir_1+cir_2+cir_3+cir_4+cir_5+cir_6+cir_7)*4;
+        }
+        if (ir_score.value < 28) {
+            ir_score.classList.add("less");
+            ir_score.classList.remove("perfect");
+        }
+        else {
+            ir_score.classList.remove("less");
+            ir_score.classList.add("perfect");
+        }
+        score2= parseInt(ir_score.value);
+    }
+
+
+    function sss(e) {
+        n=n+1;
+        var sss_score = document.querySelector('input[name="sss_score"]');
+        var et_1 = document.querySelector('input[name="et_1"]:checked').value;
+        var et_2 = document.querySelector('input[name="et_2"]:checked').value;
+        var et_3 = document.querySelector('input[name="et_3"]:checked').value;
+        var et_4 = document.querySelector('input[name="et_4"]:checked').value;
+        var et_5 = document.querySelector('input[name="et_5"]:checked').value;
+        if (et_1 == "NA") {
+            et_1=1;
+        } else{
+            et_1=parseInt(document.querySelector('input[name="et_1"]:checked').value);
+        }
+        if (et_2 == "NA") {
+            et_2=1;
+        } else{
+            et_2=parseInt(document.querySelector('input[name="et_2"]:checked').value);
+        }
+        if (et_3 == "NA") {
+            et_3=1;
+        } else{
+            et_3=parseInt(document.querySelector('input[name="et_3"]:checked').value);
+        }
+        if (et_4 == "NA") {
+            et_4=1;
+        } else{
+            et_4=parseInt(document.querySelector('input[name="et_4"]:checked').value);
+        }
+        if (et_5 == "NA") {
+            et_5=1;
+        } else{
+            et_5=parseInt(document.querySelector('input[name="et_5"]:checked').value);
+        }
+        for (var i = 0; i <= n; i++) {
+            sss_score.value = (et_1+et_2+et_3+et_4+et_5)*4;
+        }
+        if (sss_score.value < 20) {
+            sss_score.classList.add("less");
+            sss_score.classList.remove("perfect");
+        }
+        else {
+            sss_score.classList.remove("less");
+            sss_score.classList.add("perfect");
+        }
+        score3= parseInt(sss_score.value);
+    }
+    function doc(e) {
+        n=n+1;
+        var doc_score = document.querySelector('input[name="doc_score"]');
+        var doc_1 = document.querySelector('input[name="doc_1"]:checked').value;
+        var doc_2 = document.querySelector('input[name="doc_2"]:checked').value;
+        var doc_3 = document.querySelector('input[name="doc_3"]:checked').value;
+        var doc_4 = document.querySelector('input[name="doc_4"]:checked').value;
+        if (doc_1 == "NA") {
+            doc_1=1;
+        } else{
+            doc_1=parseInt(document.querySelector('input[name="doc_1"]:checked').value);
+        }
+        if (doc_2 == "NA") {
+            doc_2=1;
+        } else{
+            doc_2=parseInt(document.querySelector('input[name="doc_2"]:checked').value);
+        }
+        if (doc_3 == "NA") {
+            doc_3=1;
+        } else{
+            doc_3=parseInt(document.querySelector('input[name="doc_3"]:checked').value);
+        }
+        if (doc_4 == "NA") {
+            doc_4=1;
+        } else{
+            doc_4=parseInt(document.querySelector('input[name="doc_4"]:checked').value);
+        }
+        for (var i = 0; i <= n; i++) {
+            doc_score.value = (doc_1+doc_2+doc_3+doc_4)*4;
+        }
+        if (doc_score.value < 16) {
+            doc_score.classList.add("less");
+            doc_score.classList.remove("perfect");
+        }
+        else {
+            doc_score.classList.remove("less");
+            doc_score.classList.add("perfect");
+        }
+        score4= parseInt(doc_score.value);
+    }
+    function full_score(e) {
+        n=n+1;
+        var compliance_1 = parseInt(document.querySelector('input[name="compliance_1"]:checked').value);
+        var compliance_2 = parseInt(document.querySelector('input[name="compliance_2"]:checked').value);
+        var compliance_3 = parseInt(document.querySelector('input[name="compliance_3"]:checked').value);
+        var compliance_4 = parseInt(document.querySelector('input[name="compliance_4"]:checked').value);
+        var compliance_5 = parseInt(document.querySelector('input[name="compliance_5"]:checked').value);
+        var compliance_6 = parseInt(document.querySelector('input[name="compliance_6"]:checked').value);
+        var compliance_7 = parseInt(document.querySelector('input[name="compliance_7"]:checked').value);
+        var compliance_8 = parseInt(document.querySelector('input[name="compliance_8"]:checked').value);
+        var compliance_9 = parseInt(document.querySelector('input[name="compliance_9"]:checked').value);
+        var compliance_10 = parseInt(document.querySelector('input[name="compliance_10"]:checked').value);
+        var compliance_11 = parseInt(document.querySelector('input[name="compliance_11"]:checked').value);
+        var fullscore = document.getElementById('myscore');
+        if ((compliance_1 == 0 ) || ( compliance_2 == 0 ) || ( compliance_3 == 0 ) || ( compliance_4 == 0) || (compliance_5 == 0 ) || ( compliance_6 == 0 ) || ( compliance_7 == 0 ) || ( compliance_9 == 0) || (compliance_10 == 0 ) || (compliance_11 == 0 )){
+            fullscore.innerHTML = 0;
+        }
+        else {
+            for (var i = 0; i <= n; i++) {
+                fullscore.innerHTML = score1+score2+score3+score4+"%";
+            }
+        }
+    }
+
+</script>
+{% endblock %}

@@ -1,0 +1,352 @@
+{% extends "common_base.html" %}
+{% block main %}
+<style>
+    #report {
+        font-size: 18px;
+    }
+</style>
+        <!-- page content -->
+        <div class="right_col" role="main" id="report">
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12" align="center">
+                                    <h1>Audit Form - {{campaign.name}} ({{campaign.type}})</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <form action="/ilm-submit" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-2 form-group">
+                                        <label for="empname">Associate Name</label>
+                                        <input type="text" class="form-control" name="empname" id="empname" readonly value="{{profile.emp_name}}">
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="empid">Employee ID</label>
+                                        <input type="number" class="form-control" id="empid" name="empid" readonly value="{{profile.emp_id}}">
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="qa">Quality Analyst</label>
+                                        <input type="text" class="form-control" id="qa" name="qa" value="{{request.user.profile.emp_name}}" readonly>
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="tl">Team Lead</label>
+                                        <input type="text" class="form-control" id="tl" name="tl" readonly value="{{profile.emp_rm1}}">
+                                        <input type="hidden" name="tl_id" value="{{profile.emp_rm1_id}}">
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="manager">Manager</label>
+                                        <input type="text" class="form-control" id="manager" name="manager" readonly value="{{profile.emp_rm3}}">
+                                        <input type="hidden" name="manager_id" value="{{profile.emp_rm3_id}}">
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="am">AM</label>
+                                        <input type="text" class="form-control" id="am" name="am" readonly value="{{profile.emp_rm2}}">
+                                        <input type="hidden" name="am_id" value="{{profile.emp_rm2_id}}">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 form-group">
+                                        <label for="customer">Customer Name</label>
+                                        <input type="text" class="form-control" id="customer" name="customer" required="">
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <input type="hidden" class="form-control" name="campaign1" value="Amerisave">
+                                        <label for="ticketnumber">Ticket Number</label>
+                                        <input type="text" class="form-control" id="ticketnumber" name="ticketnumber" required="">
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="week">Week</label>
+                                        <select class="form-control" name="week" id="week" required="">
+                                            <option value="week1">Week1</option>
+                                            <option value="week2">Week2</option>
+                                            <option value="week3">Week3</option>
+                                            <option value="week4">Week4</option>
+                                            <option value="week5">Week5</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <input type="hidden" class="form-control" name="campaign1" value="Amerisave">
+                                        <label for="zone">Zone</label>
+                                        <input type="text" class="form-control" id="zone" name="zone" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 form-group">
+                                        <label for="concept">Concept</label>
+                                        <input type="text" class="form-control" id="concept" name="concept" required="">
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="qt">Query Type</label>
+                                        <input type="text" class="form-control" id="qt" name="query_type" required="">
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="calldate">Email/Chat date</label>
+                                        <input type="date" class="form-control" id="calldate" name="trans_date" required="">
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="auditdate">Audit Date</label>
+                                        <input type="text" class="form-control" value="{{today}}" readonly>
+                                        <input type="hidden" value="{{today}}" id="auditdate" name="auditdate">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12 mt-3">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>Solution</h4>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        Understanding and Solved Customer's Issue
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="s_1" value="10" id="yes4" required="">
+                                        <label for="yes4">Yes</label>
+                                        <input type="radio" name="s_1" value="0" id="no4">
+                                        <label for="no4">No</label>
+                                        <input type="radio" name="s_1" value="NA" id="na4">
+                                        <label for="na4">NA</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        Gave alternatives when required/applicable &amp; Displayed expert product knowledge
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="s_2" value="10" id="yes5" required="">
+                                        <label for="yes5">Yes</label>
+                                        <input type="radio" name="s_2" value="0" id="no5">
+                                        <label for="no5">No</label>
+                                        <input type="radio" name="s_2" value="NA" id="na5">
+                                        <label for="na5">NA</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        Coupon code added/Edited Name/Values &amp; Date//Personalised when applicable
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="s_3" value="10" id="yes6" required="">
+                                        <label for="yes6">Yes</label>
+                                        <input type="radio" name="s_3" value="0" id="no6">
+                                        <label for="no6">No</label>
+                                        <input type="radio" name="s_3" value="NA" id="na6">
+                                        <label for="na6">NA</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                       Answered all question effectively
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="s_4" value="10" id="yes7" required="">
+                                        <label for="yes7">Yes</label>
+                                        <input type="radio" name="s_4" value="0" id="no7">
+                                        <label for="no7">No</label>
+                                        <input type="radio" name="s_4" value="NA" id="na7">
+                                        <label for="na7">NA</label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12 mt-3">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>Efficiency</h4>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        Resolved issue in a timely manner
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="e_1" value="10" id="b1" required="">
+                                        <label for="b1">Yes</label>
+                                        <input type="radio" name="e_1" value="0" id="b2">
+                                        <label for="b2">No</label>
+                                        <input type="radio" name="e_1" value="NA" id="ne2">
+                                        <label for="ne2">NA</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        Categorized case properly/Check other Tickets &amp;Previous communition Merged
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="e_2" value="10" id="b3" required="">
+                                        <label for="b3">Yes</label>
+                                        <input type="radio" name="e_2" value="0" id="b4">
+                                        <label for="b4">No</label>
+                                        <input type="radio" name="e_2" value="NA" id="ne4">
+                                        <label for="ne4">NA</label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12 mt-3">
+                                <div class="row mt-3">
+                                    <div class="col-md-12">
+                                        <h4>Compliance</h4>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        Appropriate use of macros
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="compliance_1" value="10" id="yes1" required="">
+                                        <label for="yes1">Yes</label>
+                                        <input type="radio" name="compliance_1" value="0" id="no1">
+                                        <label for="no1">No</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        Magento was utilized correctly
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="compliance_2" value="15" id="yes2" required="">
+                                        <label for="yes2">Yes</label>
+                                        <input type="radio" name="compliance_2" value="0" id="no2">
+                                        <label for="no2">No</label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-8">
+                                        Identified correct order type
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="radio" name="compliance_3" value="15" id="yes3" required="">
+                                        <label for="yes3">Yes</label>
+                                        <input type="radio" name="compliance_3" value="0" id="no3">
+                                        <label for="no3">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h4>Areas of improvement</h4>
+                                        <textarea name="areaimprovement" id="areaimp" cols="30" rows="5" class="form-control" required=""></textarea>
+                                    </div>
+                                    <div class="col-md-12 mt-2">
+                                        <h4>Positives</h4>
+                                        <textarea name="positives" id="positives" cols="30" rows="5" class="form-control" required=""></textarea>
+                                    </div>
+                                    <div class="col-md-12 mt-2">
+                                        <h4>Comments</h4>
+                                        <textarea name="comments" id="cfeedback" cols="30" rows="5" class="form-control" required=""></textarea>
+                                    </div>
+                                    <div class="col-md-12 mt-5" align="center">
+                                        <button type="button" class="btn btn-lg btn-info" onclick="full_score(this)" data-toggle="modal" data-target="#viewscore">View Score</button>
+                                        <button class="btn btn-lg btn-success" onclick="return confirmm();" type="submit">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" name="campaign_name" value="{{campaign.name}}">
+                            <input type="hidden" name="campaign_type" value="{{campaign.type}}">
+                            <input type="hidden" name="start_time" value="{{start_time}}">
+                        </form>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="viewscore" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Full Score</h5><p class="mt-2"> (Please select all the options to see score)</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div align="center">
+                    <h1 id="myscore"></h1>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+ {% endblock %}
+
+
+{% block scripts %}
+    <script>
+        $mydate = $("#auditdate").val();
+        $("#auditdate").val(moment($mydate).format("YYYY-MM-DD"));
+    </script>
+<script type="text/javascript">
+    var n=0;
+    var a;
+    function full_score(e) {
+        n=n+1;
+        var s_1 = document.querySelector('input[name="s_1"]:checked').value;
+        var s_2 = document.querySelector('input[name="s_2"]:checked').value;
+        var s_3 = document.querySelector('input[name="s_3"]:checked').value;
+        var s_4 = document.querySelector('input[name="s_4"]:checked').value;
+        var e_1 = document.querySelector('input[name="e_1"]:checked').value;
+        var e_2 = document.querySelector('input[name="e_2"]:checked').value;
+        var compliance_1 = parseInt(document.querySelector('input[name="compliance_1"]:checked').value);
+        var compliance_2 = parseInt(document.querySelector('input[name="compliance_2"]:checked').value);
+        var compliance_3 = parseInt(document.querySelector('input[name="compliance_3"]:checked').value);
+        var fullscore = document.getElementById('myscore');
+        a=100;
+        if (s_1 == "NA") {
+            a=a-10;
+            s_1 = 0;
+        }else{
+            s_1 = parseInt(s_1);
+        }
+        if ((s_2 == "NA")) {
+            a=a-10;
+            s_2 = 0;
+        } else{
+            s_2 = parseInt(s_2);
+        }
+        if ((s_3 == "NA")) {
+            a=a-10;
+            s_3 = 0;
+        }else{
+            s_3 = parseInt(s_3);
+        }
+        if ((s_4 == "NA")) {
+            a=a-10;
+            s_4 = 0;
+        } else {
+            s_4 = parseInt(s_4);
+        }
+        if ((e_1 == "NA")) {
+            a=a-10;
+            e_1 = 0;
+        } else{
+            e_1 = parseInt(e_1);
+        }
+        if ((e_2 == "NA")) {
+            a=a-10;
+            e_2 = 0;
+        }else{
+            e_2 = parseInt(e_2);
+        }
+        for (var i = 0; i <= n; i++) {
+            fullscore.innerHTML = (((s_1+s_2+s_3+s_4+e_1+e_2+compliance_1+compliance_2+compliance_3)/a)*100).toFixed(2)+"%";
+        }
+    }
+
+</script>
+            {% endblock %}
