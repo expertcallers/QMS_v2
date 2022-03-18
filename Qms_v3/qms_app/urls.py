@@ -42,6 +42,8 @@ urlpatterns = [
     path('add-email', AddEmail),
     path('add-user', AddUser),
     path('add-campaign', AddCampaign),
+    path('add-qa-mapping', AddQaMapping),
+    path('view-qa-mapping', viewQaMapping),
     path('edit-email', EditEmail),
     path("settings", change_password),
 ]

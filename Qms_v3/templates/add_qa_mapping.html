@@ -8,7 +8,7 @@
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header">
-                  <h2>Add User</h2>
+                  <h2>QA Mapping</h2>
                 </div>
                 <div class="card-body">
                     <form action="" method="POST" enctype="multipart/form-data">
@@ -16,20 +16,25 @@
                         <div class="row">
                             <div class="col-md-4"></div>
                             <div class="col-md-4 mt-2 form-group">
-                                <label for="cam_name">Campaign Name</label>
-                                <input type="text" class="form-control" name="cam_name" id="cam_name" required>
+                                <label for="qa">QA</label>
+                                <select name="qa" id="qa" class="form-control select2" required>
+                                    <option value="" selected disabled>Please Select</option>
+                                    {% for i in qa %}
+                                    <option value="{{i.emp_id}}">{{i.emp_name}} ({{i.emp_id}})</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="col-md-4"></div>
                         </div>
                         <div class="row">
                             <div class="col-md-4"></div>
                             <div class="col-md-4 mt-2 form-group">
-                                <label for="cam_type">Campaign Type</label>
-                                <select name="cam_type" id="cam_type" class="form-control select2" required>
+                                <label for="campaign">Campaign</label>
+                                <select name="campaign" id="campaign" class="form-control select2" required>
                                     <option value="" selected disabled>Please Select</option>
-                                    <option value="Outbound">Outbound</option>
-                                    <option value="Inbound">Inbound</option>
-                                    <option value="Email / Chat">Email / Chat</option>
+                                    {% for i in campaigns %}
+                                    <option value="{{i.id}}">{{i.name}} ({{i.type}})</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                             <div class="col-md-4"></div>

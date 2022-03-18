@@ -56,7 +56,7 @@
                       <select id="campaign" name="campaign" class="form-control select2" required>
                         <option value="" selected disabled>Please Select</option>
                         {% for i in out_campaigns %}
-                        <option value="{{i.name}}">{{i.name}}</option>
+                        <option value="{{i.campaign_id}}">{{i.campaign}}</option>
                         {% endfor %}
                       </select>
                       <label for="emp" class="mt-3">Employee</label>
@@ -79,7 +79,7 @@
                       <select id="campaign_inbound" name="campaign" class="form-control select2" required>
                         <option value="" selected disabled>Please Select</option>
                         {% for i in in_campaign %}
-                        <option value="{{i.name}}">{{i.name}}</option>
+                        <option value="{{i.campaign_id}}">{{i.campaign}}</option>
                         {% endfor %}
                       </select>
                       <label for="emp_inbound" class="mt-3">Employee</label>
@@ -102,7 +102,7 @@
                       <select id="campaign_email" name="campaign" class="form-control select2" required>
                         <option value="" selected disabled>Please Select</option>
                         {% for i in email_campaign %}
-                        <option value="{{i.name}}">{{i.name}}</option>
+                        <option value="{{i.campaign_id}}">{{i.campaign}}</option>
                         {% endfor %}
                       </select>
                       <label for="emp_email" class="mt-3">Employee</label>
@@ -125,7 +125,7 @@
                       <select id="campaign_other" name="campaign" class="form-control select2" required>
                         <option value="" selected disabled>Please Select</option>
                         {% for i in other_campaign %}
-                        <option value="{{i.name}}">{{i.name}}</option>
+                        <option value="{{i.campaign_id}}">{{i.campaign}}</option>
                         {% endfor %}
                       </select>
                       <label for="emp_other" class="mt-3">Employee</label>

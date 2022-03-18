@@ -26,8 +26,15 @@ class Campaign(models.Model):
     name = models.CharField(max_length=150)
     type = models.CharField(max_length=50)
     page_type = models.CharField(max_length=50)
-    manager_id = models.ForeignKey(User, on_delete=models.CASCADE,related_name='mgr')
-    qa_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name='qa')
+
+    def __str__(self):
+        return str(self.name)
+
+
+class CampaignMapping(models.Model):
+    qa = models.CharField(max_length=150)
+    qa_id = models.CharField(max_length=50)
+    campaign = models.ForeignKey(Campaign,on_delete=models.CASCADE)
 
 
 class Outbound(models.Model):

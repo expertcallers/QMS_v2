@@ -327,11 +327,11 @@ def qaDashboard(request):
     user = request.user
     emp_id = request.user.profile.emp_id
     if user.profile.emp_desi in qa_list:
-        campaigns = Campaign.objects.filter(qa_id=user)
-        out_campaigns = Campaign.objects.filter(qa_id=user, type='Outbound')
-        in_campaign = Campaign.objects.filter(qa_id=user, type='Inbound')
-        email_campaign = Campaign.objects.filter(qa_id=user, type='Email / Chat')
-        other_campaign = Campaign.objects.filter(qa_id=user).exclude(type__in=['Outbound', 'Inbound', 'Email / Chat'])
+        campaigns = Campaign.objects.all()
+        out_campaigns = CampaignMapping.objects.filter(qa_id=emp_id,campaign__type='Outbound')
+        in_campaign = CampaignMapping.objects.filter(qa_id=emp_id,campaign__type='Inbound')
+        email_campaign = CampaignMapping.objects.filter(qa_id=emp_id,campaign__type='Email / Chat')
+        other_campaign = CampaignMapping.objects.filter(qa_id=emp_id).exclude(campaign__type__in=['Outbound', 'Inbound', 'Email / Chat'])
         profile = Profile.objects.filter(emp_desi__in=agent_list)
 
         # All Audits
@@ -691,8 +691,9 @@ def ManagerReportTable(request, type):
 def formView(request):
     if request.method == "POST":
         campaign = request.POST["campaign"]
+
         emp = request.POST["emp"]
-        campaign = Campaign.objects.get(name=campaign)
+        campaign = Campaign.objects.get(id=campaign)
         type = campaign.page_type
         profile = Profile.objects.get(emp_id=emp)
         today = date.today()
@@ -3451,7 +3452,7 @@ def AddUser(request):
                 try:
                     User.objects.get(username=emp_id)
                     messages.info(request, "User not added because user with same Employee Id already Exists")
-                    return redirect("/manager-dashboard")
+                    return redirect("/add-user")
                 except User.DoesNotExist:
                     a = User.objects.create_user(username=emp_id, password=emp_id)
                     e = Profile()
@@ -3472,10 +3473,10 @@ def AddUser(request):
                     e.save()
 
                     messages.info(request, "The user has been added! The username and password is " + emp_id)
-                    return redirect("/manager-dashboard")
+                    return redirect("/add-user")
             else:
-                messages.info(request, "Invalid Admin Credentials :)")
-                return redirect("/manager-dashboard")
+                messages.info(request, "User Not Added. Invalid Admin Credentials :)")
+                return redirect("/add-user")
         else:
             cam = Campaign.objects.all()
             profiles = Profile.objects.all().exclude(emp_desi__in=agent_list)
@@ -3484,37 +3485,72 @@ def AddUser(request):
     else:
         messages.info(request, "Invalid Request. You have been logged out :)")
         return redirect("/")
-
+@login_required
 def AddCampaign(request):
-    if request.method == 'POST':
-        campaign = request.POST['cam_name']
-        cam_type = request.POST['cam_type']
-        qa = request.POST['qa']
-        qa = User.objects.get(username=qa)
-        manager = request.POST['manager']
-        manager = User.objects.get(username=manager)
+    emp_desi = request.user.profile.emp_desi
+    if emp_desi in mgr_list:
+        if request.method == 'POST':
+            campaign = request.POST['cam_name']
+            cam_type = request.POST['cam_type']
 
-        if cam_type == "Outbound":
-            page_type = "Outbound"
-        elif cam_type == "Inbound":
-            page_type = "Inbound"
+            if cam_type == "Outbound":
+                page_type = "Outbound"
+            elif cam_type == "Inbound":
+                page_type = "Inbound"
+            else:
+                page_type = "Email"
+            try:
+                Campaign.objects.get(name__iexact=campaign,type=cam_type)
+                messages.info(request, "Campaign With Same Name and Type is already Available!")
+                return redirect("/add-campaign")
+            except Campaign.DoesNotExist:
+                e = Campaign()
+                e.name = campaign
+                e.type = cam_type
+                e.page_type = page_type
+                e.save()
+                messages.info(request, "Campaign Added Successfully !")
+                return redirect("/add-campaign")
         else:
-            page_type = "Email"
-        e = Campaign()
-        e.name = campaign
-        e.type = cam_type
-        e.page_type = page_type
-        e.manager_id = manager
-        e.qa_id = qa
-        e.save()
-        messages.info(request, "Campaign Added Successfully !")
-        return redirect("/dashboard-redirect")
+            return render(request, "add_campaign.html")
     else:
-        cam = Campaign.objects.all()
-        qa = Profile.objects.filter(emp_desi__in=qa_list)
-        manager = Profile.objects.filter(emp_desi__in=mgr_list)
-        data = {"campaigns": cam, "qa": qa, "manager":manager}
-        return render(request, "add_campaign.html", data)
+        messages.info(request, "Invalid Request. You have been logged out :)")
+        return redirect("/")
+
+
+@login_required
+def AddQaMapping(request):
+    emp_desi = request.user.profile.emp_desi
+    if emp_desi in mgr_list:
+        if request.method == 'POST':
+            qa_id = request.POST['qa']
+            campaign = request.POST['campaign']
+            campaign = Campaign.objects.get(id=campaign)
+            qa_name = Profile.objects.get(emp_id=qa_id).emp_name
+            try:
+                CampaignMapping.objects.get(qa_id=qa_id,campaign=campaign)
+                messages.info(request, "QA already assigned to this campaign !")
+                return redirect("/add-qa-mapping")
+            except CampaignMapping.DoesNotExist:
+                cam = CampaignMapping()
+                cam.qa = qa_name
+                cam.qa_id = qa_id
+                cam.campaign = campaign
+                cam.save()
+                messages.info(request, "QA assigned Successfully !")
+                return redirect("/view-qa-mapping")
+        else:
+            campaigns = Campaign.objects.all()
+            qa = Profile.objects.filter(emp_desi__in=qa_list)
+            data = {'campaigns':campaigns,'qa':qa}
+            return render(request, "add_qa_mapping.html",data)
+    else:
+        messages.info(request, "Invalid Request. You have been logged out :)")
+        return redirect("/")
+
+def viewQaMapping(request):
+    messages.info(request, "Comming Soon")
+    return redirect("/dashboard-redirect")
 
 # Outbound Form Submit
 @login_required

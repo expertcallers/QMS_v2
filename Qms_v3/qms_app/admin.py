@@ -9,7 +9,12 @@ class ProfileSearch(admin.ModelAdmin):
 
 class CampaignSearch(admin.ModelAdmin):
     search_fields = ('name', 'type')
-    list_display = ('name', 'type', 'page_type', 'manager_id', 'qa_id')
+    list_display = ('name', 'type', 'page_type')
+
+
+class CampaignMappingSearch(admin.ModelAdmin):
+    search_fields = ('qa', 'qa_id', 'campaign')
+    list_display = ('qa', 'qa_id', 'campaign')
 
 
 class Search(admin.ModelAdmin):
@@ -18,6 +23,7 @@ class Search(admin.ModelAdmin):
 
 
 admin.site.register(Campaign, CampaignSearch)
+admin.site.register(CampaignMapping,CampaignMappingSearch)
 admin.site.register(Profile, ProfileSearch)
 admin.site.register(Outbound, Search)
 admin.site.register(Inbound, Search)
