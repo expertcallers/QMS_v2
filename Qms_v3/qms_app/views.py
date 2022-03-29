@@ -8,7 +8,10 @@ from django.db.models import Q, Avg
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from drf_multiple_model.views import FlatMultipleModelAPIView
+
 from .models import *
+from .serializers import *
 
 # Create your views here.
 
@@ -5608,3 +5611,52 @@ def SpoiledChildSubmit(request):
         messages.warning(request, 'Invalid request. You have been Logged out!')
         return redirect("/")
 
+
+class TotalList(FlatMultipleModelAPIView):
+    querylist = [
+        {'queryset': Outbound.objects.all(),
+         'serializer_class': OutboundSerializer},
+
+        {'queryset': Inbound.objects.all(),
+         'serializer_class': InboundSerializer},
+
+        {'queryset': EmailChat.objects.all(),
+         'serializer_class': EmailChatSerializer},
+
+        {'queryset': DigitalSwissGold.objects.all(),
+         'serializer_class': DigitalSwissGoldSerializer},
+
+        {'queryset': FLA.objects.all(),
+         'serializer_class': FLASerializer},
+
+        {'queryset': BlazingHog.objects.all(),
+         'serializer_class': BlazingHogSerializer},
+
+        {'queryset': NoomPod.objects.all(),
+         'serializer_class': NoomPodSerializer},
+
+       {'queryset': NoomEva.objects.all(),
+         'serializer_class': NoomEvaSerializer},
+
+        {'queryset': AbHindalco.objects.all(),
+         'serializer_class': AbHindalcoSerializer},
+
+        {'queryset': FameHouse.objects.all(),
+         'serializer_class': FameHouseSerializer},
+
+        {'queryset': Practo.objects.all(),
+         'serializer_class': PractoSerializer},
+
+        {'queryset': ILMakiage.objects.all(),
+         'serializer_class': ILMakiageSerializer},
+
+        {'queryset': Winopoly.objects.all(),
+         'serializer_class': WinopolySerializer},
+
+        {'queryset': Nerotel.objects.all(),
+         'serializer_class': NerotelSerializer},
+
+        {'queryset': SpoiledChild.objects.all(),
+         'serializer_class': SpoiledChildSerializer},
+
+        ]
