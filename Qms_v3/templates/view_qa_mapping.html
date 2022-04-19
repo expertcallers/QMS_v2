@@ -1,0 +1,54 @@
+{% extends "common_base.html" %}
+{% block main %}
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="page-title">
+            <div class="title_left">
+              <h3>View/Edit Mapping</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <table  id="datatablex" class="table table-striped" style="width: 100%;">
+                    <thead>
+                      <tr>
+                        <th>QA</th>
+                        <th>QA Employee Id</th>
+                        <th>Campaign</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <th>QA</th>
+                        <th>QA Employee Id</th>
+                        <th>Campaign</th>
+                        <th>Action</th>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                    {% for i in campaigns %}
+                      <tr>
+                        <td>{{i.qa}}</td>
+                        <td>{{i.qa_id}}</td>
+                        <td>{{i.campaign}}</td>
+                        <td>
+                          <form action="/delete-qa-mapping" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" value="{{i.id}}" name="id">
+                            <button type="submit" onclick="return confirmm();" class="btn btn-danger btn-sm">Delete</button>
+                          </form>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+{% endblock %}

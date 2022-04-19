@@ -888,145 +888,148 @@ def agentReportTable(request, type):
 def IndividualAgentReportTable(request, type, emp_id):
     designation = request.user.profile.emp_desi
     logged_emp_id = request.user.profile.emp_id
-
-    def auditcalculator(type):
-        audits = []
-        emp_desi = Profile.objects.get(emp_id=emp_id).emp_desi
-        if designation in mgr_list:
-            if emp_desi in agent_list:
-                if type == 'all':
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(emp_id=emp_id)
-                        audits.append(tot_obj)
-                elif type == "fatal":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(emp_id=emp_id, fatal=True,
-                                                   audit_date__range=[month_start_date, todays_date])
-                        audits.append(tot_obj)
-                elif type == "month":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date])
-                        audits.append(tot_obj)
-                elif type == "open":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(emp_id=emp_id, status=False)
-                        audits.append(tot_obj)
-                elif type == "dispute":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(emp_id=emp_id, dispute_status=True)
-                        audits.append(tot_obj)
+    if designation not in agent_list:
+        def auditcalculator(type):
+            audits = []
+            emp_desi = Profile.objects.get(emp_id=emp_id).emp_desi
+            if designation in mgr_list:
+                if emp_desi in agent_list:
+                    if type == 'all':
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(emp_id=emp_id)
+                            audits.append(tot_obj)
+                    elif type == "fatal":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(emp_id=emp_id, fatal=True,
+                                                       audit_date__range=[month_start_date, todays_date])
+                            audits.append(tot_obj)
+                    elif type == "month":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date])
+                            audits.append(tot_obj)
+                    elif type == "open":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(emp_id=emp_id, status=False)
+                            audits.append(tot_obj)
+                    elif type == "dispute":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(emp_id=emp_id, dispute_status=True)
+                            audits.append(tot_obj)
+                    else:
+                        messages.info(request, 'Invalid Request.')
+                        return redirect("/")
+                elif emp_desi in qa_list:
+                    if type == 'all':
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(added_by=emp_id)
+                            audits.append(tot_obj)
+                    elif type == "fatal":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(added_by=emp_id, fatal=True,
+                                                       audit_date__range=[month_start_date, todays_date])
+                            audits.append(tot_obj)
+                    elif type == "month":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(added_by=emp_id, audit_date__range=[month_start_date, todays_date])
+                            audits.append(tot_obj)
+                    elif type == "open":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(added_by=emp_id, status=False)
+                            audits.append(tot_obj)
+                    elif type == "dispute":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(added_by=emp_id, dispute_status=True)
+                            audits.append(tot_obj)
+                    else:
+                        messages.info(request, 'Invalid Request.')
+                        return redirect("/")
+                elif emp_desi == "Team Leader":
+                    if type == 'all':
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(team_lead_id=emp_id)
+                            audits.append(tot_obj)
+                    elif type == "fatal":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(team_lead_id=emp_id, fatal=True,
+                                                       audit_date__range=[month_start_date, todays_date])
+                            audits.append(tot_obj)
+                    elif type == "month":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(team_lead_id=emp_id, audit_date__range=[month_start_date, todays_date])
+                            audits.append(tot_obj)
+                    elif type == "open":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(team_lead_id=emp_id, status=False)
+                            audits.append(tot_obj)
+                    elif type == "dispute":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(team_lead_id=emp_id, dispute_status=True)
+                            audits.append(tot_obj)
+                    else:
+                        messages.info(request, 'Invalid Request.')
+                        return redirect("/")
+                elif emp_desi == "Assistant Manager":
+                    if type == 'all':
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(am_id=emp_id)
+                            audits.append(tot_obj)
+                    elif type == "fatal":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(am_id=emp_id, fatal=True,
+                                                       audit_date__range=[month_start_date, todays_date])
+                            audits.append(tot_obj)
+                    elif type == "month":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(am_id=emp_id, audit_date__range=[month_start_date, todays_date])
+                            audits.append(tot_obj)
+                    elif type == "open":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(am_id=emp_id, status=False)
+                            audits.append(tot_obj)
+                    elif type == "dispute":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(am_id=emp_id, dispute_status=True)
+                            audits.append(tot_obj)
+                    else:
+                        messages.info(request, 'Invalid Request.')
+                        return redirect("/")
                 else:
-                    messages.info(request, 'Invalid Request.')
-                    return redirect("/")
-            elif emp_desi in qa_list:
-                if type == 'all':
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(added_by=emp_id)
-                        audits.append(tot_obj)
-                elif type == "fatal":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(added_by=emp_id, fatal=True,
-                                                   audit_date__range=[month_start_date, todays_date])
-                        audits.append(tot_obj)
-                elif type == "month":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(added_by=emp_id, audit_date__range=[month_start_date, todays_date])
-                        audits.append(tot_obj)
-                elif type == "open":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(added_by=emp_id, status=False)
-                        audits.append(tot_obj)
-                elif type == "dispute":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(added_by=emp_id, dispute_status=True)
-                        audits.append(tot_obj)
-                else:
-                    messages.info(request, 'Invalid Request.')
-                    return redirect("/")
-            elif emp_desi == "Team Leader":
-                if type == 'all':
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(team_lead_id=emp_id)
-                        audits.append(tot_obj)
-                elif type == "fatal":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(team_lead_id=emp_id, fatal=True,
-                                                   audit_date__range=[month_start_date, todays_date])
-                        audits.append(tot_obj)
-                elif type == "month":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(team_lead_id=emp_id, audit_date__range=[month_start_date, todays_date])
-                        audits.append(tot_obj)
-                elif type == "open":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(team_lead_id=emp_id, status=False)
-                        audits.append(tot_obj)
-                elif type == "dispute":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(team_lead_id=emp_id, dispute_status=True)
-                        audits.append(tot_obj)
-                else:
-                    messages.info(request, 'Invalid Request.')
-                    return redirect("/")
-            elif emp_desi == "Assistant Manager":
-                if type == 'all':
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(am_id=emp_id)
-                        audits.append(tot_obj)
-                elif type == "fatal":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(am_id=emp_id, fatal=True,
-                                                   audit_date__range=[month_start_date, todays_date])
-                        audits.append(tot_obj)
-                elif type == "month":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(am_id=emp_id, audit_date__range=[month_start_date, todays_date])
-                        audits.append(tot_obj)
-                elif type == "open":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(am_id=emp_id, status=False)
-                        audits.append(tot_obj)
-                elif type == "dispute":
-                    for i in campaign_list:
-                        tot_obj = i.objects.filter(am_id=emp_id, dispute_status=True)
-                        audits.append(tot_obj)
-                else:
-                    messages.info(request, 'Invalid Request.')
+                    messages.warning(request, 'Invalid request. You have been Logged out!')
                     return redirect("/")
             else:
-                messages.warning(request, 'Invalid request. You have been Logged out!')
-                return redirect("/")
-        else:
-            if type == 'all':
-                for i in campaign_list:
-                    tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id)
-                    audits.append(tot_obj)
-            elif type == "fatal":
-                for i in campaign_list:
-                    tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, fatal=True,
-                                               audit_date__range=[month_start_date, todays_date])
-                    audits.append(tot_obj)
-            elif type == "month":
-                for i in campaign_list:
-                    tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id,
-                                               audit_date__range=[month_start_date, todays_date])
-                    audits.append(tot_obj)
-            elif type == "open":
-                for i in campaign_list:
-                    tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, status=False)
-                    audits.append(tot_obj)
-            elif type == "dispute":
-                for i in campaign_list:
-                    tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, dispute_status=True)
-                    audits.append(tot_obj)
-            else:
-                messages.info(request, 'Invalid Request.')
-                return redirect("/")
-        return audits
+                if type == 'all':
+                    for i in campaign_list:
+                        tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id)
+                        audits.append(tot_obj)
+                elif type == "fatal":
+                    for i in campaign_list:
+                        tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, fatal=True,
+                                                   audit_date__range=[month_start_date, todays_date])
+                        audits.append(tot_obj)
+                elif type == "month":
+                    for i in campaign_list:
+                        tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id,
+                                                   audit_date__range=[month_start_date, todays_date])
+                        audits.append(tot_obj)
+                elif type == "open":
+                    for i in campaign_list:
+                        tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, status=False)
+                        audits.append(tot_obj)
+                elif type == "dispute":
+                    for i in campaign_list:
+                        tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, dispute_status=True)
+                        audits.append(tot_obj)
+                else:
+                    messages.info(request, 'Invalid Request.')
+                    return redirect("/")
+            return audits
 
-    audits = auditcalculator(type)
-    data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list":agent_list, "mgr_list":mgr_list}
-    return render(request, "agent_reports.html", data)
+        audits = auditcalculator(type)
+        data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list":agent_list, "mgr_list":mgr_list}
+        return render(request, "agent_reports.html", data)
+    else:
+        messages.warning(request, 'Invalid request. You have been Logged out!')
+        return redirect("/")
 
 
 # Agent Report (agent-report)
@@ -3551,9 +3554,27 @@ def AddQaMapping(request):
         messages.info(request, "Invalid Request. You have been logged out :)")
         return redirect("/")
 
+
+# View QA Mapping
+@login_required
 def viewQaMapping(request):
-    messages.info(request, "Comming Soon")
-    return redirect("/dashboard-redirect")
+    campaigns = CampaignMapping.objects.all()
+    qa = Profile.objects.filter(emp_desi__in=qa_list)
+    data = {'campaigns': campaigns, 'qa': qa}
+    return render(request, "view_qa_mapping.html", data)
+
+# Delete QA Mapping
+@login_required
+def deleteQaMapping(request):
+    if request.method == "POST":
+        id = request.POST["id"]
+        e = CampaignMapping.objects.get(id=id)
+        e.delete()
+        messages.info(request, "Mapping of deleted Successfully")
+        return redirect("/view-qa-mapping")
+    else:
+        messages.info(request, "Invalid Request. You have been logged out :)")
+        return redirect("/")
 
 # Outbound Form Submit
 @login_required
@@ -4910,7 +4931,6 @@ def fameHouseSubmit(request):
                            compliance_7 + compliance_8 + compliance_9 + compliance_10 + compliance_11
 
         sum_list = []
-
         def scoreCalc(pk):
             if pk == 'NA':
                 return pk
@@ -4975,7 +4995,10 @@ def fameHouseSubmit(request):
             overall_score = 0
             fatal = True
         else:
-            overall_score = (sum(sum_list) / len(sum_list)) * 100
+            if sum(sum_list) != 0:
+                overall_score = (sum(sum_list) / len(sum_list)) * 100
+            else:
+                overall_score = 100
             fatal = False
 
         #################################################

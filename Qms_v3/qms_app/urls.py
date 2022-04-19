@@ -46,6 +46,7 @@ urlpatterns = [
     path('view-qa-mapping', viewQaMapping),
     path('edit-email', EditEmail),
     path("settings", change_password),
+    path("delete-qa-mapping", deleteQaMapping),
     path("total-list",TotalList.as_view(),name="to_show_the_total_list_of_tables"),
 
 
