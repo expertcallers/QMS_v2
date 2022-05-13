@@ -33,7 +33,7 @@
                       <tr>
                         <td>{{i.qa}}</td>
                         <td>{{i.qa_id}}</td>
-                        <td>{{i.campaign}}</td>
+                        <td>{{i.campaign.name}} ({{i.campaign.type}})</td>
                         <td>
                           <form action="/delete-qa-mapping" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
