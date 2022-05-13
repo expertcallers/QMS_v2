@@ -7,7 +7,7 @@
 </style>
 <!-- page content -->
     <div class="right_col" role="main" id="report">
-        <div class="row">
+        <div class="row pb-3">
             <div class="card">
                 <div class="card-body">
                     <div class="col-md-12">
@@ -39,23 +39,27 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-2 form-group">
+                                <div class="col-md-3 form-group">
                                     <label for="case_no">Case Number/Chat Link</label>
                                     <input type="text" class="form-control" id="case_no" name="case_no" required>
                                 </div>
-                                <div class="col-md-2 form-group">
-                                    <label for="query_type">Query Type</label>
-                                    <input type="text" class="form-control" id="query_type" name="query_type" required>
+                                <div class="col-md-3 form-group">
+                                    <label for="query_type">Issue Type</label>
+                                    <input type="text" class="form-control" id="query_type" name="issue_type" required>
                                 </div>
-                                <div class="col-md-2 form-group">
-                                    <label for="sub_query_type">Sub-Query Type</label>
-                                    <input type="text" class="form-control" id="sub_query_type" name="sub_query_type" required>
+                                <div class="col-md-3 form-group">
+                                    <label for="sub_query_type">Sub-Issue Type</label>
+                                    <input type="text" class="form-control" id="sub_query_type" name="sub_issue_type" required>
                                 </div>
-                                <div class="col-md-2 form-group">
+                                <div class="col-md-3 form-group">
+                                    <label for="sub_sub_issue_type">Sub Sub-Issue Type</label>
+                                    <input type="text" class="form-control" id="sub_sub_issue_type" name="sub_sub_issue_type" required>
+                                </div>
+                                <div class="col-md-4 form-group">
                                     <label for="chat_date">Chat Date</label>
                                     <input type="date" class="form-control" id="chat_date" name="chat_date" required="">
                                 </div>
-                                <div class="col-md-2 form-group">
+                                <div class="col-md-4 form-group">
                                     <label for="csat">CSAT</label>
                                     <select class="form-control" id="csat" name="csat" required="">
                                         <option value="" selected disabled>Please Select</option>
@@ -67,7 +71,7 @@
                                         <option value="No">No</option>
                                     </select>
                                 </div>
-                                <div class="col-md-2 form-group">
+                                <div class="col-md-4 form-group">
                                     <label for="product">Product</label>
                                     <select class="form-control" id="product" name="product" required="">
                                         <option value="" selected disabled>Please Select</option>
@@ -119,21 +123,30 @@
                         </div>
 
                         <div class="col-md-12 mt-3">
+
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    <strong>Chat Opening (Greetings &amp; being attentive) &amp; Closing</strong>
-                                    <p class="smallp">PSS should greet the user,at the opening of the chat. PSS should be attentive and use correct greeting based on the time. PSS should offer further assistance and follow the chat closing script. Branding, PSS introduction should be present, If the user has already mentioned about the query then, avoid asking "How may I assist you?"</p>
+                                    <strong>Chat Closing</strong>
+                                    <p class="smallp">
+                                        PSS should offer further assistance and follow the chat closing script (with survey). Unresolved chats - PSS should inform the timeframe to the user's.
+                                        <ul style="padding-left:20px;">
+                                            <li class="smallp">Refrain from using multiple closing statement.</li>
+                                            <li class="smallp">Thanking the customer, ensuring their issue has been resolved, and so on.</li>
+                                        </ul>
+                                    </p>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <input type="radio" onchange="score(this)" name="p1" id="yes1" value="4" required="">
+                                    <input type="radio" onchange="score(this)" name="p1" id="yes1" value="2" required="">
                                     <label for="yes1">Yes</label>
                                     <input type="radio" onchange="score(this)" name="p1" id="no1" value="0" required="">
                                     <label for="no1">No</label>
+                                    <input type="radio" onchange="score(this)" name="p1" id="na_1" value="2" required="">
+                                    <label for="na_1">NA</label>
                                 </div>
                             </div>
                             <div class="row mt-3 ml-4 d-none" id="chat">
                                 <div class="col-md-8">
-                                   Standard script Opening
+                                   Failed to close the chat
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="chat_1" id="chatyes_1" value="Yes">
@@ -142,7 +155,7 @@
                                     <label for="chatno_1">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    Greeting
+                                    Failed to use the standard script (survey)
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="chat_2" id="chatyes_2" value="Yes">
@@ -151,7 +164,7 @@
                                     <label for="chatno_2">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    Standard script Closing
+                                    Multiple closing statement used
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="chat_3" id="chatyes_3" value="Yes">
@@ -160,7 +173,7 @@
                                     <label for="chatno_3">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    Being Attentive
+                                    Failed to offer further assistance
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="chat_4" id="chatyes_4" value="Yes">
@@ -169,7 +182,7 @@
                                     <label for="chatno_4">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    Offering further assistance
+                                    User ended the chat
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="chat_5" id="chatyes_5" value="Yes">
@@ -177,11 +190,21 @@
                                     <input type="radio" name="chat_5" id="chatno_5" value="No">
                                     <label for="chatno_5">No</label>
                                 </div>
+                                <div class="col-md-8">
+                                    NA
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="radio" name="chat_6" id="chatyes_6" value="Yes">
+                                    <label for="chatyes_6">Yes</label>
+                                    <input type="radio" name="chat_6" id="chatno_6" value="No">
+                                    <label for="chatno_6">No</label>
+                                </div>
                             </div>
+
                             <div class="row mt-3">
                                 <div class="col-md-8">
                                     <strong>FRTAT</strong>
-                                    <p class="smallp">PSS Should start the chat conversation within 1 minute from the time of chat allocation.</p>
+                                    <p class="smallp">PSS Should start the chat conversation within 1 minute from the automated opening message.</p>
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" onchange="score(this)" name="p2" id="yes2" value="2" required="">
@@ -193,7 +216,11 @@
                             <div class="row mt-3">
                                 <div class="col-md-8">
                                     <strong>Addressing the user/Personalisation of chat</strong>
-                                    <p class="smallp">PSS should address the user with his/her name when the name displayed on the chat with appropriate title. If the user has updated some other name like cookies, unicorn, ball etc, probe for the user's anme aand then address the user's name.</p>
+                                    <p class="smallp">
+                                        PSS should address the user with his/her name when the name displayed on the chat with appropriate salutation.<br>
+                                        The user's name should be used wherever the opportunity is presented during a chat. (Personalization will not get counted for further assistance and closing script)
+                                        <br><b>Importance:</b> To welcome and identify the user (Appointments, consulations, RX & DX orders and Plus Plan)
+                                    </p>
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" onchange="score(this)" name="p3" id="yes3" value="4" required="">
@@ -213,7 +240,7 @@
                                     <label for="persno_1">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    First Name
+                                    First name used on the chat
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="pers_2" id="persyes_2" value="Yes">
@@ -222,7 +249,7 @@
                                     <label for="persno_2">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    No. of Times
+                                    Less attempt - More scope
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="pers_3" id="persyes_3" value="Yes">
@@ -231,7 +258,7 @@
                                     <label for="persno_3">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    Didn't Probe for name
+                                    Failed to probe the user name
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="pers_4" id="persyes_4" value="Yes">
@@ -239,14 +266,41 @@
                                     <input type="radio" name="pers_4" id="persno_4" value="No">
                                     <label for="persno_4">No</label>
                                 </div>
+                                <div class="col-md-8">
+                                    Incorrect Salutation
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="radio" name="pers_5" id="persyes_5" value="Yes">
+                                    <label for="persyes_5">Yes</label>
+                                    <input type="radio" name="pers_5" id="persno_5" value="No">
+                                    <label for="persno_5">No</label>
+                                </div>
+                                <div class="col-md-8">
+                                    NA
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="radio" name="pers_6" id="persyes_6" value="Yes">
+                                    <label for="persyes_6">Yes</label>
+                                    <input type="radio" name="pers_6" id="persno_6" value="No">
+                                    <label for="persno_6">No</label>
+                                </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    <strong>Assurance &amp; Acknowledgement</strong>
-                                    <p class="smallp">PSS should provide the assurance to the user on the issue resolution/query. PSS should also acknowledge the user's query and provide timely acknowledgements throughout the chat. For eg. I do understand your concern, I will certainly help you with this, Glad to hear that, I certainly get your point and I will definitely see what best I can do for you etc</p>
+                                    <strong>Assistance & Acknowledgment</strong>
+                                    <p class="smallp">
+                                        PSS should ask/acknowledge the user's message at the initial stage & throughout the chat.
+                                    </p>
+                                        <ol style="padding-left:20px;">
+                                            <li class="smallp"><spam style="color:green">If the user has already reported the query/request/concern</spam> - PSS should acknowledge to it. (For eg. I do understand your concern, I will certainly help you with this, Glad to hear that, I certainly get your point and I will defienetly see what best I can do for you, I certainly undertand your concern etc)</li>
+                                            <li class="smallp"><spam style="color:green">If the user query/request/concern seems unclear</spam> - PSS should ask, 'Could you elaborate the query/request/concern please"?</li>
+                                        </ol>
+                                    <p class="smallp">
+                                        Refrain from using Ok, got it, we will see, I will check, noted,sure (one word replies), avoid repetitive acknowledgment statement and overdoing it.
+                                    </p>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <input type="radio" onchange="score(this)" name="p4" id="yes4" value="5" required="">
+                                    <input type="radio" onchange="score(this)" name="p4" id="yes4" value="4" required="">
                                     <label for="yes4">Yes</label>
                                     <input type="radio" onchange="score(this)" name="p4" id="no4" value="0" required="">
                                     <label for="no4">No</label>
@@ -254,7 +308,7 @@
                             </div>
                             <div class="row mt-3 ml-4 d-none" id="assurance">
                                 <div class="col-md-8">
-                                   Acknowledgement Missing
+                                   Failed to acknowledge
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="assu_1" id="assuyes_1" value="Yes">
@@ -263,7 +317,7 @@
                                     <label for="assuno_1">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    Assurance Missing
+                                    Incomplete acknowledgment
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="assu_2" id="assuyes_2" value="Yes">
@@ -272,7 +326,7 @@
                                     <label for="assuno_2">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    Wasn't Done Throughout Chat
+                                    Failed to do throughout the chat
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="assu_3" id="assuyes_3" value="Yes">
@@ -280,14 +334,32 @@
                                     <input type="radio" name="assu_3" id="assuno_3" value="No">
                                     <label for="assuno_3">No</label>
                                 </div>
+                                <div class="col-md-8">
+                                    Incorrect assistance statement
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="radio" name="assu_4" id="assuyes_4" value="Yes">
+                                    <label for="assuyes_4">Yes</label>
+                                    <input type="radio" name="assu_4" id="assuno_4" value="No">
+                                    <label for="assuno_4">No</label>
+                                </div>
+                                <div class="col-md-8">
+                                    NA
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="radio" name="assu_5" id="assuyes_5" value="Yes">
+                                    <label for="assuyes_5">Yes</label>
+                                    <input type="radio" name="assu_5" id="assuno_5" value="No">
+                                    <label for="assuno_5">No</label>
+                                </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    <strong>Coherence (understanding the issue) being attentive on chat.</strong>
-                                    <p class="smallp">PSS should be attentive, read and understand the user's query carefully and pay attention to the details provided by the user</p>
+                                    <strong>Relevant responses</strong>
+                                    <p class="smallp">PSS should provide the relevant responses to each queries.</p>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <input type="radio" onchange="score(this)" name="p5" id="yes5" value="6" required="">
+                                    <input type="radio" onchange="score(this)" name="p5" id="yes5" value="2" required="">
                                     <label for="yes5">Yes</label>
                                     <input type="radio" onchange="score(this)" name="p5" id="no5" value="0" required="">
                                     <label for="no5">No</label>
@@ -295,15 +367,27 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    <strong>Probing</strong>
-                                    <p class="smallp">PSS should do relevant probing and probe the user correctly to identify the root cause. PSS should be attentive and avoid unnecessary probing. PSS should never assume and provide resolution and it should be confirmed with the user on the chat.</p>
+                                    <strong>Assurance</strong>
+                                    <p class="smallp">PSS should provide the assurance to the user on the issue resolution/query. When it's being possible to get a resolution immediately, or within certain hours (TAT)</p>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                        <input type="radio" onchange="score(this)" name="p6" id="yes6" value="8" required="">
+                                    <input type="radio" onchange="score(this)" name="p19" id="yes19" value="4" required="">
+                                    <label for="yes19">Yes</label>
+                                    <input type="radio" onchange="score(this)" name="p19" id="no19" value="0" required="">
+                                    <label for="no19">No</label>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    <strong>Probing</strong>
+                                    <p class="smallp">PSS should do relevant probing and probe the user correctly to identify the root cause. PSS should be attentive and avoid unnecessary probing. PSS should never assume and provide resolution and it should be confirmed with the user on the chat. PSS should perform RCA on the relevant tool to understand the discrepancies/disputes on the concern raised.</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                        <input type="radio" onchange="score(this)" name="p6" id="yes6" value="6" required="">
                                         <label for="yes6">Yes</label>
                                         <input type="radio" onchange="score(this)" name="p6" id="no6" value="0" required="">
                                         <label for="no6">No</label>
-                                        <input type="radio" onchange="score(this)" name="p6" id="na1" value="8" required="">
+                                        <input type="radio" onchange="score(this)" name="p6" id="na1" value="6" required="">
                                         <label for="na1">NA</label>
                                 </div>
                             </div>
@@ -335,12 +419,26 @@
                                     <input type="radio" name="prob_3" id="probno_3" value="No">
                                     <label for="probno_3">No</label>
                                 </div>
+                                <div class="col-md-8">
+                                    NA
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="radio" name="prob_4" id="probyes_4" value="Yes">
+                                    <label for="probyes_4">Yes</label>
+                                    <input type="radio" name="prob_4" id="probno_4" value="No">
+                                    <label for="probno_4">No</label>
+                                </div>
                             </div>
 
                             <div class="row mt-3">
                                 <div class="col-md-8">
                                     <strong>Interaction: Empathy , Profressional, care</strong>
                                     <p class="smallp">PSS should empathize/apologize to the user at the right time and provide assurance whenever required in the chat. PSS should maintain professionalism in his/her responses, should display emapthy and care.</p>
+                                    <b class="smallp">For eg:</b>
+                                    <ol style="padding-left: 20px;">
+                                        <li class="smallp">If the user has experienced any problem due to the product or the service being offered. PSS has to express empathy in complete sentence (Avoid repetitive statement & irrelevant empathy)</li>
+                                        <li class="smallp">Avoid casual words while chatting with the user</li>
+                                    </ol>
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" onchange="score(this)" name="p7" id="yes7" value="8" required="">
@@ -397,11 +495,30 @@
                                     <input type="radio" name="inte_5" id="inteno_5" value="No">
                                     <label for="inteno_5">No</label>
                                 </div>
+                                <div class="col-md-8">
+                                    Repetitive empathy statement
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="radio" name="inte_6" id="inteyes_6" value="Yes">
+                                    <label for="inteyes_6">Yes</label>
+                                    <input type="radio" name="inte_6" id="inteno_6" value="No">
+                                    <label for="inteno_6">No</label>
+                                </div>
+                                <div class="col-md-8">
+                                    NA
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="radio" name="inte_7" id="inteyes_7" value="Yes">
+                                    <label for="inteyes_7">Yes</label>
+                                    <input type="radio" name="inte_7" id="inteno_7" value="No">
+                                    <label for="inteno_7">No</label>
+                                </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
                                     <strong>Grammar:</strong>
-                                    <p class="smallp">PSS should use correct punctuation, capitalization and proofread for inaccuracies/typos and spacing errors.</p>
+                                    <p class="smallp">PSS should follow the all standards of grammar (punctuation, capitalization, proofread for inaccuracies/typos and spacing errors) and PSS should know add line breaks to the chat (Cltrl+enter). The users dont prefer to read a giant wall of text.<br>
+                                        <b>Note: </b>One instance is exception for the punctuation or spacing either. Refrain from copying the details from the slack or dashboard. PSS should be recommended to draft the text/resolution in the simple and understandable manner.</p>
                                 </div>
                                 <div class="col-md-4 form-group">
                                         <input type="radio" onchange="score(this)" name="p8" id="yes8" value="8" required="">
@@ -444,46 +561,33 @@
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="gram_4" id="gramyes_4" value="Yes">
                                     <label for="gramyes_4">Yes</label>
-                                    <input type="radio" name="gram_3" id="gramno_4" value="No">
+                                    <input type="radio" name="gram_4" id="gramno_4" value="No">
                                     <label for="gramno_4">No</label>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
                                 <div class="col-md-8">
-                                    <strong>Relavant responses</strong>
-                                    <p class="smallp">Sharing incorrect or wrong message (Incorrect window). Shared a wrong/irrelevant response wih the user.</p>
+                                    Spacing
                                 </div>
                                 <div class="col-md-4 form-group">
-                                        <input type="radio" onchange="score(this)" name="p9" id="yes9" value="4" required="">
-                                        <label for="yes9">Yes</label>
-                                        <input type="radio" onchange="score(this)" name="p9" id="no9" value="0" required="">
-                                        <label for="no9">No</label>
-                                </div>
-                            </div>
-                            <div class="row mt-3 ml-4 d-none" id="relavant">
-                                <div class="col-md-8">
-                                   Incorrect Window
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <input type="radio" name="rela_1" id="relayes_1" value="Yes">
-                                    <label for="relayes_1">Yes</label>
-                                    <input type="radio" name="rela_1" id="relano_1" value="No">
-                                    <label for="relano_1">No</label>
+                                    <input type="radio" name="gram_5" id="gramyes_5" value="Yes">
+                                    <label for="gramyes_5">Yes</label>
+                                    <input type="radio" name="gram_5" id="gramno_5" value="No">
+                                    <label for="gramno_5">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    Not related to query
+                                    NA
                                 </div>
                                 <div class="col-md-4 form-group">
-                                    <input type="radio" name="rela_2" id="relayes_2" value="Yes">
-                                    <label for="relayes_2">Yes</label>
-                                    <input type="radio" name="rela_2" id="relano_2" value="No">
-                                    <label for="relano_2">No</label>
+                                    <input type="radio" name="gram_6" id="gramyes_6" value="Yes">
+                                    <label for="gramyes_6">Yes</label>
+                                    <input type="radio" name="gram_6" id="gramno_6" value="No">
+                                    <label for="gramno_6">No</label>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    <strong>Being courteous &amp; using plesantries</strong>
-                                    <p class="smallp">PSS should be courteous &amp; use pleasantries in the chat. Example: while probing the user/When the user agreed to wait/Thanking the user for sharing the information/Customer connect. Any feel good statements - It was pleasure assisting you etc</p>
+                                    <strong>Being courteous & using plesantries</strong>
+                                    <p class="smallp">PSS should be courteous & use pleasantries in the chat.</p>
+                                    <p class="smallp"><b>Eg: </b>while probing the user/When the user agreed to wait/Thanking the user for sharing the information/Customer connect. Any feel good statements - It was pleasure assisting you etc</p>
                                 </div>
                                 <div class="col-md-4 form-group">
                                         <input type="radio" onchange="score(this)" name="p10" id="yes10" value="4" required="">
@@ -495,10 +599,19 @@
                             <div class="row mt-3">
                                 <div class="col-md-8">
                                     <strong>Process followed</strong>
-                                    <p class="smallp">PSS should follow the set process(SOP) for any given query. Follow the escalation metrics. PSS should use all the relevant tools in order to provide resolution. Checking the details in the respective dashboard, updating and checking the trackers, slack channel, PE process document and then providing the resolution etc. Following the appropriate and standard format while sending emails to the internal team whereaver applicable. Following the verification process for the medicines order.</p>
+                                    <p class="smallp">PSS should follow the set process(SOP) for any given query. Follow the escalation metrics. PSS should use all the relevant tools in order to provide resolution. Checking the details in the respective dashboard, updating and checking the trackers, slack channel, PE knowledge base and then providing the resolution etc. Following the appropriate and standard format while sending emails to the internal team wherever applicable. Following the verification process for the medicines order.</p>
+                                    <b class="smallp">For eg: </b>
+                                    <ol style="padding-left: 20px;">
+                                        <li class="smallp">SOP not followed, Incorrect, Incomplete resolution to the user (Failed to address the additional queries/concerns)</li>
+                                        <li class="smallp">Promised but failed to escalate it (behaviour issues of phlebo/delivery agent)</li>
+                                        <li class="smallp">Failed to authenticate the user for the medicine orders (Avoid asking the code if it's generated on the same day)</li>
+                                        <li class="smallp">Incorrect TAT & failed to inform the TAT</li>
+                                        <li class="smallp">Incomplete/Incorrect refund details and wrong redirection</li>
+                                    </ol>
+                                    <p class="smallp"><b>Note: </b>If the user has not received an OTP, due to network or technical issue. We can share the basic order details (except - Address,cancelation,modification & Medicine details) like delivery date or status of the order.</p>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                        <input type="radio" onchange="score(this)" name="p11" id="yes11" value="12" required="">
+                                        <input type="radio" onchange="score(this)" name="p11" id="yes11" value="15" required="">
                                         <label for="yes11">Yes</label>
                                         <input type="radio" onchange="score(this)" name="p11" id="no11" value="0" required="">
                                         <label for="no11">No</label>
@@ -507,7 +620,7 @@
 
                             <div class="row mt-3 ml-4 d-none" id="process">
                                 <div class="col-md-8">
-                                   Dashboard/Slack
+                                   SOP has not followed
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="proc_1" id="procyes_1" value="Yes">
@@ -516,7 +629,7 @@
                                     <label for="procno_1">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    Trackers
+                                    Incorrect Information
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="proc_2" id="procyes_2" value="Yes">
@@ -525,7 +638,7 @@
                                     <label for="procno_2">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    SOP/Process doc/SME
+                                    Incomplete Information
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="proc_3" id="procyes_3" value="Yes">
@@ -534,7 +647,7 @@
                                     <label for="procno_3">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    Verification Process
+                                    Failed to authenticate for the medicine order
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="proc_4" id="procyes_4" value="Yes">
@@ -543,7 +656,7 @@
                                     <label for="procno_4">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    Email Format
+                                    Incorrect TAT (or) Failed to inform the TAT
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="proc_5" id="procyes_5" value="Yes">
@@ -552,7 +665,7 @@
                                     <label for="procno_5">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    Links (webpage)
+                                    Incomplete/Incorrect refund details and wrong redirection
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="proc_6" id="procyes_6" value="Yes">
@@ -561,7 +674,7 @@
                                     <label for="procno_6">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    Ticket creation
+                                    NA
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="proc_7" id="procyes_7" value="Yes">
@@ -569,23 +682,21 @@
                                     <input type="radio" name="proc_7" id="procno_7" value="No">
                                     <label for="procno_7">No</label>
                                 </div>
-                                <div class="col-md-8">
-                                    Assignment of chat
-                                </div>
-                                <div class="col-md-4 form-group">
-                                    <input type="radio" name="proc_8" id="procyes_8" value="Yes">
-                                    <label for="procyes_8">Yes</label>
-                                    <input type="radio" name="proc_8" id="procno_8" value="No">
-                                    <label for="procno_8">No</label>
-                                </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    <strong>Explanation skills (Reasoning) &amp; Rebuttal Handling</strong>
-                                    <p class="smallp">PSS should provide proper explanation/reasoning in the chat. The resolution needs to be explained in a simple manner specifying all the details available and should not use any jargons, like "Inventory unavailable, moderation dashboard, fulfillment pending stage" etc. Pss should not sound repititive, and should attempt a different approach to explain the response instead of copy pasting the same response. Sharing the alternatives whenever applicable. PSS should handle the customer objections in an effective manner.</p>
+                                    <strong>Explanation Skills (Being Specific, Reasoning) & Rebuttal Handling</strong>
+                                    <p class="smallp">The details or other information to make something clear or easy to understand</p>
+                                    <ol style="padding-left: 20px;">
+                                        <li class="smallp">PSS should provide proper explanation in the chat.</li>
+                                        <li class="smallp">The resolution needs to be explained in a simple manner and should not use any jargons, like "Inventory unavailable, moderation dashboard, fulfillment pending stage" etc. </li>
+                                        <li class="smallp">Pss should not sound repititive, and should attempt a different approach to explain the response instead of copy pasting the same response. </li>
+                                        <li class="smallp">Sharing the alternatives whenever applicable.</li>
+                                        <li class="smallp">PSS should handle the customer objections in an effective manner.</li>
+                                    </ol>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                        <input type="radio" onchange="score(this)" name="p12" id="yes12" value="10" required="">
+                                        <input type="radio" onchange="score(this)" name="p12" id="yes12" value="12" required="">
                                         <label for="yes12">Yes</label>
                                         <input type="radio" onchange="score(this)" name="p12" id="no12" value="0" required="">
                                         <label for="no12">No</label>
@@ -594,7 +705,7 @@
                             <div class="row mt-3">
                                 <div class="col-md-8">
                                     <strong>Sharing the information in a sequential manner</strong>
-                                    <p class="smallp">Sharing the information in a sequential and understandable manner. In case of multiple queries, resolution needs to be provided in a sequential manner, also In case where we need to provide Prime online or inclinic book steps it should be always followed by the doctor's or enahnced listing URL. If there is cancellation as the user wanted inclinic instead of onlone consultation, then after confirming for the cancellation and refund process, share the link and the steps followed by the refund details.</p>
+                                    <p class="smallp">Sharing the information in a sequential and understandable manner. In case of multiple queries, resolution needs to be provided in a sequential manner, also In case where we need to provide Prime online or inclinic book steps it should be always followed by the doctor's or enahnced listing URL. If there is cancellation as the user wanted inclinic instead of online consultation, then after confirming for the cancellation and refund process, share the link and the steps followed by the refund details.</p>
                                 </div>
                                 <div class="col-md-4 form-group">
                                         <input type="radio" onchange="score(this)" name="p13" id="yes13" value="3" required="">
@@ -622,13 +733,15 @@
                             <div class="row mt-3">
                                 <div class="col-md-8">
                                     <strong>Curation</strong>
-                                    <p class="smallp">PSS should select the correct issue type and sub-issue types in every chat.(labels)</p>
+                                    <p class="smallp">PSS should select the correct issue type,sub-issue,sub sub issues in every chat.(labels)</p>
                                 </div>
                                 <div class="col-md-4 form-group">
                                         <input type="radio" onchange="score(this)" name="p15" id="yes15" value="8" required="">
                                         <label for="yes15">Yes</label>
                                         <input type="radio" onchange="score(this)" name="p15" id="no15" value="0" required="">
                                         <label for="no15">No</label>
+                                        <input type="radio" onchange="score(this)" name="p15" id="na15" value="8" required="">
+                                        <label for="na15">Na</label>
                                 </div>
                             </div>
                             <div class="row mt-3 ml-4 d-none" id="curation">
@@ -650,11 +763,20 @@
                                     <input type="radio" name="cura_2" id="curano_2" value="No">
                                     <label for="curano_2">No</label>
                                 </div>
+                                <div class="col-md-8">
+                                    NA
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="radio" name="cura_3" id="curayes_3" value="Yes">
+                                    <label for="curayes_3">Yes</label>
+                                    <input type="radio" name="cura_3" id="curano_3" value="No">
+                                    <label for="curano_3">No</label>
+                                </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    <strong>Average speed of answer</strong>
-                                    <p class="smallp">Pss should provide timely responses throughout the chat(2mins). PSS should retreive the chat from hold as per the promised time.</p>
+                                    <strong>Average Speed of Answer</strong>
+                                    <p class="smallp">Pss should provide timely responses throughout the chat (2mins) unless hold procedure being followed.</p>
                                 </div>
                                 <div class="col-md-4 form-group">
                                         <input type="radio" onchange="score(this)" name="p16" id="yes16" value="5" required="">
@@ -665,21 +787,26 @@
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-8">
-                                    <strong>Chat Hold Procedure &amp;: Taking Perrmission before putting the chat on hold.</strong>
-                                    <p class="smallp">PSS should provide responses within 2 minutes unless hold procedure is being followed. PSS should refresh the hold time or respond to the user within 5 minutes from the holdtime. A hold time of 5-10 minutes can be followed while checking with the backend team when required(RX, Book, DX, and Consult). PSS should thank the user after refreshing/released the hold.</p>
+                                    <strong>Chat Hold Procedure &: Taking Permission before putting the chat on hold.</strong>
+                                    <ol style="padding-left: 20px;">
+                                        <li class="smallp">PSS should follow the hold procedure properly (Permission, duration and reason)</li>
+                                        <li class="smallp">PSS should thank the user while retrieving from the hold</li>
+                                        <li class="smallp">PSS should timely (as promised) refresher the hold (While time exceeds) Refrain from using tentative timeframes (eg: a few minutes, in sometime, etc)</li>
+                                        <li class="smallp">PSS should retreive the chat from hold as per the promised time.</li>
+                                    </ol>
                                 </div>
                                 <div class="col-md-4 form-group">
-                                        <input type="radio" onchange="score(this)" name="p17" id="yes17" value="2" required="">
+                                        <input type="radio" onchange="score(this)" name="p17" id="yes17" value="4" required="">
                                         <label for="yes17">Yes</label>
                                         <input type="radio" onchange="score(this)" name="p17" id="no17" value="0" required="">
                                         <label for="no17">No</label>
-                                        <input type="radio" onchange="score(this)" name="p17" id="na5" value="2" required="">
+                                        <input type="radio" onchange="score(this)" name="p17" id="na5" value="4" required="">
                                         <label for="na5">Na</label>
                                 </div>
                             </div>
                             <div class="row mt-3 ml-4 d-none" id="chathold">
                                 <div class="col-md-8">
-                                   Script
+                                   Standard script not used
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="hold_1" id="holdyes_1" value="Yes">
@@ -688,7 +815,7 @@
                                     <label for="holdno_1">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    Duration
+                                    Failed to refresh the chat within promised time.
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="hold_2" id="holdyes_2" value="Yes">
@@ -697,13 +824,74 @@
                                     <label for="holdno_2">No</label>
                                 </div>
                                 <div class="col-md-8">
-                                    Didn't thank the user
+                                    Failed to retrieve the chat
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" name="hold_3" id="holdyes_3" value="Yes">
                                     <label for="holdyes_3">Yes</label>
                                     <input type="radio" name="hold_3" id="holdno_3" value="No">
                                     <label for="holdno_3">No</label>
+                                </div>
+                                <div class="col-md-8">
+                                    NA
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="radio" name="hold_4" id="holdyes_4" value="Yes">
+                                    <label for="holdyes_4">Yes</label>
+                                    <input type="radio" name="hold_4" id="holdno_4" value="No">
+                                    <label for="holdno_4">No</label>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-8">
+                                    <strong>PE knowledge base adherence</strong>
+                                    <p class="smallp">PSS should provide the information, as mentioned in the knowledge document or as per the recent updates shared.<br>PSS should refrain from copy and pasting the information from the knowledge book.</p>
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="radio" onchange="score(this)" name="p18" id="yes18" value="2" required="">
+                                    <label for="yes18">Yes</label>
+                                    <input type="radio" onchange="score(this)" name="p18" id="no18" value="0" required="">
+                                    <label for="no18">No</label>
+                                    <input type="radio" onchange="score(this)" name="p18" id="na6" value="2" required="">
+                                    <label for="na6">Na</label>
+                                </div>
+                            </div>
+                            <div class="row mt-3 ml-4 d-none" id="pekb">
+                                <div class="col-md-8">
+                                   Failed to refer the knowledge base
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="radio" name="pekb_1" id="pekbyes_1" value="Yes">
+                                    <label for="pekbyes_1">Yes</label>
+                                    <input type="radio" name="pekb_1" id="pekbno_1" value="No">
+                                    <label for="pekbno_1">No</label>
+                                </div>
+                                <div class="col-md-8">
+                                    Referred, but not confident
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="radio" name="pekb_2" id="pekbyes_2" value="Yes">
+                                    <label for="pekbyes_2">Yes</label>
+                                    <input type="radio" name="pekb_2" id="pekbno_2" value="No">
+                                    <label for="pekbno_2">No</label>
+                                </div>
+                                <div class="col-md-8">
+                                    Incorrect category referred by the agent
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="radio" name="pekb_3" id="pekbyes_3" value="Yes">
+                                    <label for="pekbyes_3">Yes</label>
+                                    <input type="radio" name="pekb_3" id="pekbno_3" value="No">
+                                    <label for="pekbno_3">No</label>
+                                </div>
+                                <div class="col-md-8">
+                                    NA
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <input type="radio" name="pekb_4" id="pekbyes_4" value="Yes">
+                                    <label for="pekbyes_4">Yes</label>
+                                    <input type="radio" name="pekb_4" id="pekbno_4" value="No">
+                                    <label for="pekbno_4">No</label>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -725,7 +913,7 @@
                             <div class="row mt-3">
                                 <div class="col-md-8">
                                     <strong>Expectations: Setting correct expectations about issue resolution</strong>
-                                    <p class="smallp">PSS should share correct, complete and accurate information. PSS should refrain from setting any wrong expectation with the user.</p>
+                                    <p class="smallp">PSS should provide correct, complete and accurate information. PSS should refrain from setting any wrong expectation with the user. (If the end resoulution not gets affected, it will not be fatal)</p>
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <input type="radio" onchange="full_score(this)" name="fatal1" id="pass1" value="pass" required="">
@@ -844,11 +1032,14 @@
         $("#auditdate").val(moment($mydate).format("YYYY-MM-DD"));
     </script>
 
+
 <script type="text/javascript">
     var n=0;
     var score1;
     var p1no = document.getElementById('no1');
     var p1yes = document.getElementById('yes1');
+    var p1na = document.getElementById('na_1');
+
     var p3no = document.getElementById('no3');
     var p3yes = document.getElementById('yes3');
 
@@ -865,15 +1056,20 @@
 
     var p8yes = document.getElementById('yes8');
     var p8no = document.getElementById('no8');
-    var p9yes = document.getElementById('yes9');
-    var p9no = document.getElementById('no9');
     var p11yes = document.getElementById('yes11');
     var p11no = document.getElementById('no11');
     var p15yes = document.getElementById('yes15');
+    var p15na = document.getElementById('na15');
     var p15no = document.getElementById('no15');
     var p17no = document.getElementById('no17');
     var p17yes = document.getElementById('yes17');
     var p17na = document.getElementById('na5');
+
+
+    var p18no = document.getElementById('no18');
+    var p18yes = document.getElementById('yes18');
+    var p18na = document.getElementById('na6');
+
     var pass1 = document.getElementById('pass1');
     var fatal1 = document.getElementById('fatal1');
 
@@ -893,12 +1089,21 @@
         document.getElementById('curation').classList.remove("d-none");
         document.querySelector('input[name="cura_1"]').setAttribute("required", "required");
         document.querySelector('input[name="cura_2"]').setAttribute("required", "required");
+        document.querySelector('input[name="cura_3"]').setAttribute("required", "required");
     });
     p15yes.addEventListener('click', function(){
         document.getElementById('curation').classList.add("d-none");
         document.querySelector('input[name="cura_1"]').removeAttribute("required", "required");
         document.querySelector('input[name="cura_2"]').removeAttribute("required", "required");
+        document.querySelector('input[name="cura_3"]').removeAttribute("required", "required");
     });
+    p15na.addEventListener('click', function(){
+        document.getElementById('curation').classList.add("d-none");
+        document.querySelector('input[name="cura_1"]').removeAttribute("required", "required");
+        document.querySelector('input[name="cura_2"]').removeAttribute("required", "required");
+        document.querySelector('input[name="cura_3"]').removeAttribute("required", "required");
+    });
+
     p11no.addEventListener('click', function(){
         document.getElementById('process').classList.remove("d-none");
         document.querySelector('input[name="proc_1"]').setAttribute("required", "required");
@@ -908,7 +1113,6 @@
         document.querySelector('input[name="proc_5"]').setAttribute("required", "required");
         document.querySelector('input[name="proc_6"]').setAttribute("required", "required");
         document.querySelector('input[name="proc_7"]').setAttribute("required", "required");
-        document.querySelector('input[name="proc_8"]').setAttribute("required", "required");
     });
     p11yes.addEventListener('click', function(){
         document.getElementById('process').classList.add("d-none");
@@ -919,17 +1123,6 @@
         document.querySelector('input[name="proc_5"]').removeAttribute("required", "required");
         document.querySelector('input[name="proc_6"]').removeAttribute("required", "required");
         document.querySelector('input[name="proc_7"]').removeAttribute("required", "required");
-        document.querySelector('input[name="proc_8"]').removeAttribute("required", "required");
-    });
-    p9no.addEventListener('click', function(){
-        document.getElementById('relavant').classList.remove("d-none");
-        document.querySelector('input[name="rela_1"]').setAttribute("required", "required");
-        document.querySelector('input[name="rela_2"]').setAttribute("required", "required");
-    });
-    p9yes.addEventListener('click', function(){
-        document.getElementById('relavant').classList.add("d-none");
-        document.querySelector('input[name="rela_1"]').removeAttribute("required", "required");
-        document.querySelector('input[name="rela_2"]').removeAttribute("required", "required");
     });
     p8no.addEventListener('click', function(){
         document.getElementById('grammer').classList.remove("d-none");
@@ -937,6 +1130,8 @@
         document.querySelector('input[name="gram_2"]').setAttribute("required", "required");
         document.querySelector('input[name="gram_3"]').setAttribute("required", "required");
         document.querySelector('input[name="gram_4"]').setAttribute("required", "required");
+        document.querySelector('input[name="gram_5"]').setAttribute("required", "required");
+        document.querySelector('input[name="gram_6"]').setAttribute("required", "required");
     });
     p8yes.addEventListener('click', function(){
         document.getElementById('grammer').classList.add("d-none");
@@ -944,7 +1139,10 @@
         document.querySelector('input[name="gram_2"]').removeAttribute("required", "required");
         document.querySelector('input[name="gram_3"]').removeAttribute("required", "required");
         document.querySelector('input[name="gram_4"]').removeAttribute("required", "required");
+        document.querySelector('input[name="gram_5"]').removeAttribute("required", "required");
+        document.querySelector('input[name="gram_6"]').removeAttribute("required", "required");
     });
+
     p1no.addEventListener('click', function(){
         document.getElementById('chat').classList.remove("d-none");
         document.querySelector('input[name="chat_1"]').setAttribute("required", "required");
@@ -952,6 +1150,7 @@
         document.querySelector('input[name="chat_3"]').setAttribute("required", "required");
         document.querySelector('input[name="chat_4"]').setAttribute("required", "required");
         document.querySelector('input[name="chat_5"]').setAttribute("required", "required");
+        document.querySelector('input[name="chat_6"]').setAttribute("required", "required");
     });
     p1yes.addEventListener('click', function(){
         document.getElementById('chat').classList.add("d-none");
@@ -960,13 +1159,26 @@
         document.querySelector('input[name="chat_3"]').removeAttribute("required", "required");
         document.querySelector('input[name="chat_4"]').removeAttribute("required", "required");
         document.querySelector('input[name="chat_5"]').removeAttribute("required", "required");
+        document.querySelector('input[name="chat_6"]').removeAttribute("required", "required");
     });
+    p1na.addEventListener('click', function(){
+        document.getElementById('chat').classList.add("d-none");
+        document.querySelector('input[name="chat_1"]').removeAttribute("required", "required");
+        document.querySelector('input[name="chat_2"]').removeAttribute("required", "required");
+        document.querySelector('input[name="chat_3"]').removeAttribute("required", "required");
+        document.querySelector('input[name="chat_4"]').removeAttribute("required", "required");
+        document.querySelector('input[name="chat_5"]').removeAttribute("required", "required");
+        document.querySelector('input[name="chat_6"]').removeAttribute("required", "required");
+    });
+
     p3no.addEventListener('click', function(){
         document.getElementById('personalisation').classList.remove("d-none");
         document.querySelector('input[name="pers_1"]').setAttribute("required", "required");
         document.querySelector('input[name="pers_2"]').setAttribute("required", "required");
         document.querySelector('input[name="pers_3"]').setAttribute("required", "required");
         document.querySelector('input[name="pers_4"]').setAttribute("required", "required");
+        document.querySelector('input[name="pers_5"]').setAttribute("required", "required");
+        document.querySelector('input[name="pers_6"]').setAttribute("required", "required");
     });
     p3yes.addEventListener('click', function(){
         document.getElementById('personalisation').classList.add("d-none");
@@ -974,6 +1186,8 @@
         document.querySelector('input[name="pers_2"]').removeAttribute("required", "required");
         document.querySelector('input[name="pers_3"]').removeAttribute("required", "required");
         document.querySelector('input[name="pers_4"]').removeAttribute("required", "required");
+        document.querySelector('input[name="pers_5"]').removeAttribute("required", "required");
+        document.querySelector('input[name="pers_6"]').removeAttribute("required", "required");
     });
 
     p4no.addEventListener('click', function(){
@@ -981,12 +1195,16 @@
         document.querySelector('input[name="assu_1"]').setAttribute("required", "required");
         document.querySelector('input[name="assu_2"]').setAttribute("required", "required");
         document.querySelector('input[name="assu_3"]').setAttribute("required", "required");
+        document.querySelector('input[name="assu_4"]').setAttribute("required", "required");
+        document.querySelector('input[name="assu_5"]').setAttribute("required", "required");
     });
     p4yes.addEventListener('click', function(){
         document.getElementById('assurance').classList.add("d-none");
         document.querySelector('input[name="assu_1"]').removeAttribute("required", "required");
         document.querySelector('input[name="assu_2"]').removeAttribute("required", "required");
         document.querySelector('input[name="assu_3"]').removeAttribute("required", "required");
+        document.querySelector('input[name="assu_4"]').removeAttribute("required", "required");
+        document.querySelector('input[name="assu_5"]').removeAttribute("required", "required");
     });
 
     p6no.addEventListener('click', function(){
@@ -994,18 +1212,21 @@
         document.querySelector('input[name="prob_1"]').setAttribute("required", "required");
         document.querySelector('input[name="prob_2"]').setAttribute("required", "required");
         document.querySelector('input[name="prob_3"]').setAttribute("required", "required");
+        document.querySelector('input[name="prob_4"]').setAttribute("required", "required");
     });
     p6yes.addEventListener('click', function(){
         document.getElementById('probing').classList.add("d-none");
         document.querySelector('input[name="prob_1"]').removeAttribute("required", "required");
         document.querySelector('input[name="prob_2"]').removeAttribute("required", "required");
         document.querySelector('input[name="prob_3"]').removeAttribute("required", "required");
+        document.querySelector('input[name="prob_4"]').removeAttribute("required", "required");
     });
     p6na.addEventListener('click', function(){
         document.getElementById('probing').classList.add("d-none");
         document.querySelector('input[name="prob_1"]').removeAttribute("required", "required");
         document.querySelector('input[name="prob_2"]').removeAttribute("required", "required");
         document.querySelector('input[name="prob_3"]').removeAttribute("required", "required");
+        document.querySelector('input[name="prob_4"]').removeAttribute("required", "required");
     });
 
     p7no.addEventListener('click', function(){
@@ -1015,6 +1236,8 @@
         document.querySelector('input[name="inte_3"]').setAttribute("required", "required");
         document.querySelector('input[name="inte_4"]').setAttribute("required", "required");
         document.querySelector('input[name="inte_5"]').setAttribute("required", "required");
+        document.querySelector('input[name="inte_6"]').setAttribute("required", "required");
+        document.querySelector('input[name="inte_7"]').setAttribute("required", "required");
     });
     p7yes.addEventListener('click', function(){
         document.getElementById('interaction').classList.add("d-none");
@@ -1023,6 +1246,8 @@
         document.querySelector('input[name="inte_3"]').removeAttribute("required", "required");
         document.querySelector('input[name="inte_4"]').removeAttribute("required", "required");
         document.querySelector('input[name="inte_5"]').removeAttribute("required", "required");
+        document.querySelector('input[name="inte_6"]').removeAttribute("required", "required");
+        document.querySelector('input[name="inte_7"]').removeAttribute("required", "required");
     });
     p7na.addEventListener('click', function(){
         document.getElementById('interaction').classList.add("d-none");
@@ -1031,6 +1256,8 @@
         document.querySelector('input[name="inte_3"]').removeAttribute("required", "required");
         document.querySelector('input[name="inte_4"]').removeAttribute("required", "required");
         document.querySelector('input[name="inte_5"]').removeAttribute("required", "required");
+        document.querySelector('input[name="inte_6"]').removeAttribute("required", "required");
+        document.querySelector('input[name="inte_7"]').removeAttribute("required", "required");
     });
 
     p17no.addEventListener('click', function(){
@@ -1038,18 +1265,43 @@
         document.querySelector('input[name="hold_1"]').setAttribute("required", "required");
         document.querySelector('input[name="hold_2"]').setAttribute("required", "required");
         document.querySelector('input[name="hold_3"]').setAttribute("required", "required");
+        document.querySelector('input[name="hold_4"]').setAttribute("required", "required");
     });
     p17yes.addEventListener('click', function(){
         document.getElementById('chathold').classList.add("d-none");
         document.querySelector('input[name="hold_1"]').removeAttribute("required", "required");
         document.querySelector('input[name="hold_2"]').removeAttribute("required", "required");
         document.querySelector('input[name="hold_3"]').removeAttribute("required", "required");
+        document.querySelector('input[name="hold_4"]').removeAttribute("required", "required");
     });
     p17na.addEventListener('click', function(){
         document.getElementById('chathold').classList.add("d-none");
         document.querySelector('input[name="hold_1"]').removeAttribute("required", "required");
         document.querySelector('input[name="hold_2"]').removeAttribute("required", "required");
         document.querySelector('input[name="hold_3"]').removeAttribute("required", "required");
+        document.querySelector('input[name="hold_4"]').removeAttribute("required", "required");
+    });
+
+    p18no.addEventListener('click', function(){
+        document.getElementById('pekb').classList.remove("d-none");
+        document.querySelector('input[name="pekb_1"]').setAttribute("required", "required");
+        document.querySelector('input[name="pekb_2"]').setAttribute("required", "required");
+        document.querySelector('input[name="pekb_3"]').setAttribute("required", "required");
+        document.querySelector('input[name="pekb_4"]').setAttribute("required", "required");
+    });
+    p18yes.addEventListener('click', function(){
+        document.getElementById('pekb').classList.add("d-none");
+        document.querySelector('input[name="pekb_1"]').removeAttribute("required", "required");
+        document.querySelector('input[name="pekb_2"]').removeAttribute("required", "required");
+        document.querySelector('input[name="pekb_3"]').removeAttribute("required", "required");
+        document.querySelector('input[name="pekb_4"]').removeAttribute("required", "required");
+    });
+    p18na.addEventListener('click', function(){
+        document.getElementById('pekb').classList.add("d-none");
+        document.querySelector('input[name="pekb_1"]').removeAttribute("required", "required");
+        document.querySelector('input[name="pekb_2"]').removeAttribute("required", "required");
+        document.querySelector('input[name="pekb_3"]').removeAttribute("required", "required");
+        document.querySelector('input[name="pekb_4"]').removeAttribute("required", "required");
     });
 
     function score(e) {
@@ -1063,7 +1315,7 @@
         var p6 = parseInt(document.querySelector('input[name="p6"]:checked').value);
         var p7 = parseInt(document.querySelector('input[name="p7"]:checked').value);
         var p8 = parseInt(document.querySelector('input[name="p8"]:checked').value);
-        var p9 = parseInt(document.querySelector('input[name="p9"]:checked').value);
+        var p9 = parseInt(document.querySelector('input[name="p18"]:checked').value);
         var p10 = parseInt(document.querySelector('input[name="p10"]:checked').value);
         var p11 = parseInt(document.querySelector('input[name="p11"]:checked').value);
         var p12 = parseInt(document.querySelector('input[name="p12"]:checked').value);
@@ -1072,8 +1324,9 @@
         var p15 = parseInt(document.querySelector('input[name="p15"]:checked').value);
         var p16 = parseInt(document.querySelector('input[name="p16"]:checked').value);
         var p17 = parseInt(document.querySelector('input[name="p17"]:checked').value);
+        var p19 = parseInt(document.querySelector('input[name="p19"]:checked').value);
         for (var i = 0; i <= n; i++) {
-            ce_score.value = p1+p2+p3+p4+p5+p6+p7+p8+p9+p10+p11+p12+p13+p14+p15+p16+p17;
+            ce_score.value = p1+p2+p3+p4+p5+p6+p7+p8+p9+p10+p11+p12+p13+p14+p15+p16+p17+p19;
         }
         if (ce_score.value < 100) {
             ce_score.classList.add("less");

@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import *
 
 
@@ -152,20 +153,19 @@ class FameHouseSerializer(serializers.ModelSerializer):
 class PractoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Practo
-        fields = ['campaign', 'associate_name', 'emp_id', 'zone', 'concept', 'case_no', 'query_type', 'sub_query_type',
-                  'chat_date', 'csat', 'product',
+        fields = ['campaign', 'associate_name', 'emp_id', 'zone', 'concept', 'case_no', 'issue_type', 'sub_issue',
+                  'sub_sub_issue', 'chat_date', 'csat', 'product',
                   'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager', 'manager_id',
-                  'am', 'am_id', 'week', 'p_1', 'p1_s1', 'p1_s2', 'p1_s3', 'p1_s4', 'p1_s5', 'p_2', 'p_3', 'p3_s1',
-                  'p3_s2',
-                  'p3_s3', 'p3_s4', 'p_4', 'p4_s1', 'p4_s2', 'p4_s3', 'p_5', 'p_6', 'p6_s1', 'p6_s2', 'p6_s3', 'p_7',
-                  'p7_s1',
-                  'p7_s2', 'p7_s3', 'p7_s4', 'p7_s5', 'p_8', 'p8_s1', 'p8_s2', 'p8_s3', 'p8_s4', 'p_9', 'p9_s1',
-                  'p9_s2', 'p_10',
-                  'p_11', 'p11_s1', 'p11_s2', 'p11_s3', 'p11_s4', 'p11_s5', 'p11_s6', 'p11_s7', 'p11_s8', 'p_12',
-                  'p_13', 'p_14',
-                  'p_15', 'p15_s1', 'p15_s2', 'p_16', 'p_17', 'p17_s1', 'p17_s2', 'p17_s3', 'compliance_1',
-                  'compliance1_s1',
-                  'compliance1_s2', 'compliance1_s3', 'compliance_2', 'areas_improvement', 'positives', 'comments',
+                  'am', 'am_id', 'week',
+                  'p_1', 'p1_s1', 'p1_s2', 'p1_s3', 'p1_s4', 'p1_s5', 'p1_s6', 'p_2', 'p_3', 'p3_s1', 'p3_s2', 'p3_s3',
+                  'p3_s4', 'p3_s5', 'p3_s6', 'p_4', 'p4_s1', 'p4_s2', 'p4_s3', 'p4_s4', 'p4_s5', 'p_5', 'p_6', 'p_7',
+                  'p7_s1', 'p7_s2', 'p7_s3', 'p7_s4', 'p_8', 'p8_s1', 'p8_s2', 'p8_s3', 'p8_s4', 'p8_s5', 'p8_s6',
+                  'p8_s7', 'p_9', 'p9_s1', 'p9_s2', 'p9_s3', 'p9_s4', 'p9_s5', 'p9_s6', 'p_10', 'p_11', 'p11_s1',
+                  'p11_s2', 'p11_s3', 'p11_s4', 'p11_s5', 'p11_s6', 'p11_s7', 'p_12', 'p_13', 'p_14', 'p_15', 'p15_s1',
+                  'p15_s2', 'p15_s3', 'p_16', 'p_17', 'p17_s1', 'p17_s2', 'p17_s3', 'p17_s4', 'p_18', 'p18_s1',
+                  'p18_s2', 'p18_s3', 'p18_s4', 'compliance_1', 'compliance1_s1', 'compliance1_s2', 'compliance1_s3',
+                  'compliance_2',
+                  'areas_improvement', 'positives', 'comments',
                   'status',
                   'closed_date', 'emp_comments', 'overall_score', 'fatal',
                   'fatal_count', 'dispute_status', 'audit_duration']

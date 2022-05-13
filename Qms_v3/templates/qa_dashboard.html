@@ -423,7 +423,7 @@
                               <select required class="form-control select2" name="campaign" id="export_campaign">
                                 <option value="" selected disabled>Please Select</option>
                                 {% for i in campaigns %}
-                                <option value="{{i.name}}">{{i.name}}</option>
+                                <option value="{{i.id}}">{{i.name}} ({{i.type}})</option>
                                 {% endfor %}
                               </select>
                             </div>

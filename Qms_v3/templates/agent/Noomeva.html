@@ -291,6 +291,7 @@
                         <div class="col-md-6">
                             <h4 id="tot_score">{{form.overall_score}}</h4>
                         </div>
+                        {% if request.user.profile.emp_desi in agent_list %}
                         {% if form.status == False %}
                         <div class="col-md-12 mt-3">
                             <form action="/agent-respond" method="POST" enctype="multipart/form-data">
@@ -312,6 +313,7 @@
                                 <button class="btn btn-lg btn-danger mt-2"><i class="fa fa-close"></i> Reject & Dispute</button>
                             </form>
                         </div>
+                        {% endif %}
                         {% endif %}
                         <div class="col-md-12 mt-3" align="center">
                             <button class="btn btn-info btn-lg" onclick="history.back()">Back</button>
