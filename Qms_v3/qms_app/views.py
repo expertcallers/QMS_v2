@@ -54,22 +54,46 @@ def Login(request):
             # user_login
             login(request, user)
             designation = request.user.profile.emp_desi
-
-            if designation in qa_list:
-                return redirect("/qa-dashboard")
-            elif designation in mgr_list:
-                return redirect("/manager-dashboard")
-            elif designation in agent_list:
-                return redirect("/agent-dashboard")
+            pc = request.user.profile.pc
+            if pc == False:
+                return redirect("/change-password")
             else:
-                messages.info(request, 'Invalid Request. You have been logged out :)')
-                return redirect("/")
+                if designation in qa_list:
+                    return redirect("/qa-dashboard")
+                elif designation in mgr_list:
+                    return redirect("/manager-dashboard")
+                elif designation in agent_list:
+                    return redirect("/agent-dashboard")
+                else:
+                    messages.info(request, 'Invalid Request. You have been logged out :)')
+                    return redirect("/")
 
         else:
             messages.info(request, 'Invalid user !')
             return redirect("/")
     else:
         pass
+
+
+@login_required
+def change_password(request):  # Test1
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            user = request.user
+            user.profile.pc = True
+            user.save()
+            user.profile.save()
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('/appraisal/')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'common/change_password.html', {'form': form})
+
 
 @login_required
 def DashboardRedirect(request):
@@ -1642,25 +1666,24 @@ def CampaignAgentReportView(request):
         messages.warning(request, 'Invalid request. You have been Logged out!')
         return redirect("/")
 
-@login_required
+
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated! Please login with new password.')
-
             user = request.user
             user.profile.pc = True
             user.save()
             user.profile.save()
+            messages.success(request, 'Your password was successfully updated! Please login with new password.')
             return redirect('/')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
-        return render(request, 'settings.html', {'form': form, "agent": agent_list})
+        return render(request, 'change-password.html', {'form': form, "agent": agent_list})
 
 
 @login_required

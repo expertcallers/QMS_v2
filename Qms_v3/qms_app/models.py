@@ -17,6 +17,7 @@ class Profile(models.Model):
     emp_rm3_id = models.CharField(max_length=30)
     agent_status = models.CharField(max_length=30)
     emp_email = models.EmailField(null=True,blank=True)
+    pc = models.BooleanField(default=False)
 
     def __str__(self):
         return self.emp_name
