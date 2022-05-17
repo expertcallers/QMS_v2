@@ -1667,7 +1667,8 @@ def CampaignAgentReportView(request):
         return redirect("/")
 
 
-def change_password(request):
+@login_required
+def change_password_new(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -1681,6 +1682,7 @@ def change_password(request):
             return redirect('/')
         else:
             messages.error(request, 'Please correct the error below.')
+            return redirect('/change-password')
     else:
         form = PasswordChangeForm(request.user)
         return render(request, 'change-password.html', {'form': form, "agent": agent_list})

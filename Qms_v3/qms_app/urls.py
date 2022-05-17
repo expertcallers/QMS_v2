@@ -5,7 +5,7 @@ from .views import *
 urlpatterns = [
     path('', index),
     path('login', Login),
-    path('change-password', change_password),
+    path('change-password', change_password_new),
     path('dashboard-redirect', DashboardRedirect),
     path('qa-dashboard', qaDashboard),
     path('manager-dashboard', managerDashboard),
