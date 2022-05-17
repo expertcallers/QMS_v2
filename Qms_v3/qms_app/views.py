@@ -663,7 +663,18 @@ def ManagerReportTable(request, type):
                                 tot_obj = i.objects.filter(campaign=cam.name, status=False,
                                                        audit_date__range=[start_date, end_date])
                         else:
-                            tot_obj = i.objects.filter(campaign=cname,
+                            cam = Campaign.objects.get(id=cname)
+                            if cam.type == "Outbound":
+                                tot_obj = Outbound.objects.filter(campaign=cam.name,
+                                                       audit_date__range=[start_date, end_date])
+                            elif cam.type == "Inbound":
+                                tot_obj = Inbound.objects.filter(campaign=cam.name,
+                                                       audit_date__range=[start_date, end_date])
+                            elif cam.type == "Email":
+                                tot_obj = EmailChat.objects.filter(campaign=cam.name,
+                                                       audit_date__range=[start_date, end_date])
+                            else:
+                                tot_obj = i.objects.filter(campaign=cam.name,
                                                        audit_date__range=[start_date, end_date])
                         audits.append(tot_obj)
                     else:
@@ -672,9 +683,25 @@ def ManagerReportTable(request, type):
                         elif cname == "all" and status == "open":
                             tot_obj = i.objects.filter(status=False)
                         elif cname and status == "open":
-                            tot_obj = i.objects.filter(campaign=cname, status=False)
+                            cam = Campaign.objects.get(id=cname)
+                            if cam.type == "Outbound":
+                                tot_obj = Outbound.objects.filter(campaign=cam.name, status=False)
+                            elif cam.type == "Inbound":
+                                tot_obj = Inbound.objects.filter(campaign=cam.name, status=False)
+                            elif cam.type == "Email":
+                                tot_obj = EmailChat.objects.filter(campaign=cam.name, status=False)
+                            else:
+                                tot_obj = i.objects.filter(campaign=cam.name, status=False)
                         else:
-                            tot_obj = i.objects.filter(campaign=cname)
+                            cam = Campaign.objects.get(id=cname)
+                            if cam.type == "Outbound":
+                                tot_obj = Outbound.objects.filter(campaign=cam.name)
+                            elif cam.type == "Inbound":
+                                tot_obj = Inbound.objects.filter(campaign=cam.name)
+                            elif cam.type == "Email":
+                                tot_obj = EmailChat.objects.filter(campaign=cam.name)
+                            else:
+                                tot_obj = i.objects.filter(campaign=cam.name)
                         audits.append(tot_obj)
             else:
                 messages.info(request, "Invalid Request!")
