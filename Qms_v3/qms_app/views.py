@@ -87,12 +87,12 @@ def change_password(request):  # Test1
             user.save()
             user.profile.save()
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('/appraisal/')
+            return redirect('/')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'common/change_password.html', {'form': form})
+    return render(request, 'settings.html', {'form': form})
 
 
 @login_required
@@ -649,7 +649,18 @@ def ManagerReportTable(request, type):
                             tot_obj = i.objects.filter(status=False,
                                                        audit_date__range=[start_date, end_date])
                         elif cname and status == "open":
-                            tot_obj = i.objects.filter(campaign=cname, status=False,
+                            cam = Campaign.objects.get(id=cname)
+                            if cam.type == "Outbound":
+                                tot_obj = Outbound.objects.filter(campaign=cam.name, status=False,
+                                                       audit_date__range=[start_date, end_date])
+                            elif cam.type == "Inbound":
+                                tot_obj = Inbound.objects.filter(campaign=cam.name, status=False,
+                                                       audit_date__range=[start_date, end_date])
+                            elif cam.type == "Email":
+                                tot_obj = EmailChat.objects.filter(campaign=cam.name, status=False,
+                                                       audit_date__range=[start_date, end_date])
+                            else:
+                                tot_obj = i.objects.filter(campaign=cam.name, status=False,
                                                        audit_date__range=[start_date, end_date])
                         else:
                             tot_obj = i.objects.filter(campaign=cname,
