@@ -675,8 +675,9 @@ def ManagerReportTable(request, type):
                                                        audit_date__range=[start_date, end_date])
                             else:
                                 tot_obj = i.objects.filter(campaign=cam.name,
-                                                       audit_date__range=[start_date, end_date])
-                        audits.append(tot_obj)
+                                                      audit_date__range=[start_date, end_date])
+                        if tot_obj not in audits:
+                            audits.append(tot_obj)
                     else:
                         if cname == "all" and status == "all":
                             tot_obj = i.objects.all()
@@ -702,7 +703,8 @@ def ManagerReportTable(request, type):
                                 tot_obj = EmailChat.objects.filter(campaign=cam.name)
                             else:
                                 tot_obj = i.objects.filter(campaign=cam.name)
-                        audits.append(tot_obj)
+                        if tot_obj not in audits:
+                            audits.append(tot_obj)
             else:
                 messages.info(request, "Invalid Request!")
                 return redirect("/agent-dashboard")
