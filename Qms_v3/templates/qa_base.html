@@ -185,20 +185,19 @@
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
                 <ul class="nav side-menu">
-                  <li><a href="/qa-dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
+                  <li><a href="/dashboard"><i class="fa fa-home"></i> Dashboard</a></li>
                   <li><a href="/qa-reports/all"><i class="fa fa-database"></i> All Audits</a></li>
                   <li><a href="/qa-reports/open"><i class="fa fa-pencil"></i> Open Audits</a></li>
                   <li><a href="/qa-reports/dispute"><i class="fa fa-times"></i> Dispute Audits</a></li>
                   <li><a href="/settings"><i class="fa fa-gear"></i> Settings</a></li>
                 </ul>
               </div>
-
             </div>
             <!-- /sidebar menu -->
 
             <!-- /menu footer buttons -->
             <div class="sidebar-footer hidden-small">
-              <a data-toggle="tooltip" data-placement="top" title="Logout" href="/">
+              <a data-toggle="tooltip" data-placement="top" title="Logout" href="/logout">
                 <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
               </a>
             </div>
@@ -220,7 +219,7 @@
                     <img src="{% static 'assets/images/img.jpg' %}" alt=""> {{request.user.profile.emp_name}}
                   </a>
                   <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item"  href="/"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                    <a class="dropdown-item"  href="/logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                   </div>
                 </li>
                 <li style="margin-top:5px !important;">

@@ -1,16 +1,16 @@
 import datetime
 from datetime import date
+
 import xlwt
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
-from django.db.models import Q, Avg
+from django.db.models import Avg
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib import messages
 from drf_multiple_model.views import FlatMultipleModelAPIView
 
-from .models import *
 from .serializers import *
 
 # Create your views here.
@@ -18,11 +18,11 @@ from .serializers import *
 # Campaign Models
 campaign_list = [Outbound, Inbound, EmailChat,
                  DigitalSwissGold, FLA, BlazingHog, NoomPod, NoomEva, AbHindalco,
-                 Practo, FameHouse, ILMakiage, Winopoly,Nerotel,SpoiledChild]
+                 Practo, FameHouse, ILMakiage, Winopoly, Nerotel, SpoiledChild, Amerisave]
 
 # page names must be equal to campaign page type
 pages = ["Outbound", "Inbound", "Email", "Digital", "FLA", "BlazingHog", "Noompod", "Noomeva", "Abhindalco", "Practo",
-         "Fame", "ILM", "Winopoly","Nerotel","Spoiled"]
+         "Fame", "ILM", "Winopoly", "Nerotel", "Spoiled", 'Amerisave']
 
 # List of Agents Designations
 agent_list = ["CRO", "Patrolling officer"]
@@ -41,8 +41,15 @@ todays_date = date.today()
 
 
 def index(request):
+    if request.user.is_authenticated:
+        return redirect("/dashboard")
+    else:
+        return render(request, "index.html")
+
+
+def logoutUser(request):
     logout(request)
-    return render(request, "index.html")
+    return redirect('/')
 
 
 def Login(request):
@@ -53,24 +60,14 @@ def Login(request):
         if user is not None:
             # user_login
             login(request, user)
-            designation = request.user.profile.emp_desi
             pc = request.user.profile.pc
             if pc == False:
                 return redirect("/change-password")
             else:
-                if designation in qa_list:
-                    return redirect("/qa-dashboard")
-                elif designation in mgr_list:
-                    return redirect("/manager-dashboard")
-                elif designation in agent_list:
-                    return redirect("/agent-dashboard")
-                else:
-                    messages.info(request, 'Invalid Request. You have been logged out :)')
-                    return redirect("/")
-
+                return redirect("/dashboard")
         else:
             messages.info(request, 'Invalid user !')
-            return redirect("/")
+            return redirect("/logout")
     else:
         pass
 
@@ -87,7 +84,7 @@ def change_password(request):  # Test1
             user.save()
             user.profile.save()
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('/')
+            return redirect('/logout')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
@@ -106,7 +103,7 @@ def DashboardRedirect(request):
         return redirect("/agent-dashboard")
     else:
         messages.info(request, 'Invalid Request. You have been logged out :)')
-        return redirect("/")
+        return redirect("/logout")
 
 
 # QA Dashboard (qa-dashboard)
@@ -236,7 +233,6 @@ def managerDashboard(request):
             if i["score"] != "No Audits":
                 new_audits.append(i)
 
-
         qa_audits = []
         for j in qa_profile:
             average_score = 0
@@ -333,19 +329,17 @@ def managerDashboard(request):
             if i["score"] != "No Audits":
                 new_am_audits.append(i)
 
-
-
         data = {"campaigns": campaigns, "profile": profile, "audit": tot,
                 "month_all_total": month_all_total, "open_total": open_total, "dispute_total": dispute_total,
                 "average": score_average, "fatal": fatal_count,
                 "all_total": all_total, "fatal_total": fatal_total, "coaching_closure": coaching_closure,
-                "audits": new_audits,"qa_audits":new_qa_audits,"tl_audits":new_tl_audits,"am_audits":new_am_audits}
+                "audits": new_audits, "qa_audits": new_qa_audits, "tl_audits": new_tl_audits,
+                "am_audits": new_am_audits}
 
         return render(request, "manager_dashboard.html", data)
     else:
         messages.info(request, 'Invalid Request. You have been logged out :)')
-        return redirect("/")
-
+        return redirect("/logout")
 
 
 # QA Dashboard (qa-dashboard)
@@ -356,10 +350,11 @@ def qaDashboard(request):
     if user.profile.emp_desi in qa_list:
         assigned_campaigns = CampaignMapping.objects.filter(qa_id=emp_id).values('campaign')
         campaigns = Campaign.objects.filter(id__in=assigned_campaigns)
-        out_campaigns = CampaignMapping.objects.filter(qa_id=emp_id,campaign__type='Outbound')
-        in_campaign = CampaignMapping.objects.filter(qa_id=emp_id,campaign__type='Inbound')
-        email_campaign = CampaignMapping.objects.filter(qa_id=emp_id,campaign__type='Email / Chat')
-        other_campaign = CampaignMapping.objects.filter(qa_id=emp_id).exclude(campaign__type__in=['Outbound', 'Inbound', 'Email / Chat'])
+        out_campaigns = CampaignMapping.objects.filter(qa_id=emp_id, campaign__type='Outbound')
+        in_campaign = CampaignMapping.objects.filter(qa_id=emp_id, campaign__type='Inbound')
+        email_campaign = CampaignMapping.objects.filter(qa_id=emp_id, campaign__type='Email / Chat')
+        other_campaign = CampaignMapping.objects.filter(qa_id=emp_id).exclude(
+            campaign__type__in=['Outbound', 'Inbound', 'Email / Chat'])
         profile = Profile.objects.filter(emp_desi__in=agent_list)
 
         # All Audits
@@ -491,8 +486,7 @@ def qaDashboard(request):
         return render(request, "qa_dashboard.html", data)
     else:
         messages.info(request, 'Invalid Request. You have been logged out :)')
-        return redirect("/")
-
+        return redirect("/logout")
 
 
 # Test function for ajax (get-emp)
@@ -537,6 +531,7 @@ def ReportTable(request, type):
                 status = request.POST.get("status")
                 start_date = request.POST.get("start_date")
                 end_date = request.POST.get("end_date")
+                cam = Campaign.objects.get(id=cname)
                 for i in campaign_list:
                     if start_date:
                         if cname == "all" and status == "all":
@@ -545,10 +540,10 @@ def ReportTable(request, type):
                             tot_obj = i.objects.filter(added_by=emp_id, status=False,
                                                        audit_date__range=[start_date, end_date])
                         elif cname and status == "open":
-                            tot_obj = i.objects.filter(added_by=emp_id, campaign=cname, status=False,
+                            tot_obj = i.objects.filter(added_by=emp_id, campaign_id=cam.id, status=False,
                                                        audit_date__range=[start_date, end_date])
                         else:
-                            tot_obj = i.objects.filter(campaign=cname, added_by=emp_id,
+                            tot_obj = i.objects.filter(campaign_id=cam.id, added_by=emp_id,
                                                        audit_date__range=[start_date, end_date])
                         audits.append(tot_obj)
                     else:
@@ -557,9 +552,9 @@ def ReportTable(request, type):
                         elif cname == "all" and status == "open":
                             tot_obj = i.objects.filter(added_by=emp_id, status=False)
                         elif cname and status == "open":
-                            tot_obj = i.objects.filter(added_by=emp_id, campaign=cname, status=False)
+                            tot_obj = i.objects.filter(added_by=emp_id, campaign_id=cam.id, status=False)
                         else:
-                            tot_obj = i.objects.filter(campaign=cname, added_by=emp_id)
+                            tot_obj = i.objects.filter(campaign_id=cam.id, added_by=emp_id)
                         audits.append(tot_obj)
             else:
                 messages.info(request, "Invalid Request!")
@@ -601,12 +596,12 @@ def ReportTable(request, type):
                 return redirect("/agent-dashboard")
         else:
             messages.info(request, 'Invalid Request. You have been logged out :)')
-            return redirect("/")
+            return redirect("/logout")
 
         return audits
 
     audits = auditcalculator(type)
-    data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list":agent_list, "mgr_list":mgr_list}
+    data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list": agent_list, "mgr_list": mgr_list}
     return render(request, "qa_reports.html", data)
 
 
@@ -641,6 +636,7 @@ def ManagerReportTable(request, type):
                 status = request.POST.get("status")
                 start_date = request.POST.get("start_date")
                 end_date = request.POST.get("end_date")
+                cam = Campaign.objects.get(id=cname)
                 for i in campaign_list:
                     if start_date:
                         if cname == "all" and status == "all":
@@ -649,33 +645,11 @@ def ManagerReportTable(request, type):
                             tot_obj = i.objects.filter(status=False,
                                                        audit_date__range=[start_date, end_date])
                         elif cname and status == "open":
-                            cam = Campaign.objects.get(id=cname)
-                            if cam.type == "Outbound":
-                                tot_obj = Outbound.objects.filter(campaign=cam.name, status=False,
-                                                       audit_date__range=[start_date, end_date])
-                            elif cam.type == "Inbound":
-                                tot_obj = Inbound.objects.filter(campaign=cam.name, status=False,
-                                                       audit_date__range=[start_date, end_date])
-                            elif cam.type == "Email":
-                                tot_obj = EmailChat.objects.filter(campaign=cam.name, status=False,
-                                                       audit_date__range=[start_date, end_date])
-                            else:
-                                tot_obj = i.objects.filter(campaign=cam.name, status=False,
+                            tot_obj = i.objects.filter(campaign_id=cam.id, status=False,
                                                        audit_date__range=[start_date, end_date])
                         else:
-                            cam = Campaign.objects.get(id=cname)
-                            if cam.type == "Outbound":
-                                tot_obj = Outbound.objects.filter(campaign=cam.name,
+                            tot_obj = i.objects.filter(campaign_id=cam.id,
                                                        audit_date__range=[start_date, end_date])
-                            elif cam.type == "Inbound":
-                                tot_obj = Inbound.objects.filter(campaign=cam.name,
-                                                       audit_date__range=[start_date, end_date])
-                            elif cam.type == "Email":
-                                tot_obj = EmailChat.objects.filter(campaign=cam.name,
-                                                       audit_date__range=[start_date, end_date])
-                            else:
-                                tot_obj = i.objects.filter(campaign=cam.name,
-                                                      audit_date__range=[start_date, end_date])
                         if tot_obj not in audits:
                             audits.append(tot_obj)
                     else:
@@ -684,25 +658,9 @@ def ManagerReportTable(request, type):
                         elif cname == "all" and status == "open":
                             tot_obj = i.objects.filter(status=False)
                         elif cname and status == "open":
-                            cam = Campaign.objects.get(id=cname)
-                            if cam.type == "Outbound":
-                                tot_obj = Outbound.objects.filter(campaign=cam.name, status=False)
-                            elif cam.type == "Inbound":
-                                tot_obj = Inbound.objects.filter(campaign=cam.name, status=False)
-                            elif cam.type == "Email":
-                                tot_obj = EmailChat.objects.filter(campaign=cam.name, status=False)
-                            else:
-                                tot_obj = i.objects.filter(campaign=cam.name, status=False)
+                            tot_obj = i.objects.filter(campaign_id=cam.id, status=False)
                         else:
-                            cam = Campaign.objects.get(id=cname)
-                            if cam.type == "Outbound":
-                                tot_obj = Outbound.objects.filter(campaign=cam.name)
-                            elif cam.type == "Inbound":
-                                tot_obj = Inbound.objects.filter(campaign=cam.name)
-                            elif cam.type == "Email":
-                                tot_obj = EmailChat.objects.filter(campaign=cam.name)
-                            else:
-                                tot_obj = i.objects.filter(campaign=cam.name)
+                            tot_obj = i.objects.filter(campaign_id=cam.id)
                         if tot_obj not in audits:
                             audits.append(tot_obj)
             else:
@@ -745,12 +703,12 @@ def ManagerReportTable(request, type):
                 return redirect("/agent-dashboard")
         else:
             messages.info(request, 'Invalid Request. You have been logged out :)')
-            return redirect("/")
+            return redirect("/logout")
 
         return audits
 
     audits = auditcalculator(type)
-    data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list":agent_list, "mgr_list":mgr_list}
+    data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list": agent_list, "mgr_list": mgr_list}
     return render(request, "qa_reports.html", data)
 
 
@@ -774,7 +732,7 @@ def formView(request):
 
     else:
         messages.info(request, 'Invalid Request !')
-        return redirect("/")
+        return redirect("/logout")
 
 
 # Report for QA (report)
@@ -800,7 +758,7 @@ def qaReport(request):
 
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
 
 
 # Agent Dashbaoard (agent-dashboard)
@@ -940,11 +898,11 @@ def agentReportTable(request, type):
                 return redirect("/agent-dashboard")
         else:
             messages.info(request, 'Invalid Request.')
-            return redirect("/")
+            return redirect("/logout")
         return audits
 
     audits = auditcalculator(type)
-    data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list":agent_list, "mgr_list":mgr_list}
+    data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list": agent_list, "mgr_list": mgr_list}
     return render(request, "agent_reports.html", data)
 
 
@@ -982,7 +940,7 @@ def IndividualAgentReportTable(request, type, emp_id):
                             audits.append(tot_obj)
                     else:
                         messages.info(request, 'Invalid Request.')
-                        return redirect("/")
+                        return redirect("/logout")
                 elif emp_desi in qa_list:
                     if type == 'all':
                         for i in campaign_list:
@@ -995,7 +953,8 @@ def IndividualAgentReportTable(request, type, emp_id):
                             audits.append(tot_obj)
                     elif type == "month":
                         for i in campaign_list:
-                            tot_obj = i.objects.filter(added_by=emp_id, audit_date__range=[month_start_date, todays_date])
+                            tot_obj = i.objects.filter(added_by=emp_id,
+                                                       audit_date__range=[month_start_date, todays_date])
                             audits.append(tot_obj)
                     elif type == "open":
                         for i in campaign_list:
@@ -1007,7 +966,7 @@ def IndividualAgentReportTable(request, type, emp_id):
                             audits.append(tot_obj)
                     else:
                         messages.info(request, 'Invalid Request.')
-                        return redirect("/")
+                        return redirect("/logout")
                 elif emp_desi == "Team Leader":
                     if type == 'all':
                         for i in campaign_list:
@@ -1020,7 +979,8 @@ def IndividualAgentReportTable(request, type, emp_id):
                             audits.append(tot_obj)
                     elif type == "month":
                         for i in campaign_list:
-                            tot_obj = i.objects.filter(team_lead_id=emp_id, audit_date__range=[month_start_date, todays_date])
+                            tot_obj = i.objects.filter(team_lead_id=emp_id,
+                                                       audit_date__range=[month_start_date, todays_date])
                             audits.append(tot_obj)
                     elif type == "open":
                         for i in campaign_list:
@@ -1032,7 +992,7 @@ def IndividualAgentReportTable(request, type, emp_id):
                             audits.append(tot_obj)
                     else:
                         messages.info(request, 'Invalid Request.')
-                        return redirect("/")
+                        return redirect("/logout")
                 elif emp_desi == "Assistant Manager":
                     if type == 'all':
                         for i in campaign_list:
@@ -1057,10 +1017,10 @@ def IndividualAgentReportTable(request, type, emp_id):
                             audits.append(tot_obj)
                     else:
                         messages.info(request, 'Invalid Request.')
-                        return redirect("/")
+                        return redirect("/logout")
                 else:
                     messages.warning(request, 'Invalid request. You have been Logged out!')
-                    return redirect("/")
+                    return redirect("/logout")
             else:
                 if type == 'all':
                     for i in campaign_list:
@@ -1086,15 +1046,15 @@ def IndividualAgentReportTable(request, type, emp_id):
                         audits.append(tot_obj)
                 else:
                     messages.info(request, 'Invalid Request.')
-                    return redirect("/")
+                    return redirect("/logout")
             return audits
 
         audits = auditcalculator(type)
-        data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list":agent_list, "mgr_list":mgr_list}
+        data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list": agent_list, "mgr_list": mgr_list}
         return render(request, "agent_reports.html", data)
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
 
 
 # Agent Report (agent-report)
@@ -1109,7 +1069,7 @@ def agentReport(request):
             if obj.count() > 0:
                 if obj[0].page_type == type:
                     campaign = i.objects.get(id=id)
-                    data = {"form": campaign, "type": campaign.campaign_type, 'agent_list':agent_list}
+                    data = {"form": campaign, "type": campaign.campaign_type, 'agent_list': agent_list}
                     for j in pages:
                         if type == j:
                             return render(request, "agent/" + j + ".html", data)
@@ -1120,7 +1080,7 @@ def agentReport(request):
 
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
 
 
 # Agent Respond
@@ -1159,7 +1119,7 @@ def agentRespond(request):
         return redirect("/agent-dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
 
 
 @login_required
@@ -1187,7 +1147,8 @@ def IndividualReportView(request):
                 # All Audits Current Month Count
                 month_all_count = []
                 for i in campaign_list:
-                    camapign = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date]).count()
+                    camapign = i.objects.filter(emp_id=emp_id,
+                                                audit_date__range=[month_start_date, todays_date]).count()
                     month_all_count.append(camapign)
                 month_all_total = 0
                 for i in month_all_count:
@@ -1283,7 +1244,8 @@ def IndividualReportView(request):
                 # All Audits Current Month Count
                 month_all_count = []
                 for i in campaign_list:
-                    camapign = i.objects.filter(team_lead_id=emp_id, audit_date__range=[month_start_date, todays_date]).count()
+                    camapign = i.objects.filter(team_lead_id=emp_id,
+                                                audit_date__range=[month_start_date, todays_date]).count()
                     month_all_count.append(camapign)
                 month_all_total = 0
                 for i in month_all_count:
@@ -1379,7 +1341,8 @@ def IndividualReportView(request):
                 # All Audits Current Month Count
                 month_all_count = []
                 for i in campaign_list:
-                    camapign = i.objects.filter(added_by=emp_id, audit_date__range=[month_start_date, todays_date]).count()
+                    camapign = i.objects.filter(added_by=emp_id,
+                                                audit_date__range=[month_start_date, todays_date]).count()
                     month_all_count.append(camapign)
                 month_all_total = 0
                 for i in month_all_count:
@@ -1558,7 +1521,7 @@ def IndividualReportView(request):
 
             else:
                 messages.warning(request, 'Invalid request. You have been Logged out!')
-                return redirect("/")
+                return redirect("/logout")
 
         else:
             # All Audits
@@ -1663,12 +1626,13 @@ def IndividualReportView(request):
             "audit": tot, "month_all_total": month_all_total, "open_total": open_total, "dispute_total": dispute_total,
             "average": score_average, "fatal": fatal_count,
             "all_total": all_total, "fatal_total": fatal_total, "coaching_closure": coaching_closure,
-            "profile": profile, "audits": new_audits,"desig":emp_desi
+            "profile": profile, "audits": new_audits, "desig": emp_desi
         }
         return render(request, "individual_reports.html", data)
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
 
 @login_required
 def CampaignAgentReportView(request):
@@ -1700,11 +1664,11 @@ def CampaignAgentReportView(request):
                             campaign = i.objects.filter(added_by=emp_id)
             audits = campaign
         type = "campaign"
-        data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list":agent_list, "mgr_list":mgr_list}
+        data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list": agent_list, "mgr_list": mgr_list}
         return render(request, "campaign_reports.html", data)
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
 
 
 @login_required
@@ -1719,7 +1683,7 @@ def change_password_new(request):
             user.save()
             user.profile.save()
             messages.success(request, 'Your password was successfully updated! Please login with new password.')
-            return redirect('/')
+            return redirect('/logout')
         else:
             messages.error(request, 'Please correct the error below.')
             return redirect('/change-password')
@@ -1738,13 +1702,7 @@ def AddEmail(request):
         e.emp_email = email
         e.save()
         messages.info(request, "Email Added Successfully !")
-        if designation in qa_list:
-            return redirect("/qa-dashboard")
-        elif designation in agent_list:
-            return redirect("/agent-dashboard")
-        else:
-            messages.info(request, 'Not authorised to view this page !')
-            return redirect("/")
+        return redirect("/dashboard")
     else:
         messages.info(request, 'Please add your Email ID')
         return render(request, "add-email.html")
@@ -1760,16 +1718,10 @@ def EditEmail(request):
         e.emp_email = email
         e.save()
         messages.info(request, "Email Changed Successfully !")
-        if designation in qa_list:
-            return redirect("/qa-dashboard")
-        elif designation in agent_list:
-            return redirect("/agent-dashboard")
-        else:
-            messages.info(request, 'Not authorised to view this page !')
-            return redirect("/")
+        return redirect("/dashboard")
     else:
         messages.info(request, "Invalid Request. You have been logged out :)")
-        return redirect("/")
+        return redirect("/logout")
 
 
 @login_required
@@ -3343,7 +3295,8 @@ def exportData(request):
                            'Magento was utilized correctly?',
                            'Identified correct order type ?',
 
-                           'Status', 'Closed Date', 'Fatal', 'Fatal Count','Solution Score','Efficiency Score', "Compliance Total",
+                           'Status', 'Closed Date', 'Fatal', 'Fatal Count', 'Solution Score', 'Efficiency Score',
+                           "Compliance Total",
                            "Total Score", 'Dispute Status', 'Areas of improvement', 'Positives', 'Comments']
             else:
                 columns = ['Process/Campaign', 'Employee ID', 'Associate Name', 'Zone', 'Customer Name', 'Concept',
@@ -3363,7 +3316,8 @@ def exportData(request):
                            'Magento was utilized correctly?',
                            'Identified correct order type ?',
 
-                           'Status', 'Closed Date', 'Fatal', 'Fatal Count','Solution Score','Efficiency Score', "Compliance Total",
+                           'Status', 'Closed Date', 'Fatal', 'Fatal Count', 'Solution Score', 'Efficiency Score',
+                           "Compliance Total",
                            "Total Score", 'Dispute Status', 'Areas of improvement', 'Positives', 'Comments',
                            'Audit Duration']
 
@@ -3373,7 +3327,8 @@ def exportData(request):
             # Sheet body, remaining rows
             font_style = xlwt.XFStyle()
             if designation in qa_list:
-                rows = SpoiledChild.objects.filter(audit_date__range=[start_date, end_date], added_by=emp_id).values_list(
+                rows = SpoiledChild.objects.filter(audit_date__range=[start_date, end_date],
+                                                   added_by=emp_id).values_list(
                     'campaign', 'emp_id', 'associate_name', 'zone', 'customer_name', 'concept', 'email_chat_date',
                     'audit_date', 'quality_analyst', 'team_lead', 'manager', 'am', 'week',
 
@@ -3381,7 +3336,8 @@ def exportData(request):
                     'efficiency_1', 'efficiency_2',
                     'compliance_1', 'compliance_2', 'compliance_3',
 
-                    'status', 'closed_date', 'fatal', 'fatal_count', 'solution_score','efficiency_score', 'compliance_total', 'overall_score',
+                    'status', 'closed_date', 'fatal', 'fatal_count', 'solution_score', 'efficiency_score',
+                    'compliance_total', 'overall_score',
                     'dispute_status',
                     'areas_improvement', 'positives', 'comments')
             else:
@@ -3393,7 +3349,8 @@ def exportData(request):
                     'efficiency_1', 'efficiency_2',
                     'compliance_1', 'compliance_2', 'compliance_3',
 
-                    'status', 'closed_date', 'fatal', 'fatal_count', 'solution_score','efficiency_score', 'compliance_total', 'overall_score',
+                    'status', 'closed_date', 'fatal', 'fatal_count', 'solution_score', 'efficiency_score',
+                    'compliance_total', 'overall_score',
                     'dispute_status',
                     'areas_improvement', 'positives', 'comments', 'audit_duration')
 
@@ -3444,7 +3401,8 @@ def exportData(request):
                            'Discovery Questions? ',
                            'Was agent rude on the call?',
 
-                           'Status', 'Closed Date', 'Fatal', 'Fatal Count','Engagement Total','Resolution Total',  "Compliance Total",
+                           'Status', 'Closed Date', 'Fatal', 'Fatal Count', 'Engagement Total', 'Resolution Total',
+                           "Compliance Total",
                            "Total Score", 'Dispute Status', 'Areas of improvement', 'Positives', 'Comments']
             else:
                 columns = ['Process/Campaign', 'Employee ID', 'Associate Name', 'Zone', 'Concept', 'Customer Name',
@@ -3472,7 +3430,8 @@ def exportData(request):
                            'Discovery Questions? ',
                            'Was agent rude on the call?',
 
-                           'Status', 'Closed Date', 'Fatal', 'Fatal Count','Engagement Total','Resolution Total',  "Compliance Total",
+                           'Status', 'Closed Date', 'Fatal', 'Fatal Count', 'Engagement Total', 'Resolution Total',
+                           "Compliance Total",
                            "Total Score", 'Dispute Status', 'Areas of improvement', 'Positives', 'Comments',
                            'Audit Duration']
 
@@ -3490,7 +3449,8 @@ def exportData(request):
                     'res_1', 'res_2', 'res_3', 'res_4',
                     'compliance_1', 'compliance_2', 'compliance_3', 'compliance_4',
 
-                    'status', 'closed_date', 'fatal', 'fatal_count','eng_total','res_total', 'compliance_total', 'overall_score',
+                    'status', 'closed_date', 'fatal', 'fatal_count', 'eng_total', 'res_total', 'compliance_total',
+                    'overall_score',
                     'dispute_status',
                     'areas_improvement', 'positives', 'comments')
             else:
@@ -3502,7 +3462,8 @@ def exportData(request):
                     'res_1', 'res_2', 'res_3', 'res_4',
                     'compliance_1', 'compliance_2', 'compliance_3', 'compliance_4',
 
-                    'status', 'closed_date', 'fatal', 'fatal_count','eng_total','res_total', 'compliance_total', 'overall_score',
+                    'status', 'closed_date', 'fatal', 'fatal_count', 'eng_total', 'res_total', 'compliance_total',
+                    'overall_score',
                     'dispute_status',
                     'areas_improvement', 'positives', 'comments', 'audit_duration')
 
@@ -3518,16 +3479,11 @@ def exportData(request):
 
             return response
 
-        if designation in qa_list:
-            return redirect("/qa-dashboard")
-        elif designation in mgr_list:
-            return redirect("/manager-dashboard")
-        else:
-            messages.info(request, 'Not authorised to view this page !')
-            return redirect("/")
+        return redirect("/dashboard")
     else:
         messages.info(request, "Invalid Request. You have been logged out :)")
-        return redirect("/")
+        return redirect("/logout")
+
 
 @login_required
 def AddUser(request):
@@ -3586,7 +3542,9 @@ def AddUser(request):
             return render(request, "add_user.html", data)
     else:
         messages.info(request, "Invalid Request. You have been logged out :)")
-        return redirect("/")
+        return redirect("/logout")
+
+
 @login_required
 def AddCampaign(request):
     emp_desi = request.user.profile.emp_desi
@@ -3602,7 +3560,7 @@ def AddCampaign(request):
             else:
                 page_type = "Email"
             try:
-                Campaign.objects.get(name__iexact=campaign,type=cam_type)
+                Campaign.objects.get(name__iexact=campaign, type=cam_type)
                 messages.info(request, "Campaign With Same Name and Type is already Available!")
                 return redirect("/add-campaign")
             except Campaign.DoesNotExist:
@@ -3617,7 +3575,7 @@ def AddCampaign(request):
             return render(request, "add_campaign.html")
     else:
         messages.info(request, "Invalid Request. You have been logged out :)")
-        return redirect("/")
+        return redirect("/logout")
 
 
 @login_required
@@ -3630,7 +3588,7 @@ def AddQaMapping(request):
             campaign = Campaign.objects.get(id=campaign)
             qa_name = Profile.objects.get(emp_id=qa_id).emp_name
             try:
-                CampaignMapping.objects.get(qa_id=qa_id,campaign=campaign)
+                CampaignMapping.objects.get(qa_id=qa_id, campaign=campaign)
                 messages.info(request, "QA already assigned to this campaign !")
                 return redirect("/add-qa-mapping")
             except CampaignMapping.DoesNotExist:
@@ -3644,11 +3602,11 @@ def AddQaMapping(request):
         else:
             campaigns = Campaign.objects.all()
             qa = Profile.objects.filter(emp_desi__in=qa_list)
-            data = {'campaigns':campaigns,'qa':qa}
-            return render(request, "add_qa_mapping.html",data)
+            data = {'campaigns': campaigns, 'qa': qa}
+            return render(request, "add_qa_mapping.html", data)
     else:
         messages.info(request, "Invalid Request. You have been logged out :)")
-        return redirect("/")
+        return redirect("/logout")
 
 
 # View QA Mapping
@@ -3658,6 +3616,7 @@ def viewQaMapping(request):
     qa = Profile.objects.filter(emp_desi__in=qa_list)
     data = {'campaigns': campaigns, 'qa': qa}
     return render(request, "view_qa_mapping.html", data)
+
 
 # Delete QA Mapping
 @login_required
@@ -3670,7 +3629,8 @@ def deleteQaMapping(request):
         return redirect("/view-qa-mapping")
     else:
         messages.info(request, "Invalid Request. You have been logged out :)")
-        return redirect("/")
+        return redirect("/logout")
+
 
 # Outbound Form Submit
 @login_required
@@ -3681,8 +3641,10 @@ def outboundFormSubmit(request):
         end = datetime.datetime.now().time()
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
-        campaign = request.POST["campaign_name"]
-        campaign_type = request.POST["campaign_type"]
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
         emp_name = request.POST["empname"]
         emp_id = request.POST["empid"]
         zone = request.POST["zone"]
@@ -3750,8 +3712,9 @@ def outboundFormSubmit(request):
         e.softskill_total = softskill_score
         e.compliance_total = business_compliance_score
         e.overall_score = total_score
-        e.campaign = campaign
+        e.campaign = campaign_name
         e.campaign_type = campaign_type
+        e.campaign_id = campaign_id
         e.associate_name = emp_name
         e.emp_id = emp_id
         e.zone = zone
@@ -3793,10 +3756,11 @@ def outboundFormSubmit(request):
 
         msg = 'Audit for ' + emp_name + ' is done Successfully!'
         messages.info(request, msg)
-        return redirect("/qa-dashboard")
+        return redirect("/dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
 
 # Inbound Form Submit
 @login_required
@@ -3807,8 +3771,10 @@ def inboundFormSubmit(request):
         end = datetime.datetime.now().time()
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
-        campaign = request.POST["campaign_name"]
-        campaign_type = request.POST["campaign_type"]
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
         emp_name = request.POST["empname"]
         emp_id = request.POST["empid"]
         zone = request.POST["zone"]
@@ -3880,8 +3846,9 @@ def inboundFormSubmit(request):
         e.business_total = business_score
         e.compliance_total = compliance_score
         e.overall_score = total_score
-        e.campaign = campaign
+        e.campaign = campaign_name
         e.campaign_type = campaign_type
+        e.campaign_id = campaign_id
         e.associate_name = emp_name
         e.emp_id = emp_id
         e.zone = zone
@@ -3932,10 +3899,11 @@ def inboundFormSubmit(request):
         msg = 'Audit for ' + emp_name + ' is done Successfully!'
         messages.info(request, msg)
 
-        return redirect("/qa-dashboard")
+        return redirect("/dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
 
 # Email Form Submit
 @login_required
@@ -3946,8 +3914,10 @@ def emailFormSubmit(request):
         end = datetime.datetime.now().time()
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
-        campaign = request.POST["campaign_name"]
-        campaign_type = request.POST["campaign_type"]
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
         emp_name = request.POST["empname"]
         emp_id = request.POST["empid"]
         zone = request.POST["zone"]
@@ -4019,8 +3989,9 @@ def emailFormSubmit(request):
         e.business_total = business_score
         e.compliance_total = compliance_score
         e.overall_score = total_score
-        e.campaign = campaign
+        e.campaign = campaign_name
         e.campaign_type = campaign_type
+        e.campaign_id = campaign_id
         e.associate_name = emp_name
         e.emp_id = emp_id
         e.zone = zone
@@ -4071,10 +4042,11 @@ def emailFormSubmit(request):
         msg = 'Audit for ' + emp_name + ' is done Successfully!'
         messages.info(request, msg)
 
-        return redirect("/qa-dashboard")
+        return redirect("/dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
 
 @login_required
 def DigitalSwissGoldFormSubmit(request):
@@ -4084,8 +4056,10 @@ def DigitalSwissGoldFormSubmit(request):
         end = datetime.datetime.now().time()
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
-        campaign = request.POST["campaign_name"]
-        campaign_type = request.POST["campaign_type"]
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
         emp_name = request.POST["empname"]
         emp_id = request.POST["empid"]
         zone = request.POST["zone"]
@@ -4157,8 +4131,9 @@ def DigitalSwissGoldFormSubmit(request):
         e.business_total = business_score
         e.compliance_total = compliance_score
         e.overall_score = total_score
-        e.campaign = campaign
+        e.campaign = campaign_name
         e.campaign_type = campaign_type
+        e.campaign_id = campaign_id
         e.associate_name = emp_name
         e.emp_id = emp_id
         e.zone = zone
@@ -4209,10 +4184,11 @@ def DigitalSwissGoldFormSubmit(request):
         msg = 'Audit for ' + emp_name + ' is done Successfully!'
         messages.info(request, msg)
 
-        return redirect("/qa-dashboard")
+        return redirect("/dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
 
 @login_required
 def FLAFormSubmit(request):
@@ -4222,8 +4198,10 @@ def FLAFormSubmit(request):
         end = datetime.datetime.now().time()
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
-        campaign = request.POST["campaign_name"]
-        campaign_type = request.POST["campaign_type"]
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
         emp_name = request.POST["empname"]
         emp_id = request.POST["empid"]
         concept = request.POST["concept"]
@@ -4266,8 +4244,9 @@ def FLAFormSubmit(request):
         e.unique_id = unique_id
         e.audit_duration = duration
         e.overall_score = total_score
-        e.campaign = campaign
+        e.campaign = campaign_name
         e.campaign_type = campaign_type
+        e.campaign_id = campaign_id
         e.associate_name = emp_name
         e.emp_id = emp_id
         e.concept = concept
@@ -4296,10 +4275,11 @@ def FLAFormSubmit(request):
         msg = 'Audit for ' + emp_name + ' is done Successfully!'
         messages.info(request, msg)
 
-        return redirect("/qa-dashboard")
+        return redirect("/dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
 
 @login_required
 def blazingHogFormSubmit(request):
@@ -4309,8 +4289,10 @@ def blazingHogFormSubmit(request):
         end = datetime.datetime.now().time()
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
-        campaign = request.POST["campaign_name"]
-        campaign_type = request.POST["campaign_type"]
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
         emp_name = request.POST["empname"]
         emp_id = request.POST["empid"]
         concept = request.POST["concept"]
@@ -4367,8 +4349,9 @@ def blazingHogFormSubmit(request):
         e.unique_id = unique_id
         e.audit_duration = duration
         e.overall_score = total_score
-        e.campaign = campaign
+        e.campaign = campaign_name
         e.campaign_type = campaign_type
+        e.campaign_id = campaign_id
         e.associate_name = emp_name
         e.emp_id = emp_id
         e.concept = concept
@@ -4409,10 +4392,11 @@ def blazingHogFormSubmit(request):
         msg = 'Audit for ' + emp_name + ' is done Successfully!'
         messages.info(request, msg)
 
-        return redirect("/qa-dashboard")
+        return redirect("/dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
 
 @login_required
 def NoomPodFormSubmit(request):
@@ -4422,8 +4406,10 @@ def NoomPodFormSubmit(request):
         end = datetime.datetime.now().time()
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
-        campaign = request.POST["campaign_name"]
-        campaign_type = request.POST["campaign_type"]
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
         emp_name = request.POST["empname"]
         emp_id = request.POST["empid"]
         concept = request.POST["concept"]
@@ -4479,8 +4465,9 @@ def NoomPodFormSubmit(request):
         e.unique_id = unique_id
         e.audit_duration = duration
         e.overall_score = total_score
-        e.campaign = campaign
+        e.campaign = campaign_name
         e.campaign_type = campaign_type
+        e.campaign_id = campaign_id
         e.associate_name = emp_name
         e.emp_id = emp_id
         e.concept = concept
@@ -4519,10 +4506,11 @@ def NoomPodFormSubmit(request):
         msg = 'Audit for ' + emp_name + ' is done Successfully!'
         messages.info(request, msg)
 
-        return redirect("/qa-dashboard")
+        return redirect("/dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
 
 @login_required
 def NoomEvaFormSubmit(request):
@@ -4532,8 +4520,10 @@ def NoomEvaFormSubmit(request):
         end = datetime.datetime.now().time()
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
-        campaign = request.POST["campaign_name"]
-        campaign_type = request.POST["campaign_type"]
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
         emp_name = request.POST["empname"]
         emp_id = request.POST["empid"]
         concept = request.POST["concept"]
@@ -4589,8 +4579,9 @@ def NoomEvaFormSubmit(request):
         e.unique_id = unique_id
         e.audit_duration = duration
         e.overall_score = total_score
-        e.campaign = campaign
+        e.campaign = campaign_name
         e.campaign_type = campaign_type
+        e.campaign_id = campaign_id
         e.associate_name = emp_name
         e.emp_id = emp_id
         e.concept = concept
@@ -4629,10 +4620,11 @@ def NoomEvaFormSubmit(request):
         msg = 'Audit for ' + emp_name + ' is done Successfully!'
         messages.info(request, msg)
 
-        return redirect("/qa-dashboard")
+        return redirect("/dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
 
 @login_required
 def AbHindalcoFormSubmit(request):
@@ -4642,8 +4634,10 @@ def AbHindalcoFormSubmit(request):
         end = datetime.datetime.now().time()
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
-        campaign = request.POST["campaign_name"]
-        campaign_type = request.POST["campaign_type"]
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
         emp_name = request.POST["empname"]
         emp_id = request.POST["empid"]
         zone = request.POST["zone"]
@@ -4709,8 +4703,9 @@ def AbHindalcoFormSubmit(request):
         e.softskill_total = softskill_score
         e.compliance_total = business_compliance_score
         e.overall_score = total_score
-        e.campaign = campaign
+        e.campaign = campaign_name
         e.campaign_type = campaign_type
+        e.campaign_id = campaign_id
         e.associate_name = emp_name
         e.emp_id = emp_id
         e.zone = zone
@@ -4749,10 +4744,11 @@ def AbHindalcoFormSubmit(request):
 
         msg = 'Audit for ' + emp_name + ' is done Successfully!'
         messages.info(request, msg)
-        return redirect("/qa-dashboard")
+        return redirect("/dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
 
 @login_required
 def PractoSubmit(request):
@@ -4762,8 +4758,10 @@ def PractoSubmit(request):
         end = datetime.datetime.now().time()
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
-        campaign = request.POST["campaign_name"]
-        campaign_type = request.POST["campaign_type"]
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
 
         associate_name = request.POST['empname']
         emp_id = request.POST['empid']
@@ -4787,36 +4785,35 @@ def PractoSubmit(request):
         am_id = request.POST["am_id"]
         week = request.POST["week"]
 
-
-        p_1 = int(request.POST['p1']) #Chat Closing
+        p_1 = int(request.POST['p1'])  # Chat Closing
         p1_s1 = request.POST.get("chat_1")
         p1_s2 = request.POST.get("chat_2")
         p1_s3 = request.POST.get("chat_3")
         p1_s4 = request.POST.get("chat_4")
         p1_s5 = request.POST.get("chat_5")
         p1_s6 = request.POST.get("chat_6")
-        p_2 = int(request.POST['p2']) #FRTAT
-        p_3 = int(request.POST['p3']) #Addressing the user/Personalisation of chat
+        p_2 = int(request.POST['p2'])  # FRTAT
+        p_3 = int(request.POST['p3'])  # Addressing the user/Personalisation of chat
         p3_s1 = request.POST.get("pers_1")
         p3_s2 = request.POST.get("pers_2")
         p3_s3 = request.POST.get("pers_3")
         p3_s4 = request.POST.get("pers_4")
         p3_s5 = request.POST.get("pers_5")
         p3_s6 = request.POST.get("pers_6")
-        p_4 = int(request.POST['p4']) #Assistance & Acknowledgment
+        p_4 = int(request.POST['p4'])  # Assistance & Acknowledgment
         p4_s1 = request.POST.get("assu_1")
         p4_s2 = request.POST.get("assu_2")
         p4_s3 = request.POST.get("assu_3")
         p4_s4 = request.POST.get("assu_4")
         p4_s5 = request.POST.get("assu_5")
-        p_5 = int(request.POST['p5']) #Relevant responses
-        p_6 = int(request.POST['p19']) #Assurance
-        p_7 = int(request.POST['p6']) #Probing
+        p_5 = int(request.POST['p5'])  # Relevant responses
+        p_6 = int(request.POST['p19'])  # Assurance
+        p_7 = int(request.POST['p6'])  # Probing
         p7_s1 = request.POST.get("prob_1")
         p7_s2 = request.POST.get("prob_2")
         p7_s3 = request.POST.get("prob_3")
         p7_s4 = request.POST.get("prob_4")
-        p_8 = int(request.POST['p7']) #Interaction: Empathy , Profressional, care
+        p_8 = int(request.POST['p7'])  # Interaction: Empathy , Profressional, care
         p8_s1 = request.POST.get("inte_1")
         p8_s2 = request.POST.get("inte_2")
         p8_s3 = request.POST.get("inte_3")
@@ -4824,15 +4821,15 @@ def PractoSubmit(request):
         p8_s5 = request.POST.get("inte_5")
         p8_s6 = request.POST.get("inte_6")
         p8_s7 = request.POST.get("inte_7")
-        p_9 = int(request.POST['p8']) #Grammar
+        p_9 = int(request.POST['p8'])  # Grammar
         p9_s1 = request.POST.get("gram_1")
         p9_s2 = request.POST.get("gram_2")
         p9_s3 = request.POST.get("gram_3")
         p9_s4 = request.POST.get("gram_4")
         p9_s5 = request.POST.get("gram_5")
         p9_s6 = request.POST.get("gram_6")
-        p_10 = int(request.POST['p10']) #Being courteous & using plesantries
-        p_11 = int(request.POST['p11']) #Process followed
+        p_10 = int(request.POST['p10'])  # Being courteous & using plesantries
+        p_11 = int(request.POST['p11'])  # Process followed
         p11_s1 = request.POST.get("proc_1")
         p11_s2 = request.POST.get("proc_2")
         p11_s3 = request.POST.get("proc_3")
@@ -4840,27 +4837,27 @@ def PractoSubmit(request):
         p11_s5 = request.POST.get("proc_5")
         p11_s6 = request.POST.get("proc_6")
         p11_s7 = request.POST.get("proc_7")
-        p_12 = int(request.POST['p12']) #Explanation Skills (Being Specific, Reasoning) & Rebuttal Handling
-        p_13 = int(request.POST['p13']) #Sharing the information in a sequential manner
-        p_14 = int(request.POST['p14']) #Case Documentation
-        p_15 = int(request.POST['p15']) #Curation
+        p_12 = int(request.POST['p12'])  # Explanation Skills (Being Specific, Reasoning) & Rebuttal Handling
+        p_13 = int(request.POST['p13'])  # Sharing the information in a sequential manner
+        p_14 = int(request.POST['p14'])  # Case Documentation
+        p_15 = int(request.POST['p15'])  # Curation
         p15_s1 = request.POST.get("cura_1")
         p15_s2 = request.POST.get("cura_2")
         p15_s3 = request.POST.get("cura_3")
-        p_16 = int(request.POST['p16']) #Average Speed of Answer
-        p_17 = int(request.POST['p17']) #Chat Hold Procedure &: Taking Permission before putting the chat on hold.
+        p_16 = int(request.POST['p16'])  # Average Speed of Answer
+        p_17 = int(request.POST['p17'])  # Chat Hold Procedure &: Taking Permission before putting the chat on hold.
         p17_s1 = request.POST.get("hold_1")
         p17_s2 = request.POST.get("hold_3")
         p17_s3 = request.POST.get("hold_3")
         p17_s4 = request.POST.get("hold_4")
-        p_18 = int(request.POST['p18']) #PE knowledge base adherence
+        p_18 = int(request.POST['p18'])  # PE knowledge base adherence
         p18_s1 = request.POST.get("pekb_1")
         p18_s2 = request.POST.get("pekb_2")
         p18_s3 = request.POST.get("pekb_3")
         p18_s4 = request.POST.get("pekb_4")
 
         # Score
-        lst = lst = [p_1,p_2,p_3,p_4,p_5,p_6,p_7,p_8,p_9,p_10,p_11,p_12,p_13,p_14,p_15,p_16,p_17,p_18]
+        lst = lst = [p_1, p_2, p_3, p_4, p_5, p_6, p_7, p_8, p_9, p_10, p_11, p_12, p_13, p_14, p_15, p_16, p_17, p_18]
         score = sum(lst)
 
         # Compliance
@@ -4893,14 +4890,15 @@ def PractoSubmit(request):
         try:
             Practo.objects.get(unique_id=unique_id)
             messages.info(request, "Please have patience! How ever the Audit has been Added :)")
-            return redirect("/qa-dashboard")
+            return redirect("/dashboard")
         except Practo.DoesNotExist:
             e = Practo()
             e.unique_id = unique_id
             e.audit_duration = duration
-            e.campaign = campaign
+            e.campaign = campaign_name
             e.campaign_type = campaign_type
-
+            e.campaign_id = campaign_id
+            e.chat_date = chat_date
             e.associate_name = associate_name
             e.emp_id = emp_id
             e.zone = zone
@@ -5009,10 +5007,11 @@ def PractoSubmit(request):
             e.save()
             msg = 'Audit for ' + associate_name + ' is done Successfully!'
             messages.info(request, msg)
-            return redirect("/qa-dashboard")
+            return redirect("/dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
 
 @login_required
 def fameHouseSubmit(request):
@@ -5022,7 +5021,10 @@ def fameHouseSubmit(request):
         end = datetime.datetime.now().time()
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
-        campaign = request.POST["campaign_name"]
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
 
         associate_name = request.POST['empname']
         emp_id = request.POST['empid']
@@ -5058,6 +5060,7 @@ def fameHouseSubmit(request):
                            compliance_7 + compliance_8 + compliance_9 + compliance_10 + compliance_11
 
         sum_list = []
+
         def scoreCalc(pk):
             if pk == 'NA':
                 return pk
@@ -5139,11 +5142,13 @@ def fameHouseSubmit(request):
         try:
             FameHouse.objects.get(unique_id=unique_id)
             messages.info(request, "Please have patience! How ever the Audit has been Added :)")
-            return redirect("/qa-dashboard")
+            return redirect("/dashboard")
         except FameHouse.DoesNotExist:
             e = FameHouse()
             e.unique_id = unique_id
-            e.campaign = campaign
+            e.campaign = campaign_name
+            e.campaign_type = campaign_type
+            e.campaign_id = campaign_id
             e.associate_name = associate_name
             e.emp_id = emp_id
             e.ticket_type = ticket_type
@@ -5208,10 +5213,11 @@ def fameHouseSubmit(request):
             e.save()
             msg = 'Audit for ' + associate_name + ' is done Successfully!'
             messages.info(request, msg)
-            return redirect("/qa-dashboard")
+            return redirect("/dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
 
 @login_required
 def ILMakiageSubmit(request):
@@ -5221,7 +5227,10 @@ def ILMakiageSubmit(request):
         end = datetime.datetime.now().time()
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
-        campaign = request.POST["campaign_name"]
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
 
         associate_name = request.POST['empname']
         emp_id = request.POST['empid']
@@ -5305,11 +5314,13 @@ def ILMakiageSubmit(request):
         try:
             ILMakiage.objects.get(unique_id=unique_id)
             messages.info(request, "Please have patience! How ever the Audit has been Added :)")
-            return redirect("/qa-dashboard")
+            return redirect("/dashboard")
         except ILMakiage.DoesNotExist:
             e = ILMakiage()
             e.unique_id = unique_id
-            e.campaign = campaign
+            e.campaign = campaign_name
+            e.campaign_type = campaign_type
+            e.campaign_id = campaign_id
             e.associate_name = associate_name
             e.emp_id = emp_id
             e.zone = zone
@@ -5349,10 +5360,11 @@ def ILMakiageSubmit(request):
             e.save()
             msg = 'Audit for ' + associate_name + ' is done Successfully!'
             messages.info(request, msg)
-            return redirect("/qa-dashboard")
+            return redirect("/dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
 
 @login_required
 def WinopolySubmit(request):
@@ -5362,8 +5374,10 @@ def WinopolySubmit(request):
         end = datetime.datetime.now().time()
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
-        campaign = request.POST["campaign_name"]
-        campaign_type = request.POST["campaign_type"]
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
         emp_name = request.POST["empname"]
         emp_id = request.POST["empid"]
         zone = request.POST["zone"]
@@ -5446,14 +5460,15 @@ def WinopolySubmit(request):
         try:
             Winopoly.objects.get(unique_id=unique_id)
             messages.info(request, "Please have patience! How ever the Audit has been Added :)")
-            return redirect("/qa-dashboard")
+            return redirect("/dashboard")
         except Winopoly.DoesNotExist:
             e = Winopoly()
             e.unique_id = unique_id
             e.audit_duration = duration
             e.overall_score = overall_score
-            e.campaign = campaign
+            e.campaign = campaign_name
             e.campaign_type = campaign_type
+            e.campaign_id = campaign_id
             e.associate_name = emp_name
             e.emp_id = emp_id
             e.zone = zone
@@ -5508,10 +5523,11 @@ def WinopolySubmit(request):
             e.save()
             msg = 'Audit for ' + emp_name + ' is done Successfully!'
             messages.info(request, msg)
-            return redirect("/qa-dashboard")
+            return redirect("/dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
 
 @login_required
 def NerotelSubmit(request):
@@ -5521,8 +5537,10 @@ def NerotelSubmit(request):
         end = datetime.datetime.now().time()
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
-        campaign = request.POST["campaign_name"]
-        campaign_type = request.POST["campaign_type"]
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
         emp_name = request.POST["empname"]
         emp_id = request.POST["empid"]
         zone = request.POST["zone"]
@@ -5595,8 +5613,9 @@ def NerotelSubmit(request):
         e.res_total = res_score
         e.compliance_total = compliance_score
         e.overall_score = total_score
-        e.campaign = campaign
+        e.campaign = campaign_name
         e.campaign_type = campaign_type
+        e.campaign_id = campaign_id
         e.associate_name = emp_name
         e.emp_id = emp_id
         e.zone = zone
@@ -5643,10 +5662,11 @@ def NerotelSubmit(request):
 
         msg = 'Audit for ' + emp_name + ' is done Successfully!'
         messages.info(request, msg)
-        return redirect("/qa-dashboard")
+        return redirect("/dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
 
 @login_required
 def SpoiledChildSubmit(request):
@@ -5656,8 +5676,10 @@ def SpoiledChildSubmit(request):
         end = datetime.datetime.now().time()
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
-        campaign = request.POST["campaign_name"]
-        campaign_type = request.POST["campaign_type"]
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
         emp_name = request.POST["empname"]
         emp_id = request.POST["empid"]
         concept = request.POST["concept"]
@@ -5714,8 +5736,9 @@ def SpoiledChildSubmit(request):
         e.unique_id = unique_id
         e.audit_duration = duration
         e.overall_score = total_score
-        e.campaign = campaign
+        e.campaign = campaign_name
         e.campaign_type = campaign_type
+        e.campaign_id = campaign_id
         e.associate_name = emp_name
         e.emp_id = emp_id
         e.concept = concept
@@ -5756,10 +5779,100 @@ def SpoiledChildSubmit(request):
         msg = 'Audit for ' + emp_name + ' is done Successfully!'
         messages.info(request, msg)
 
-        return redirect("/qa-dashboard")
+        return redirect("/dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
-        return redirect("/")
+        return redirect("/logout")
+
+
+@login_required
+def AmerisaveSubmit(request):
+    if request.method == "POST":
+        unique_id = request.POST["csrfmiddlewaretoken"]
+        start = datetime.datetime.strptime(request.POST["start_time"], '%H:%M:%S.%f').time()
+        end = datetime.datetime.now().time()
+        duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
+        duration = str(duration)
+        campaign_id = request.POST["campaign_id"]
+        campaign = Campaign.objects.get(id=campaign_id)
+        campaign_name = campaign.name
+        campaign_type = campaign.type
+        emp_name = request.POST["empname"]
+        emp_id = request.POST["empid"]
+        type = request.POST["type"]
+        lead_source = request.POST["lead_source"]
+        customer_id = request.POST["customer_id"]
+        transfer = request.POST["transfer"]
+
+        call_date = request.POST["call_date"]
+        audit_date = request.POST["auditdate"]
+        quality_analyst = request.POST["qa"]
+        team_lead = request.POST["tl"]
+        team_lead_id = request.POST["tl_id"]
+        manager = request.POST["manager"]
+        manager_id = request.POST["manager_id"]
+        am = request.POST["am"]
+        am_id = request.POST["am_id"]
+        week = request.POST["week"]
+
+        nce_1 = int(request.POST["nce_1"])
+        nce_2 = int(request.POST["nce_2"])
+        nce_3 = int(request.POST["nce_3"])
+        nce_4 = int(request.POST["nce_4"])
+        nce_score = nce_1 + nce_2 + nce_3 + nce_4
+
+        compliance_1 = int(request.POST["compliance_1"])
+        compliance_2 = int(request.POST["compliance_2"])
+        compliance_3 = int(request.POST["compliance_3"])
+        compliance_4 = int(request.POST["compliance_4"])
+        compliance_5 = int(request.POST["compliance_5"])
+        compliance_6 = int(request.POST["compliance_6"])
+        compliance_score = compliance_1 + compliance_2 + compliance_3 + compliance_4 + compliance_5 + compliance_6
+
+        areas_imp = request.POST["areaimprovement"]
+        positive = request.POST["positives"]
+        comments = request.POST["comments"]
+
+        fatal_list = [compliance_1, compliance_2, compliance_3]
+        fatal_list_count = []
+        for i in fatal_list:
+            if i == 0:
+                fatal_list_count.append(i)
+        no_of_fatals = len(fatal_list_count)
+
+        if compliance_1 == 0 or compliance_2 == 0 or compliance_3 == 0:
+            total_score = 0
+            fatal = True
+        else:
+            total_score = nce_score + compliance_score
+            fatal = False
+
+        added_by = request.user.profile.emp_id
+
+        e = Amerisave(
+            unique_id=unique_id, audit_duration=duration, overall_score=total_score, campaign=campaign_name,
+            campaign_type=campaign_type, campaign_id=campaign_id, associate_name=emp_name, emp_id=emp_id,
+            call_date=call_date, audit_date=audit_date, quality_analyst=quality_analyst, team_lead=team_lead,
+            manager=manager, am=am, team_lead_id=team_lead_id, manager_id=manager_id, am_id=am_id, week=week,
+            areas_improvement=areas_imp, positives=positive, comments=comments, fatal_count=no_of_fatals,
+            fatal=fatal, added_by=added_by,
+
+            nce_1=nce_1, nce_2=nce_2, nce_3=nce_3, nce_4=nce_4,
+            compliance_1=compliance_1, compliance_2=compliance_2, compliance_3=compliance_3,
+            compliance_4=compliance_4, compliance_5=compliance_5, compliance_6=compliance_6,
+            nce_score=nce_score, compliance_score=compliance_score, type=type, lead_source=lead_source,
+            customer_id=customer_id, transfer=transfer,
+
+        )
+        e.save()
+
+        msg = 'Audit for ' + emp_name + ' is done Successfully!'
+        messages.info(request, msg)
+
+        return redirect("/dashboard")
+    else:
+        messages.warning(request, 'Invalid request. You have been Logged out!')
+        return redirect("/logout")
 
 
 class TotalList(FlatMultipleModelAPIView):
@@ -5785,7 +5898,7 @@ class TotalList(FlatMultipleModelAPIView):
         {'queryset': NoomPod.objects.all(),
          'serializer_class': NoomPodSerializer},
 
-       {'queryset': NoomEva.objects.all(),
+        {'queryset': NoomEva.objects.all(),
          'serializer_class': NoomEvaSerializer},
 
         {'queryset': AbHindalco.objects.all(),
@@ -5809,4 +5922,4 @@ class TotalList(FlatMultipleModelAPIView):
         {'queryset': SpoiledChild.objects.all(),
          'serializer_class': SpoiledChildSerializer},
 
-        ]
+    ]

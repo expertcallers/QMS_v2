@@ -41,6 +41,7 @@ class CampaignMapping(models.Model):
 class Outbound(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Outbound', max_length=50)
     page_type = models.CharField(default='Outbound', max_length=50)
 
@@ -104,6 +105,7 @@ class Outbound(models.Model):
 class Inbound(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Inbound', max_length=50)
     page_type = models.CharField(default='Inbound', max_length=50)
     emp_id = models.CharField(max_length=30)
@@ -172,6 +174,7 @@ class Inbound(models.Model):
 class EmailChat(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Email', max_length=50)
     page_type = models.CharField(default='Email', max_length=50)
     emp_id = models.CharField(max_length=30)
@@ -242,6 +245,7 @@ class EmailChat(models.Model):
 class DigitalSwissGold(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Digital', max_length=50)
     page_type = models.CharField(default='Digital', max_length=50)
     emp_id = models.CharField(max_length=30)
@@ -312,6 +316,7 @@ class DigitalSwissGold(models.Model):
 class FLA(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='FLA', max_length=50)
     page_type = models.CharField(default='FLA', max_length=50)
     emp_id = models.CharField(max_length=30)
@@ -355,6 +360,7 @@ class FLA(models.Model):
 class BlazingHog(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='BlazingHog', max_length=50)
     page_type = models.CharField(default='BlazingHog', max_length=50)
     emp_id = models.CharField(max_length=30)
@@ -414,6 +420,7 @@ class BlazingHog(models.Model):
 class NoomPod(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Noompod', max_length=50)
     page_type = models.CharField(default='Noompod', max_length=50)
     emp_id = models.CharField(max_length=30)
@@ -469,6 +476,7 @@ class NoomPod(models.Model):
 class NoomEva(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Noomeva', max_length=50)
     page_type = models.CharField(default='Noomeva', max_length=50)
     emp_id = models.CharField(max_length=30)
@@ -524,6 +532,7 @@ class NoomEva(models.Model):
 class AbHindalco(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Abhindalco', max_length=50)
     page_type = models.CharField(default='Abhindalco', max_length=50)
 
@@ -587,6 +596,7 @@ class Practo(models.Model):
     # Start Common Must Add to all models
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Practo', max_length=50)
     page_type = models.CharField(default='Practo', max_length=50)
     # End Common Must Add to all models
@@ -714,6 +724,7 @@ class FameHouse(models.Model):
     # Start Common Must Add to all models
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Fame House', max_length=50)
     page_type = models.CharField(default='Fame', max_length=50)
     # End Common Must Add to all models
@@ -805,6 +816,7 @@ class ILMakiage(models.Model):
     # Start Common Must Add to all models
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='IL Makiage', max_length=50)
     page_type = models.CharField(default='ILM', max_length=50)
     # End Common Must Add to all models
@@ -863,6 +875,7 @@ class ILMakiage(models.Model):
 class Winopoly(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Winopoly Outbound', max_length=50)
     page_type = models.CharField(default='Winopoly', max_length=50)
 
@@ -936,6 +949,7 @@ class Winopoly(models.Model):
 class Nerotel(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Nerotel Inbound', max_length=50)
     page_type = models.CharField(default='Nerotel', max_length=50)
 
@@ -1002,6 +1016,7 @@ class Nerotel(models.Model):
 class SpoiledChild(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Spoiled Child', max_length=50)
     page_type = models.CharField(default='Spoiled', max_length=50)
     emp_id = models.CharField(max_length=30)
@@ -1047,6 +1062,65 @@ class SpoiledChild(models.Model):
     areas_improvement = models.TextField()
     positives = models.TextField()
     comments = models.TextField()
+
+    added_by = models.CharField(max_length=30)
+    status = models.BooleanField(default=False)
+    closed_date = models.DateTimeField(null=True)
+    emp_comments = models.TextField(null=True)
+
+    fatal = models.BooleanField(default=False)
+    fatal_count = models.IntegerField(default=0)
+    dispute_status = models.BooleanField(default=False)
+    audit_duration = models.CharField(max_length=30)
+
+
+class Amerisave(models.Model):
+    unique_id = models.CharField(max_length=300)
+    campaign = models.CharField(max_length=150)
+    campaign_id = models.IntegerField(null=True, blank=True)
+    campaign_type = models.CharField(default='Amerisave', max_length=50)
+    page_type = models.CharField(default='Amerisave', max_length=50)
+    type = models.CharField(max_length=150, null=True, blank=True)
+    emp_id = models.CharField(max_length=30)
+    associate_name = models.CharField(max_length=50)
+    transfer = models.CharField(max_length=100)
+    customer_id = models.CharField(max_length=100)
+    lead_source = models.CharField(max_length=100)
+    call_date = models.DateField()
+    audit_date = models.DateField()
+    quality_analyst = models.CharField(max_length=100)
+    team_lead = models.CharField(max_length=100)
+    team_lead_id = models.CharField(max_length=30)
+    manager = models.CharField(max_length=100)
+    manager_id = models.CharField(max_length=30)
+    am = models.CharField(max_length=100)
+    am_id = models.CharField(max_length=30)
+    week = models.CharField(max_length=10)
+
+    # questions
+    # NCE
+    nce_1 = models.IntegerField()
+    nce_2 = models.IntegerField()
+    nce_3 = models.IntegerField()
+    nce_4 = models.IntegerField()
+
+    # Compliance
+    compliance_1 = models.IntegerField()
+    compliance_2 = models.IntegerField()
+    compliance_3 = models.IntegerField()
+    compliance_4 = models.IntegerField()
+    compliance_5 = models.IntegerField()
+    compliance_6 = models.IntegerField()
+
+    # Scores
+    nce_score = models.IntegerField()
+    compliance_score = models.IntegerField()
+    overall_score = models.IntegerField()
+
+    areas_improvement = models.TextField()
+    positives = models.TextField()
+    comments = models.TextField()
+    fail_type = models.CharField(max_length=80)
 
     added_by = models.CharField(max_length=30)
     status = models.BooleanField(default=False)

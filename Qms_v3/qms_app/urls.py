@@ -5,8 +5,9 @@ from .views import *
 urlpatterns = [
     path('', index),
     path('login', Login),
+    path('logout', logoutUser),
     path('change-password', change_password_new),
-    path('dashboard-redirect', DashboardRedirect),
+    path('dashboard', DashboardRedirect),
     path('qa-dashboard', qaDashboard),
     path('manager-dashboard', managerDashboard),
     path('get-emp', getEmp),
@@ -39,6 +40,7 @@ urlpatterns = [
     path('winopoly-submit', WinopolySubmit),
     path('nerotel-submit', NerotelSubmit),
     path('spoiled-submit', SpoiledChildSubmit),
+    path('amerisave-submit', AmerisaveSubmit),
 
     path('add-email', AddEmail),
     path('add-user', AddUser),
@@ -49,6 +51,5 @@ urlpatterns = [
     path("settings", change_password),
     path("delete-qa-mapping", deleteQaMapping),
     path("total-list",TotalList.as_view(),name="to_show_the_total_list_of_tables"),
-
 
 ]

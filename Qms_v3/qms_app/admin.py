@@ -23,7 +23,7 @@ class Search(admin.ModelAdmin):
 
 
 admin.site.register(Campaign, CampaignSearch)
-admin.site.register(CampaignMapping,CampaignMappingSearch)
+admin.site.register(CampaignMapping, CampaignMappingSearch)
 admin.site.register(Profile, ProfileSearch)
 admin.site.register(Outbound, Search)
 admin.site.register(Inbound, Search)
@@ -39,3 +39,5 @@ admin.site.register(ILMakiage, Search)
 admin.site.register(Winopoly, Search)
 admin.site.register(Nerotel, Search)
 admin.site.register(SpoiledChild, Search)
+admin.site.register(Amerisave, Search)
+admin.site.register(AbHindalco, Search)
