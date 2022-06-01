@@ -303,7 +303,7 @@
                                 <option value="" selected disabled>Please Select</option>
                                 <option value="all">All</option>
                                 {% for i in campaigns %}
-                                <option value="{{i.name}}">{{i.name}}</option>
+                                <option value="{{i.id}}">{{i.name}} ({{i.type}})</option>
                                 {% endfor %}
                               </select>
                             </div>
