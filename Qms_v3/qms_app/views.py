@@ -501,7 +501,6 @@ def getEmp(request):
 @login_required
 def ReportTable(request, type):
     emp_id = request.user.profile.emp_id
-
     def auditcalculator(type):
         audits = []
         if type == 'all':
@@ -531,7 +530,6 @@ def ReportTable(request, type):
                 status = request.POST.get("status")
                 start_date = request.POST.get("start_date")
                 end_date = request.POST.get("end_date")
-                cam = Campaign.objects.get(id=cname)
                 for i in campaign_list:
                     if start_date:
                         if cname == "all" and status == "all":
@@ -540,9 +538,11 @@ def ReportTable(request, type):
                             tot_obj = i.objects.filter(added_by=emp_id, status=False,
                                                        audit_date__range=[start_date, end_date])
                         elif cname and status == "open":
+                            cam = Campaign.objects.get(id=cname)
                             tot_obj = i.objects.filter(added_by=emp_id, campaign_id=cam.id, status=False,
                                                        audit_date__range=[start_date, end_date])
                         else:
+                            cam = Campaign.objects.get(id=cname)
                             tot_obj = i.objects.filter(campaign_id=cam.id, added_by=emp_id,
                                                        audit_date__range=[start_date, end_date])
                         audits.append(tot_obj)
@@ -552,8 +552,10 @@ def ReportTable(request, type):
                         elif cname == "all" and status == "open":
                             tot_obj = i.objects.filter(added_by=emp_id, status=False)
                         elif cname and status == "open":
+                            cam = Campaign.objects.get(id=cname)
                             tot_obj = i.objects.filter(added_by=emp_id, campaign_id=cam.id, status=False)
                         else:
+                            cam = Campaign.objects.get(id=cname)
                             tot_obj = i.objects.filter(campaign_id=cam.id, added_by=emp_id)
                         audits.append(tot_obj)
             else:
@@ -636,7 +638,6 @@ def ManagerReportTable(request, type):
                 status = request.POST.get("status")
                 start_date = request.POST.get("start_date")
                 end_date = request.POST.get("end_date")
-                cam = Campaign.objects.get(id=cname)
                 for i in campaign_list:
                     if start_date:
                         if cname == "all" and status == "all":
@@ -645,9 +646,11 @@ def ManagerReportTable(request, type):
                             tot_obj = i.objects.filter(status=False,
                                                        audit_date__range=[start_date, end_date])
                         elif cname and status == "open":
+                            cam = Campaign.objects.get(id=cname)
                             tot_obj = i.objects.filter(campaign_id=cam.id, status=False,
                                                        audit_date__range=[start_date, end_date])
                         else:
+                            cam = Campaign.objects.get(id=cname)
                             tot_obj = i.objects.filter(campaign_id=cam.id,
                                                        audit_date__range=[start_date, end_date])
                         if tot_obj not in audits:
@@ -658,8 +661,10 @@ def ManagerReportTable(request, type):
                         elif cname == "all" and status == "open":
                             tot_obj = i.objects.filter(status=False)
                         elif cname and status == "open":
+                            cam = Campaign.objects.get(id=cname)
                             tot_obj = i.objects.filter(campaign_id=cam.id, status=False)
                         else:
+                            cam = Campaign.objects.get(id=cname)
                             tot_obj = i.objects.filter(campaign_id=cam.id)
                         if tot_obj not in audits:
                             audits.append(tot_obj)

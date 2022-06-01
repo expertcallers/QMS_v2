@@ -1100,7 +1100,7 @@ class Amerisave(models.Model):
     # questions
     # NCE
     nce_1 = models.IntegerField()
-    nce_2 = models.IntegerField()
+    nce_2 = models.CharField(max_length=100)
     nce_3 = models.IntegerField()
     nce_4 = models.IntegerField()
 
