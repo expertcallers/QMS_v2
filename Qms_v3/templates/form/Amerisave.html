@@ -1,0 +1,444 @@
+{% extends "common_base.html" %}
+{% block main %}
+<style>
+    #report {
+        font-size: 18px;
+    }
+</style>
+<!-- page content -->
+<div class="right_col" role="main" id="report">
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12" align="center">
+                            <h1>Audit Form - {{campaign.name}} ({{campaign.type}})</h1>
+                        </div>
+                    </div>
+                </div>
+                 <form action="/amerisave-submit" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-3 form-group">
+                                <label for="empname">Associate Name</label>
+                                <input type="text" class="form-control" id="empname" readonly name="empname" value="{{profile.emp_name}}">
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="empid">Employee ID</label>
+                                <input type="text" class="form-control" id="empid" name="empid" readonly value="{{profile.emp_id}}">
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="type">Type - Inbound/Outbound</label>
+                                <select class="form-control" id="type" name="type" required>
+                                    <option selected disabled value="">-- Please Select --</option>
+                                    <option value="Inbound">Inbound</option>
+                                    <option value="Outbound">Outbound</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label for="lead_source">Lead Source</label>
+                                <select class="form-control" id="lead_source" name="lead_source" required>
+                                    <option selected disabled value="">-- Please Select --</option>
+                                    <option value="AmeriSave.com">AmeriSave.com</option>
+                                    <option value="Bankrate">Bankrate</option>
+                                    <option value="Direct E1DD Mail">Direct E1DD Mail</option>
+                                    <option value="DMS">DMS</option>
+                                    <option value="IMCI">IMCI</option>
+                                    <option value="LendingTree">LendingTree</option>
+                                    <option value="Lower-My-Bills">Lower-My-Bills</option>
+                                    <option value="Natural Intelligence">Natural Intelligence</option>
+                                    <option value="Non-LT Agg">Non-LT Agg</option>
+                                    <option value="W4">W4</option>
+                                    <option value="Wisdom">Wisdom</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                <label for="customer_id">Customer ID</label>
+                                <input type="text" class="form-control" id="customer_id" name="customer_id" required>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label for="transfer">Transfer/Non-transfer</label>
+                                <select class="form-control" id="transfer" name="transfer" required>
+                                    <option selected disabled value="">-- Please Select --</option>
+                                    <option value="Transfer">Transfer</option>
+                                    <option value="Non-Transfer">Non-Transfer</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label for="call_date">Call Date</label>
+                                <input type="date" class="form-control" id="call_date" name="call_date" required="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 form-group">
+                                <label for="auditdate">Audit Date</label>
+                                <input type="text" class="form-control" id="auditdate" name="auditdate" value="{{date}}" readonly>
+                            </div>
+                            <div class="col-md-2 form-group">
+                                <label for="qa">Quality Analyst</label>
+                                <input type="text" class="form-control" id="qa" name="qa" value="{{request.user.profile.emp_name}}" readonly>
+                            </div>
+                            <div class="col-md-2 form-group">
+                                <label for="tl">Team Lead</label>
+                                <input type="text" class="form-control" id="tl" name="tl" readonly value="{{profile.emp_rm1}}">
+                                <input type="hidden" name="tl_id" value="{{profile.emp_rm1_id}}">
+                            </div>
+                            <div class="col-md-2 form-group">
+                                <label for="manager">Manager</label>
+                                <input type="text" class="form-control" id="manager" name="manager" readonly value="{{profile.emp_rm3}}">
+                                <input type="hidden" name="manager_id" value="{{profile.emp_rm3_id}}">
+                            </div>
+                            <div class="col-md-2 form-group">
+                                <label for="am">AM</label>
+                                <input type="text" class="form-control" id="am" name="am" readonly value="{{profile.emp_rm2}}">
+                                <input type="hidden" name="am_id" value="{{profile.emp_rm2_id}}">
+                            </div>
+                            <div class="col-md-2 form-group">
+                                <label for="week">Week</label>
+                                <select class="form-control" name="week" id="week" required="">
+                                    <option value="week1">Week1</option>
+                                    <option value="week2">Week2</option>
+                                    <option value="week3">Week3</option>
+                                    <option value="week4">Week4</option>
+                                    <option value="week5">Week5</option>
+                                </select>
+                            </div>
+                            <input type="hidden" name="campaign" value="{{campaign}}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mt-3 mb-3">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>NCE</h4>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Did CSS adhere to the script associated with the lead source?
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="nce_1" onclick="nce(this);" value="5" id="nce_yes_1" required="">
+                                <label for="nce_yes_1">Yes</label>
+                                <input type="radio" name="nce_1" onclick="nce(this);" value="0" id="nce_no_1">
+                                <label for="nce_no_1">No</label>
+                                <input type="radio" name="nce_1" onclick="nce(this);" value="5" id="nce_na_1">
+                                <label for="nce_na_1">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                What was the consumer's main objection?
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <select class="form-control select2" required name="nce_2">
+                                    <option value="" selected disabled>-- Please Select --</option>
+                                    <option value="HELOC">HELOC</option>
+                                    <option value="Not Ready">Not Ready</option>
+                                    <option value="Not Interested">Not Interested</option>
+                                    <option value="Busy">Busy</option>
+                                    <option value="Another Lender">Another Lender</option>
+                                    <option value="DNC">DNC</option>
+                                    <option value="Email Only">Email Only</option>
+                                    <option value="Too Many Calls">Too Many Calls</option>
+                                    <option value="Government Money">Government Money</option>
+                                    <option value="Can't Help Me">Can't Help Me</option>
+                                    <option value="Not Decision Maker">Not Decision Maker</option>
+                                    <option value="Credit Pull">Credit Pull</option>
+                                    <option value="N/A">N/A</option>
+                                    <option value="Never Inquired">Never Inquired</option>
+                                    <option value="Prop Type Issue">Prop Type Issue</option>
+                                </select>
+            <!--                    <input type="radio" name="nce_2" onclick="nce(this);" value="5" id="nce_yes_2" required="">-->
+            <!--                    <label for="nce_yes_2">Yes</label>-->
+            <!--                    <input type="radio" name="nce_2" onclick="nce(this);" value="0" id="nce_no_2">-->
+            <!--                    <label for="nce_no_2">No</label>-->
+            <!--                    <input type="radio" name="nce_2" onclick="nce(this);" value="5" id="nce_na_2">-->
+            <!--                    <label for="nce_na_2">NA</label>-->
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Did CSS attempt to overcome objections?
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="nce_3" onclick="nce(this);" value="5" id="nce_yes_3" required="">
+                                <label for="nce_yes_3">Yes</label>
+                                <input type="radio" name="nce_3" onclick="nce(this);" value="0" id="nce_no_3">
+                                <label for="nce_no_3">No</label>
+                                <input type="radio" name="nce_3" onclick="nce(this);" value="5" id="nce_na_3">
+                                <label for="nce_na_3">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8">
+                                Transfer Only: Did CSS properly transfer the customer to sales?
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="nce_4" onclick="nce(this);" value="5" id="nce_yes_4" required="">
+                                <label for="nce_yes_4">Yes</label>
+                                <input type="radio" name="nce_4" onclick="nce(this);" value="0" id="nce_no_4">
+                                <label for="nce_no_4">No</label>
+                                <input type="radio" name="nce_4" onclick="nce(this);" value="5" id="nce_na_4">
+                                <label for="nce_na_4">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-8 score">
+                                NCE Section Score
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control scoree" name="nce_score" readonly id="nce_score" value="Select appropriate option for ALL to see score">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mt-3 mb-3">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Compliance</h4>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3 fatal">
+                            <div class="col-md-8">
+                                Did CSS disposition call correctly?
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_1" onclick="compliance(this);" value="15" id="compliance_yes_1" required="">
+                                <label for="compliance_yes_1">Yes</label>
+                                <input type="radio" name="compliance_1" onclick="compliance(this);" value="0" id="compliance_no_1">
+                                <label for="compliance_no_1">No</label>
+                                <input type="radio" name="compliance_1" onclick="compliance(this);" value="15" id="compliance_na_1">
+                                <label for="compliance_na_1">NA</label>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3 fatal">
+                            <div class="col-md-8">
+                                CSS Full Name
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_2" onclick="compliance(this);" value="10" id="compliance_yes_2" required="">
+                                <label for="compliance_yes_2">Yes</label>
+                                <input type="radio" name="compliance_2" onclick="compliance(this);" value="0" id="compliance_no_2">
+                                <label for="compliance_no_2">No</label>
+                                <input type="radio" name="compliance_2" onclick="compliance(this);" value="10" id="compliance_na_2">
+                                <label for="compliance_na_2">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3 fatal">
+                            <div class="col-md-8">
+                                AmeriSave Mortgage Corporation
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_3" onclick="compliance(this);" value="13" id="compliance_yes_3" required="">
+                                <label for="compliance_yes_3">Yes</label>
+                                <input type="radio" name="compliance_3" onclick="compliance(this);" value="0" id="compliance_no_3">
+                                <label for="compliance_no_3">No</label>
+                                <input type="radio" name="compliance_3" onclick="compliance(this);" value="13" id="compliance_na_3">
+                                <label for="compliance_na_3">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3 fatal">
+                            <div class="col-md-8">
+                                Recorded Line
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_4" onclick="compliance(this);" value="15" id="compliance_yes_4" required="">
+                                <label for="compliance_yes_4">Yes</label>
+                                <input type="radio" name="compliance_4" onclick="compliance(this);" value="0" id="compliance_no_4">
+                                <label for="compliance_no_4">No</label>
+                                <input type="radio" name="compliance_4" onclick="compliance(this);" value="15" id="compliance_na_4">
+                                <label for="compliance_na_4">NA</label>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3 fatal">
+                            <div class="col-md-8">
+                                Pre-qualified for a loan with AMC
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_5" onclick="compliance(this);" value="15" id="compliance_yes_5" required="">
+                                <label for="compliance_yes_5">Yes</label>
+                                <input type="radio" name="compliance_5" onclick="compliance(this);" value="0" id="compliance_no_5">
+                                <label for="compliance_no_5">No</label>
+                                <input type="radio" name="compliance_5" onclick="compliance(this);" value="15" id="compliance_na_5">
+                                <label for="compliance_na_5">NA</label>
+                            </div>
+                        </div>
+                        <div class="row mt-3 fatal">
+                            <div class="col-md-8">
+                                Did CSS read Fine Print verbatim and completely?
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <input type="radio" name="compliance_6" onclick="compliance(this);" value="17" id="compliance_yes_6" required="">
+                                <label for="compliance_yes_6">Yes</label>
+                                <input type="radio" name="compliance_6" onclick="compliance(this);" value="0" id="compliance_no_6">
+                                <label for="compliance_no_6">No</label>
+                                <input type="radio" name="compliance_6" onclick="compliance(this);" value="17" id="compliance_na_6">
+                                <label for="compliance_na_6">NA</label>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-8 score">
+                                Compliance Section Score
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control scoree" name="compliance_score" id="compliance_score" readonly value="Select appropriate option for ALL to see score">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12 pb-5">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Areas of improvement</h4>
+                                <textarea name="areaimprovement" id="areaimp" cols="30" rows="5" class="form-control" required=""></textarea>
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <h4>Positives</h4>
+                                <textarea name="positives" id="positives" cols="30" rows="5" class="form-control" required=""></textarea>
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4>Comments</h4>
+                                        <textarea name="comments" id="cfeedback" cols="30" rows="5" class="form-control" required=""></textarea>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h4>If Fail, Which Type</h4>
+                                        <select name="fail_type" class="form-control select2">
+                                            <option value="" selected disabled>-- Please Select -- </option>
+                                            <option value="Call Intro (Name Company Recorded Line)">Call Intro (Name Company Recorded Line)</option>
+                                            <option value="IMCI Pre-Qualified Statement">IMCI Pre-Qualified Statement</option>
+                                            <option value="IMCI Disclaimer">IMCI Disclaimer</option>
+                                            <option value="Multiple">Multiple</option>
+                                            <option value="Rates">Rates</option>
+                                            <option value="Superlatives">Superlatives</option>
+                                            <option value="DNC(Disposition)">DNC(Disposition)</option>
+                                            <option value="DNC(Rebuttal 1)">DNC(Rebuttal 1)</option>
+                                            <option value="DNC(Rebuttal 2+)">DNC(Rebuttal 2+)</option>
+                                            <option value="Unprofessionalism">Unprofessionalism</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-5" align="center">
+                                <button class="btn btn-lg btn-info" onclick="full_score(this)" data-toggle="modal" data-target="#viewscore">View Score</button>
+                                <button class="btn btn-lg btn-success" onclick="confirm('Are you sure you want to continue?');" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                     <input type="hidden" name="campaign_id" value="{{campaign.id}}">
+                     <input type="hidden" name="start_time" value="{{start_time}}">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+    <!-- Modal -->
+    <div class="modal fade" id="viewscore" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Full Score</h5><p class="mt-2"> (Please select all the options to see score)</p>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div align="center">
+                <h1 id="myscore"></h1>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+    var n=0;
+    var score1;
+    var score2;
+    var fatal1;
+    var fatal2;
+    var fatal3;
+    var fatal4;
+    var fatal5;
+    var fatal6;
+
+    function nce(e) {
+        n=n+1;
+        var nce_score = document.querySelector('input[name="nce_score"]');
+        var nce_1 = parseInt(document.querySelector('input[name="nce_1"]:checked').value);
+        var nce_3 = parseInt(document.querySelector('input[name="nce_3"]:checked').value);
+        var nce_4 = parseInt(document.querySelector('input[name="nce_4"]:checked').value);
+        for (var i = 0; i <= n; i++) {
+            nce_score.value = nce_1+nce_3+nce_4;
+        }
+        if (nce_score.value < 15) {
+            nce_score.classList.add("less");
+            nce_score.classList.remove("perfect");
+        }
+        else {
+            nce_score.classList.remove("less");
+            nce_score.classList.add("perfect");
+        }
+        score1 = parseInt(nce_score.value);
+    }
+    function compliance(e) {
+        n=n+1;
+        var comp_score = document.querySelector('input[name="compliance_score"]');
+        var comp_1 = parseInt(document.querySelector('input[name="compliance_1"]:checked').value);
+        var comp_2 = parseInt(document.querySelector('input[name="compliance_2"]:checked').value);
+        var comp_3 = parseInt(document.querySelector('input[name="compliance_3"]:checked').value);
+        var comp_4 = parseInt(document.querySelector('input[name="compliance_4"]:checked').value);
+        var comp_5 = parseInt(document.querySelector('input[name="compliance_5"]:checked').value);
+        var comp_6 = parseInt(document.querySelector('input[name="compliance_6"]:checked').value);
+        fatal1 = comp_1;
+        fatal2 = comp_2;
+        fatal3 = comp_3;
+        fatal4 = comp_4;
+        fatal5 = comp_5;
+        fatal6 = comp_6;
+        for (var i = 0; i <= n; i++) {
+            comp_score.value = comp_1+comp_2+comp_3+comp_4+comp_5+comp_6;
+        }
+        if (comp_score.value < 85) {
+            comp_score.classList.add("less");
+            comp_score.classList.remove("perfect");
+        }
+        else {
+            comp_score.classList.remove("less");
+            comp_score.classList.add("perfect");
+        }
+        score2 = parseInt(comp_score.value);
+    }
+    function full_score(e) {
+        n=n+1;
+        var fullscore = document.getElementById('myscore');
+        if ((fatal1 == 0 ) || ( fatal2 == 0 ) || ( fatal3 == 0 ) || ( fatal4 == 0 ) || ( fatal5 == 0 ) || ( fatal6 == 0 )){
+            fullscore.innerHTML = 0;
+        }
+        else {
+            for (var i = 0; i <= n; i++) {
+                fullscore.innerHTML = (((score1+score2)/100)*100).toFixed(2)+"%";
+            }
+        }
+    }
+
+</script>
+{% endblock %}

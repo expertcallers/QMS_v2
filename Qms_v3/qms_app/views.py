@@ -5810,7 +5810,7 @@ def AmerisaveSubmit(request):
         transfer = request.POST["transfer"]
 
         call_date = request.POST["call_date"]
-        audit_date = request.POST["auditdate"]
+        audit_date = date.today()
         quality_analyst = request.POST["qa"]
         team_lead = request.POST["tl"]
         team_lead_id = request.POST["tl_id"]
@@ -5821,10 +5821,10 @@ def AmerisaveSubmit(request):
         week = request.POST["week"]
 
         nce_1 = int(request.POST["nce_1"])
-        nce_2 = int(request.POST["nce_2"])
+        nce_2 = request.POST["nce_2"]
         nce_3 = int(request.POST["nce_3"])
         nce_4 = int(request.POST["nce_4"])
-        nce_score = nce_1 + nce_2 + nce_3 + nce_4
+        nce_score = nce_1 + nce_3 + nce_4
 
         compliance_1 = int(request.POST["compliance_1"])
         compliance_2 = int(request.POST["compliance_2"])
@@ -5838,14 +5838,14 @@ def AmerisaveSubmit(request):
         positive = request.POST["positives"]
         comments = request.POST["comments"]
 
-        fatal_list = [compliance_1, compliance_2, compliance_3]
+        fatal_list = [compliance_1, compliance_2, compliance_3, compliance_4, compliance_5, compliance_6]
         fatal_list_count = []
         for i in fatal_list:
             if i == 0:
                 fatal_list_count.append(i)
         no_of_fatals = len(fatal_list_count)
 
-        if compliance_1 == 0 or compliance_2 == 0 or compliance_3 == 0:
+        if compliance_1 == 0 or compliance_2 == 0 or compliance_3 == 0 or compliance_4 == 0 or compliance_5 == 0 or compliance_6 == 0:
             total_score = 0
             fatal = True
         else:

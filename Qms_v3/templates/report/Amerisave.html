@@ -1,0 +1,318 @@
+{% extends "common_base.html" %}
+{% block main %}
+<style>
+    #report {
+        font-size: 18px;
+    }
+</style>
+<!-- page content -->
+<div class="right_col" role="main" id="report">
+    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-12" align="center">
+                            <h1>Audit Report - {{form.campaign}} ({{form.type}})</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 fields">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Associate Name</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.associate_name}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Employee ID</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.emp_id}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Type - Inbound/Outbound</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.type}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Lead Source</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.lead_source}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Customer ID</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.customer_id}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Transfer/Non-transfer</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.transfer}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Call Date</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.call_date}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Audit Date</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.audit_date}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Quality Analyst</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.quality_analyst}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Team Lead</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.team_lead}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Manager</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.manager}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>AM</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.am}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Week</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.week}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 class mt-3">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>NCE</h4>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-8">
+                            Did CSS adhere to the script associated with the lead source?
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <h5 id="nce_1">{{form.nce_1}}</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-8">
+                            What was the consumer's main objection?
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <h5 id="nce_2">{{form.nce_2}}</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-8">
+                            Did CSS attempt to overcome objections?
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <h5 id="nce_3">{{form.nce_3}}</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-8">
+                            Transfer Only: Did CSS properly transfer the customer to sales?
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <h5 id="nce_4">{{form.nce_4}}</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-8 score">
+                            NCE Section Score
+                        </div>
+                        <div class="col-md-4">
+                            <h4 id="nce_score">{{form.nce_score}}</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 class mt-3">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Compliance</h4>
+                        </div>
+                    </div>
+                    <div class="row mt-3 fatal">
+                        <div class="col-md-8">
+                            Did CSS disposition call correctly?
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <h5 id="t_1">{{form.compliance_1}}</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-3 fatal">
+                        <div class="col-md-8">
+                           CSS Full Name
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <h5 id="t_2">{{form.compliance_2}}</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-3 fatal">
+                        <div class="col-md-8">
+                            AmeriSave Mortgage Corporation
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <h5 id="t_3">{{form.compliance_3}}</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-3 fatal">
+                        <div class="col-md-8">
+                            Recorded Line
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <h5 id="t_4">{{form.compliance_4}}</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-3 fatal">
+                        <div class="col-md-8">
+                            Pre-qualified for a loan with AMC
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <h5 id="t_5">{{form.compliance_5}}</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-3 fatal">
+                        <div class="col-md-8">
+                            Did CSS read Fine Print verbatim and completely?
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <h5 id="t_6">{{form.compliance_6}}</h5>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-8 score">
+                            Compliance Section Score
+                        </div>
+                        <div class="col-md-4">
+                            <h4 id="t_score">{{form.compliance_score}}</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12" id="last">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Areas of improvement</h4>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{form.areas_improvement}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Positives</h4>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{form.positives}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Comments</h4>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{form.comments}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>If Fail, Which Type</h4>
+                        </div>
+                        <div class="col-md-6">
+                            <p>{{form.fail_type}}</p>
+                        </div>
+                    </div>
+                    <div class="row mt-5 noborder">
+                        <div class="col-md-6">
+                            <h5>Total Score</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <h4 id="tot_score">{{form.overall_score}}</h4>
+                        </div>
+                        <div class="col-md-12 mt-3" align="center">
+                            <a href="#" class="btn btn-info btn-lg" onclick="history.back();">Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+{% endblock %}
