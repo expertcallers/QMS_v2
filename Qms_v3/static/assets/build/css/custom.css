@@ -5082,3 +5082,7 @@ div.dataTables_wrapper div.dataTables_filter input {
 div.dataTables_wrapper div.dataTables_filter {
     margin-right: 10px;
 }
+
+.anchor.btn.btn-default:hover {
+    box-shadow: 2px 1px 5px grey;
+  }
