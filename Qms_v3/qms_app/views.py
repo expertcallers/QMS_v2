@@ -502,6 +502,7 @@ def getEmp(request):
 @login_required
 def ReportTable(request, type):
     emp_id = request.user.profile.emp_id
+
     def auditcalculator(type):
         audits = []
         if type == 'all':
@@ -5880,10 +5881,11 @@ def AmerisaveSubmit(request):
         messages.warning(request, 'Invalid request. You have been Logged out!')
         return redirect("/logout")
 
+
 @login_required
 def PasswordReset(request):
     emp = request.user.profile.emp_id
-    if emp == '1234':
+    if emp == '1234' or emp == '5670' or emp == '8413' or emp == '5533':
         if request.method == 'POST':
             emp_id = request.POST['empid']
             password = request.POST['password']
@@ -5904,9 +5906,6 @@ def PasswordReset(request):
     else:
         messages.error(request, 'Bad Request!')
         return render("/")
-
-
-
 
 
 class TotalList(FlatMultipleModelAPIView):
@@ -5956,4 +5955,6 @@ class TotalList(FlatMultipleModelAPIView):
         {'queryset': SpoiledChild.objects.all(),
          'serializer_class': SpoiledChildSerializer},
 
+        {'queryset': Amerisave.objects.all(),
+         'serializer_class': AmerisaveSerializer},
     ]

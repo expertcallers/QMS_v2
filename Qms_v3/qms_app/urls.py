@@ -41,8 +41,8 @@ urlpatterns = [
     path('nerotel-submit', NerotelSubmit),
     path('spoiled-submit', SpoiledChildSubmit),
     path('amerisave-submit', AmerisaveSubmit),
-    path('password-reset', PasswordReset),
 
+    path('password-reset', PasswordReset),
     path('add-email', AddEmail),
     path('add-user', AddUser),
     path('add-campaign', AddCampaign),

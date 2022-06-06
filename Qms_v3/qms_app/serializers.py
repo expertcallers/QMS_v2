@@ -231,12 +231,12 @@ class SpoiledChildSerializer(serializers.ModelSerializer):
 class AmerisaveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Amerisave
-        fields = ['campaign', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name', 'email_chat_date',
-                  'query_type',
-                  'ticket_id', 'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager',
-                  'manager_id',
-                  'am', 'am_id', 'week', 'solution_1', 'solution_2', 'solution_3', 'solution_4', 'efficiency_1',
-                  'efficiency_2',
-                  'compliance_1', 'compliance_2', 'compliance_3', 'areas_improvement', 'positives',
-                  'comments', 'solution_score', 'efficiency_score', 'compliance_score', 'overall_score',
-                  'status', 'closed_date', 'emp_comments', 'fatal', 'fatal_count', 'dispute_status', 'audit_duration']
+        fields = ['campaign', 'type', 'associate_name', 'emp_id', 'transfer', 'customer_id', 'lead_source', 'call_date',
+                  'audit_date', 'quality_analyst', 'team_lead', 'team_lead_id', 'manager', 'manager_id', 'am', 'am_id',
+                  'week',
+                  'nce_1', 'nce_2', 'nce_3', 'nce_4',
+                  'compliance_1', 'compliance_2', 'compliance_3', 'compliance_4', 'compliance_5', 'compliance_6',
+                  'nce_score', 'compliance_score', 'overall_score',
+                  'areas_improvement', 'positives', 'comments', 'fail_type',
+                  'added_by', 'status', 'closed_date', 'emp_comments', 'fatal', 'fatal_count',
+                  'dispute_status', 'audit_duration']
