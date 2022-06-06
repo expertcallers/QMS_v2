@@ -189,6 +189,9 @@
                   <li><a href="/qa-reports/all"><i class="fa fa-database"></i> All Audits</a></li>
                   <li><a href="/qa-reports/open"><i class="fa fa-pencil"></i> Open Audits</a></li>
                   <li><a href="/qa-reports/dispute"><i class="fa fa-times"></i> Dispute Audits</a></li>
+                  {% if request.user.profile.emp_id == '1234' or request.user.profile.emp_id == '5670' or request.user.profile.emp_id == '5533' or request.user.profile.emp_id == '8413' %}
+                  <li><a href="/password-reset"><i class="fa fa-lock"></i> Employee Password Reset</a></li>
+                  {% endif %}
                   <li><a href="/settings"><i class="fa fa-gear"></i> Settings</a></li>
                 </ul>
               </div>

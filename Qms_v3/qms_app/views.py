@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.hashers import make_password
 from django.db.models import Avg
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
@@ -5878,6 +5879,34 @@ def AmerisaveSubmit(request):
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
         return redirect("/logout")
+
+@login_required
+def PasswordReset(request):
+    emp = request.user.profile.emp_id
+    if emp == '1234':
+        if request.method == 'POST':
+            emp_id = request.POST['empid']
+            password = request.POST['password']
+            confirm_pass = request.POST['confirmpass']
+            if password == confirm_pass:
+                e = User.objects.get(username=emp_id)
+                e.password = make_password(password)
+                e.save()
+                messages.error(request, 'Password changed successfully!')
+                return redirect('/password-reset')
+            else:
+                messages.error(request, 'Passwords does not match')
+                return redirect('/password-reset')
+        else:
+            profiles = Profile.objects.all()
+            data = {"profiles": profiles}
+            return render(request, "password_reset.html", data)
+    else:
+        messages.error(request, 'Bad Request!')
+        return render("/")
+
+
+
 
 
 class TotalList(FlatMultipleModelAPIView):
