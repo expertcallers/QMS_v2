@@ -383,6 +383,24 @@
                                 <p>{{form.comments}}</p>
                             </div>
                         </div>
+                        {% if form.emp_comments %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Dispute Status</h4>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{form.dispute_status}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Employee Comments</h4>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{form.emp_comments}}</p>
+                            </div>
+                        </div>
+                        {% endif %}
                         <div class="row mt-5 noborder">
                             <div class="col-md-6">
                                 <h5>Total Score</h5>

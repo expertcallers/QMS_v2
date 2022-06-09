@@ -587,6 +587,24 @@
                                     <p>{{form.comments}}</p>
                                 </div>
                             </div>
+                            {% if form.emp_comments %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Dispute Status</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.dispute_status}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Employee Comments</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.emp_comments}}</p>
+                                </div>
+                            </div>
+                            {% endif %}
                             <div class="row mt-5 noborder">
                                 <div class="col-md-6">
                                     <h5>Total Score</h5>
@@ -594,28 +612,6 @@
                                 <div class="col-md-6">
                                     <h4 id="tot_score">{{form.overall_score}}</h4>
                                 </div>
-                                {% if form.status == False %}
-                                <div class="col-md-12 mt-3">
-                                    <form action="/agent-respond" method="POST" enctype="multipart/form-data">
-                                        {% csrf_token %}
-                                        <label for="emp_com_accept">Employee Comments *</label>
-                                        <input type="hidden" name="id" value="{{form.id}}">
-                                        <input type="hidden" name="type" value="{{type}}">
-                                        <textarea class="form-control" id="emp_com_accept" required rows="4" name="emp_com_accept"></textarea>
-                                        <button class="btn btn-lg btn-success mt-2"><i class="fa fa-check"></i> Accept & Sign</button>
-                                    </form>
-                                </div>
-                                <div class="col-md-12 mt-3">
-                                    <form action="/agent-respond" method="POST" enctype="multipart/form-data">
-                                        {% csrf_token %}
-                                        <label for="emp_com_reject">Employee Comments *</label>
-                                        <input type="hidden" name="type" value="{{type}}">
-                                        <input type="hidden" name="id" value="{{form.id}}">
-                                        <textarea class="form-control" id="emp_com_reject" required rows="4" name="emp_com_reject"></textarea>
-                                        <button class="btn btn-lg btn-danger mt-2"><i class="fa fa-close"></i> Reject & Dispute</button>
-                                    </form>
-                                </div>
-                                {% endif %}
                                 <div class="col-md-12 mt-3" align="center">
                                     <button class="btn btn-info btn-lg" onclick="history.back()">Back</button>
                                 </div>
