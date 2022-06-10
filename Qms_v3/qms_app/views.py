@@ -3712,7 +3712,14 @@ def outboundFormSubmit(request):
             total_score = openng_score + softskill_score + business_compliance_score
             fatal = False
         added_by = request.user.profile.emp_id
+
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         e = Outbound()
+        e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
         e.oc_total = openng_score
@@ -3846,7 +3853,13 @@ def inboundFormSubmit(request):
             fatal = False
         added_by = request.user.profile.emp_id
 
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         e = Inbound()
+        e.audit_id = audit_id
         e.audit_duration = duration
         e.unique_id = unique_id
         e.ce_total = ce_total
@@ -3989,7 +4002,13 @@ def emailFormSubmit(request):
             fatal = False
         added_by = request.user.profile.emp_id
 
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         e = EmailChat()
+        e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
         e.ce_total = ce_total
@@ -4131,7 +4150,13 @@ def DigitalSwissGoldFormSubmit(request):
             fatal = False
         added_by = request.user.profile.emp_id
 
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         e = DigitalSwissGold()
+        e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
         e.ce_total = ce_total
@@ -4247,7 +4272,13 @@ def FLAFormSubmit(request):
             fatal = False
         added_by = request.user.profile.emp_id
 
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         e = FLA()
+        e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
         e.overall_score = total_score
@@ -4352,7 +4383,13 @@ def blazingHogFormSubmit(request):
 
         added_by = request.user.profile.emp_id
 
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         e = BlazingHog()
+        e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
         e.overall_score = total_score
@@ -4468,7 +4505,13 @@ def NoomPodFormSubmit(request):
 
         added_by = request.user.profile.emp_id
 
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         e = NoomPod()
+        e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
         e.overall_score = total_score
@@ -4582,7 +4625,13 @@ def NoomEvaFormSubmit(request):
 
         added_by = request.user.profile.emp_id
 
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         e = NoomEva()
+        e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
         e.overall_score = total_score
@@ -4703,7 +4752,13 @@ def AbHindalcoFormSubmit(request):
             fatal = False
         added_by = request.user.profile.emp_id
 
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         e = AbHindalco()
+        e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
         e.oc_total = openng_score
@@ -4894,12 +4949,18 @@ def PractoSubmit(request):
             fatal = False
         added_by = request.user.profile.emp_id
 
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         try:
             Practo.objects.get(unique_id=unique_id)
             messages.info(request, "Please have patience! How ever the Audit has been Added :)")
             return redirect("/dashboard")
         except Practo.DoesNotExist:
             e = Practo()
+            e.audit_id = audit_id
             e.unique_id = unique_id
             e.audit_duration = duration
             e.campaign = campaign_name
@@ -5146,12 +5207,18 @@ def fameHouseSubmit(request):
 
         added_by = request.user.profile.emp_id
 
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         try:
             FameHouse.objects.get(unique_id=unique_id)
             messages.info(request, "Please have patience! How ever the Audit has been Added :)")
             return redirect("/dashboard")
         except FameHouse.DoesNotExist:
             e = FameHouse()
+            e.audit_id = audit_id
             e.unique_id = unique_id
             e.campaign = campaign_name
             e.campaign_type = campaign_type
@@ -5318,12 +5385,18 @@ def ILMakiageSubmit(request):
         comments = request.POST['comments']
         added_by = request.user.profile.emp_id
 
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         try:
             ILMakiage.objects.get(unique_id=unique_id)
             messages.info(request, "Please have patience! How ever the Audit has been Added :)")
             return redirect("/dashboard")
         except ILMakiage.DoesNotExist:
             e = ILMakiage()
+            e.audit_id = audit_id
             e.unique_id = unique_id
             e.campaign = campaign_name
             e.campaign_type = campaign_type
@@ -5464,12 +5537,19 @@ def WinopolySubmit(request):
             fatal = False
 
         added_by = request.user.profile.emp_id
+
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         try:
             Winopoly.objects.get(unique_id=unique_id)
             messages.info(request, "Please have patience! How ever the Audit has been Added :)")
             return redirect("/dashboard")
         except Winopoly.DoesNotExist:
             e = Winopoly()
+            e.audit_id = audit_id
             e.unique_id = unique_id
             e.audit_duration = duration
             e.overall_score = overall_score
@@ -5613,7 +5693,14 @@ def NerotelSubmit(request):
             total_score = eng_score + res_score + compliance_score
             fatal = False
         added_by = request.user.profile.emp_id
+
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         e = Nerotel()
+        e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
         e.eng_total = eng_score
@@ -5739,7 +5826,13 @@ def SpoiledChildSubmit(request):
 
         added_by = request.user.profile.emp_id
 
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         e = SpoiledChild()
+        e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
         e.overall_score = total_score
@@ -5856,13 +5949,18 @@ def AmerisaveSubmit(request):
 
         added_by = request.user.profile.emp_id
 
+        auditid = AuditIdTable.objects.first()
+        audit_id = auditid.audit_id
+        auditid.audit_id = int(auditid.audit_id) + 1
+        auditid.save()
+
         e = Amerisave(
             unique_id=unique_id, audit_duration=duration, overall_score=total_score, campaign=campaign_name,
             campaign_type=campaign_type, campaign_id=campaign_id, associate_name=emp_name, emp_id=emp_id,
             call_date=call_date, audit_date=audit_date, quality_analyst=quality_analyst, team_lead=team_lead,
             manager=manager, am=am, team_lead_id=team_lead_id, manager_id=manager_id, am_id=am_id, week=week,
             areas_improvement=areas_imp, positives=positive, comments=comments, fatal_count=no_of_fatals,
-            fatal=fatal, added_by=added_by,
+            fatal=fatal, added_by=added_by, audit_id=audit_id,
 
             nce_1=nce_1, nce_2=nce_2, nce_3=nce_3, nce_4=nce_4,
             compliance_1=compliance_1, compliance_2=compliance_2, compliance_3=compliance_3,
@@ -5905,7 +6003,7 @@ def PasswordReset(request):
             return render(request, "password_reset.html", data)
     else:
         messages.error(request, 'Bad Request!')
-        return render("/")
+        return redirect("/")
 
 
 class TotalList(FlatMultipleModelAPIView):

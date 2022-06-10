@@ -228,6 +228,7 @@ class SpoiledChildSerializer(serializers.ModelSerializer):
                   'comments', 'solution_score', 'efficiency_score', 'compliance_score', 'overall_score',
                   'status', 'closed_date', 'emp_comments', 'fatal', 'fatal_count', 'dispute_status', 'audit_duration']
 
+
 class AmerisaveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Amerisave

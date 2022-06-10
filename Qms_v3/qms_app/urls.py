@@ -1,5 +1,5 @@
-
 from django.urls import path
+
 from .views import *
 
 urlpatterns = [
@@ -28,11 +28,11 @@ urlpatterns = [
     path('outbound-submit', outboundFormSubmit),
     path('inbound-submit', inboundFormSubmit),
     path('email-submit', emailFormSubmit),
-    path('digital-submit',DigitalSwissGoldFormSubmit),
+    path('digital-submit', DigitalSwissGoldFormSubmit),
     path('fla-submit', FLAFormSubmit),
     path('blazinghog-submit', blazingHogFormSubmit),
-    path('noompod-submit',NoomPodFormSubmit),
-    path('noomeva-submit',NoomEvaFormSubmit),
+    path('noompod-submit', NoomPodFormSubmit),
+    path('noomeva-submit', NoomEvaFormSubmit),
     path('abhindalco-submit', AbHindalcoFormSubmit),
     path('practo-submit', PractoSubmit),
     path('fame-submit', fameHouseSubmit),
@@ -51,6 +51,6 @@ urlpatterns = [
     path('edit-email', EditEmail),
     path("settings", change_password),
     path("delete-qa-mapping", deleteQaMapping),
-    path("total-list",TotalList.as_view(),name="to_show_the_total_list_of_tables"),
+    path("total-list", TotalList.as_view(), name="to_show_the_total_list_of_tables"),
 
 ]

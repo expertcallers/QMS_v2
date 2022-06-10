@@ -1,10 +1,11 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+
 # Create your models here.
 
 class Profile(models.Model):
-    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     emp_id = models.CharField(max_length=30, unique=True)
     emp_name = models.CharField(max_length=100)
     emp_desi = models.CharField(max_length=100)
@@ -16,7 +17,7 @@ class Profile(models.Model):
     emp_rm3 = models.CharField(max_length=100)
     emp_rm3_id = models.CharField(max_length=30)
     agent_status = models.CharField(max_length=30)
-    emp_email = models.EmailField(null=True,blank=True)
+    emp_email = models.EmailField(null=True, blank=True)
     pc = models.BooleanField(default=False)
 
     def __str__(self):
@@ -35,7 +36,14 @@ class Campaign(models.Model):
 class CampaignMapping(models.Model):
     qa = models.CharField(max_length=150)
     qa_id = models.CharField(max_length=50)
-    campaign = models.ForeignKey(Campaign,on_delete=models.CASCADE)
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+
+
+class AuditIdTable(models.Model):
+    audit_id = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.audit_id)
 
 
 class Outbound(models.Model):
@@ -44,6 +52,7 @@ class Outbound(models.Model):
     campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Outbound', max_length=50)
     page_type = models.CharField(default='Outbound', max_length=50)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
 
     emp_id = models.CharField(max_length=30)
     associate_name = models.CharField(max_length=50)
@@ -102,12 +111,14 @@ class Outbound(models.Model):
     dispute_status = models.BooleanField(default=False)
     audit_duration = models.CharField(max_length=30)
 
+
 class Inbound(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
     campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Inbound', max_length=50)
     page_type = models.CharField(default='Inbound', max_length=50)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
     emp_id = models.CharField(max_length=30)
     associate_name = models.CharField(max_length=50)
     zone = models.CharField(max_length=50)
@@ -170,12 +181,12 @@ class Inbound(models.Model):
     audit_duration = models.CharField(max_length=30)
 
 
-
 class EmailChat(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
     campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Email', max_length=50)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
     page_type = models.CharField(default='Email', max_length=50)
     emp_id = models.CharField(max_length=30)
     associate_name = models.CharField(max_length=50)
@@ -227,7 +238,6 @@ class EmailChat(models.Model):
     compliance_total = models.IntegerField(null=True)
     overall_score = models.IntegerField(null=True)
 
-
     areas_improvement = models.TextField()
     positives = models.TextField()
     comments = models.TextField()
@@ -242,12 +252,14 @@ class EmailChat(models.Model):
     dispute_status = models.BooleanField(default=False)
     audit_duration = models.CharField(max_length=30)
 
+
 class DigitalSwissGold(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
     campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Digital', max_length=50)
     page_type = models.CharField(default='Digital', max_length=50)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
     emp_id = models.CharField(max_length=30)
     associate_name = models.CharField(max_length=50)
     zone = models.CharField(max_length=50)
@@ -319,6 +331,7 @@ class FLA(models.Model):
     campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='FLA', max_length=50)
     page_type = models.CharField(default='FLA', max_length=50)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
     emp_id = models.CharField(max_length=30)
     associate_name = models.CharField(max_length=50)
     concept = models.CharField(max_length=100)
@@ -363,6 +376,7 @@ class BlazingHog(models.Model):
     campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='BlazingHog', max_length=50)
     page_type = models.CharField(default='BlazingHog', max_length=50)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
     emp_id = models.CharField(max_length=30)
     associate_name = models.CharField(max_length=50)
     zone = models.CharField(max_length=50)
@@ -381,7 +395,6 @@ class BlazingHog(models.Model):
     query_type = models.CharField(max_length=100)
     ticket_id = models.CharField(max_length=100)
 
-
     # questions
     # solutions
     solution_1 = models.IntegerField()
@@ -389,7 +402,7 @@ class BlazingHog(models.Model):
     solution_3 = models.IntegerField()
     solution_4 = models.IntegerField()
 
-    #Efficiency
+    # Efficiency
     efficiency_1 = models.IntegerField()
     efficiency_2 = models.IntegerField()
 
@@ -417,12 +430,14 @@ class BlazingHog(models.Model):
     dispute_status = models.BooleanField(default=False)
     audit_duration = models.CharField(max_length=30)
 
+
 class NoomPod(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
     campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Noompod', max_length=50)
     page_type = models.CharField(default='Noompod', max_length=50)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
     emp_id = models.CharField(max_length=30)
     associate_name = models.CharField(max_length=50)
     concept = models.CharField(max_length=100)
@@ -451,7 +466,6 @@ class NoomPod(models.Model):
     compliance_4 = models.IntegerField()
     compliance_5 = models.IntegerField()
     compliance_6 = models.IntegerField()
-
 
     areas_improvement = models.TextField()
     positives = models.TextField()
@@ -479,6 +493,7 @@ class NoomEva(models.Model):
     campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Noomeva', max_length=50)
     page_type = models.CharField(default='Noomeva', max_length=50)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
     emp_id = models.CharField(max_length=30)
     associate_name = models.CharField(max_length=50)
     concept = models.CharField(max_length=100)
@@ -508,7 +523,6 @@ class NoomEva(models.Model):
     compliance_5 = models.IntegerField()
     compliance_6 = models.IntegerField()
 
-
     areas_improvement = models.TextField()
     positives = models.TextField()
     comments = models.TextField()
@@ -535,6 +549,7 @@ class AbHindalco(models.Model):
     campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Abhindalco', max_length=50)
     page_type = models.CharField(default='Abhindalco', max_length=50)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
 
     emp_id = models.CharField(max_length=30)
     associate_name = models.CharField(max_length=50)
@@ -570,7 +585,6 @@ class AbHindalco(models.Model):
     compliance_3 = models.IntegerField()
     compliance_4 = models.IntegerField()
 
-
     areas_improvement = models.TextField()
     positives = models.TextField()
     comments = models.TextField()
@@ -599,6 +613,7 @@ class Practo(models.Model):
     campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Practo', max_length=50)
     page_type = models.CharField(default='Practo', max_length=50)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
     # End Common Must Add to all models
 
     associate_name = models.CharField(max_length=150)
@@ -606,13 +621,13 @@ class Practo(models.Model):
     zone = models.CharField(max_length=50)
     concept = models.CharField(max_length=60)
 
-    case_no = models.CharField(max_length=200,null=True,blank=True)
-    issue_type = models.CharField(max_length=200,null=True,blank=True)
-    sub_issue = models.CharField(max_length=200,null=True,blank=True)
-    sub_sub_issue = models.CharField(max_length=200,null=True,blank=True)
-    chat_date = models.DateField(null=True,blank=True)
-    csat = models.CharField(max_length=200,null=True,blank=True)
-    product = models.CharField(max_length=200,null=True,blank=True)
+    case_no = models.CharField(max_length=200, null=True, blank=True)
+    issue_type = models.CharField(max_length=200, null=True, blank=True)
+    sub_issue = models.CharField(max_length=200, null=True, blank=True)
+    sub_sub_issue = models.CharField(max_length=200, null=True, blank=True)
+    chat_date = models.DateField(null=True, blank=True)
+    csat = models.CharField(max_length=200, null=True, blank=True)
+    product = models.CharField(max_length=200, null=True, blank=True)
 
     audit_date = models.DateField()
     quality_analyst = models.CharField(max_length=100)
@@ -626,80 +641,80 @@ class Practo(models.Model):
 
     # Customer Experience
     p_1 = models.IntegerField()
-    p1_s1 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p1_s2 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p1_s3 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p1_s4 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p1_s5 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p1_s6 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
+    p1_s1 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p1_s2 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p1_s3 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p1_s4 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p1_s5 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p1_s6 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
     p_2 = models.IntegerField()
     p_3 = models.IntegerField()
-    p3_s1 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p3_s2 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p3_s3 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p3_s4 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p3_s5 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p3_s6 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
+    p3_s1 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p3_s2 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p3_s3 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p3_s4 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p3_s5 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p3_s6 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
     p_4 = models.IntegerField()
-    p4_s1 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p4_s2 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p4_s3 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p4_s4 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p4_s5 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
+    p4_s1 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p4_s2 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p4_s3 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p4_s4 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p4_s5 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
     p_5 = models.IntegerField()
     p_6 = models.IntegerField()
     p_7 = models.IntegerField()
-    p7_s1 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p7_s2 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p7_s3 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p7_s4 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
+    p7_s1 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p7_s2 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p7_s3 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p7_s4 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
     p_8 = models.IntegerField()
-    p8_s1 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p8_s2 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p8_s3 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p8_s4 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p8_s5 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p8_s6 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p8_s7 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
+    p8_s1 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p8_s2 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p8_s3 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p8_s4 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p8_s5 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p8_s6 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p8_s7 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
     p_9 = models.IntegerField()
-    p9_s1 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p9_s2 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p9_s3 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p9_s4 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p9_s5 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p9_s6 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
+    p9_s1 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p9_s2 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p9_s3 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p9_s4 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p9_s5 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p9_s6 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
     p_10 = models.IntegerField()
     p_11 = models.IntegerField()
-    p11_s1 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p11_s2 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p11_s3 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p11_s4 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p11_s5 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p11_s6 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p11_s7 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
+    p11_s1 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p11_s2 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p11_s3 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p11_s4 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p11_s5 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p11_s6 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p11_s7 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
     p_12 = models.IntegerField()
     p_13 = models.IntegerField()
     p_14 = models.IntegerField()
     p_15 = models.IntegerField()
-    p15_s1 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p15_s2 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p15_s3 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
+    p15_s1 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p15_s2 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p15_s3 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
     p_16 = models.IntegerField()
     p_17 = models.IntegerField()
-    p17_s1 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p17_s2 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p17_s3 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p17_s4 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p_18 = models.IntegerField(null=True,blank=True)
-    p18_s1 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p18_s2 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p18_s3 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    p18_s4 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
+    p17_s1 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p17_s2 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p17_s3 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p17_s4 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p_18 = models.IntegerField(null=True, blank=True)
+    p18_s1 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p18_s2 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p18_s3 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    p18_s4 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
 
     compliance_1 = models.CharField(max_length=30)
-    compliance1_s1 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    compliance1_s2 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
-    compliance1_s3 = models.CharField(max_length=20,default="Yes",null=True,blank=True)
+    compliance1_s1 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    compliance1_s2 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
+    compliance1_s3 = models.CharField(max_length=20, default="Yes", null=True, blank=True)
     compliance_2 = models.CharField(max_length=30)
 
     areas_improvement = models.TextField()
@@ -727,6 +742,7 @@ class FameHouse(models.Model):
     campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Fame House', max_length=50)
     page_type = models.CharField(default='Fame', max_length=50)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
     # End Common Must Add to all models
 
     emp_id = models.CharField(max_length=30)
@@ -759,39 +775,39 @@ class FameHouse(models.Model):
     compliance_10 = models.IntegerField(null=True)
     compliance_11 = models.IntegerField(null=True)
 
-    #customer Response
-    cr_1 = models.CharField(max_length=10,null=True)
-    #Opening
-    opening_1 = models.CharField(max_length=10,null=True)
-    opening_2 = models.CharField(max_length=10,null=True)
-    #Composition
+    # customer Response
+    cr_1 = models.CharField(max_length=10, null=True)
+    # Opening
+    opening_1 = models.CharField(max_length=10, null=True)
+    opening_2 = models.CharField(max_length=10, null=True)
+    # Composition
     comp_1 = models.CharField(max_length=10, null=True)
     comp_2 = models.CharField(max_length=10, null=True)
-    #Macro Usage
-    macro_1 = models.CharField(max_length=10,null=True)
-    macro_2 = models.CharField(max_length=10,null=True)
-    #Closing
-    closing_1 = models.CharField(max_length=10,null=True)
-    closing_2 = models.CharField(max_length=10,null=True)
-    #Customer Issue Resolution
-    cir_1 = models.CharField(max_length=10,null=True)
-    cir_2 = models.CharField(max_length=10,null=True)
-    cir_3 = models.CharField(max_length=10,null=True)
-    cir_4 = models.CharField(max_length=10,null=True)
-    cir_5 = models.CharField(max_length=10,null=True)
+    # Macro Usage
+    macro_1 = models.CharField(max_length=10, null=True)
+    macro_2 = models.CharField(max_length=10, null=True)
+    # Closing
+    closing_1 = models.CharField(max_length=10, null=True)
+    closing_2 = models.CharField(max_length=10, null=True)
+    # Customer Issue Resolution
+    cir_1 = models.CharField(max_length=10, null=True)
+    cir_2 = models.CharField(max_length=10, null=True)
+    cir_3 = models.CharField(max_length=10, null=True)
+    cir_4 = models.CharField(max_length=10, null=True)
+    cir_5 = models.CharField(max_length=10, null=True)
     cir_6 = models.CharField(max_length=10, null=True)
     cir_7 = models.CharField(max_length=10, null=True)
-    #Etiquette
-    et_1 = models.CharField(max_length=10,null=True)
-    et_2 = models.CharField(max_length=10,null=True)
-    et_3 = models.CharField(max_length=10,null=True)
-    et_4 = models.CharField(max_length=10,null=True)
+    # Etiquette
+    et_1 = models.CharField(max_length=10, null=True)
+    et_2 = models.CharField(max_length=10, null=True)
+    et_3 = models.CharField(max_length=10, null=True)
+    et_4 = models.CharField(max_length=10, null=True)
     et_5 = models.CharField(max_length=10, null=True)
-    #Documentation
-    doc_1 = models.CharField(max_length=10,null=True)
-    doc_2 = models.CharField(max_length=10,null=True)
-    doc_3 = models.CharField(max_length=10,null=True)
-    doc_4 = models.CharField(max_length=10,null=True)
+    # Documentation
+    doc_1 = models.CharField(max_length=10, null=True)
+    doc_2 = models.CharField(max_length=10, null=True)
+    doc_3 = models.CharField(max_length=10, null=True)
+    doc_4 = models.CharField(max_length=10, null=True)
 
     compliance_total = models.IntegerField(null=True)
 
@@ -819,6 +835,7 @@ class ILMakiage(models.Model):
     campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='IL Makiage', max_length=50)
     page_type = models.CharField(default='ILM', max_length=50)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
     # End Common Must Add to all models
 
     emp_id = models.CharField(max_length=30)
@@ -878,6 +895,7 @@ class Winopoly(models.Model):
     campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Winopoly Outbound', max_length=50)
     page_type = models.CharField(default='Winopoly', max_length=50)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
 
     emp_id = models.CharField(max_length=30)
     associate_name = models.CharField(max_length=150)
@@ -898,7 +916,7 @@ class Winopoly(models.Model):
     am_id = models.CharField(max_length=30)
     week = models.CharField(max_length=10)
 
-    #Opening Statement
+    # Opening Statement
     comp_1 = models.IntegerField()
     op_2 = models.IntegerField()
     op_3 = models.IntegerField()
@@ -935,10 +953,10 @@ class Winopoly(models.Model):
 
     added_by = models.CharField(max_length=30)
     status = models.BooleanField(default=False)
-    closed_date = models.DateTimeField(null=True,blank=True)
-    emp_comments = models.TextField(null=True,blank=True)
+    closed_date = models.DateTimeField(null=True, blank=True)
+    emp_comments = models.TextField(null=True, blank=True)
     # Total Scores
-    overall_score = models.IntegerField(null=True,blank=True)
+    overall_score = models.IntegerField(null=True, blank=True)
 
     fatal = models.BooleanField(default=False)
     fatal_count = models.IntegerField(default=0)
@@ -952,6 +970,7 @@ class Nerotel(models.Model):
     campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Nerotel Inbound', max_length=50)
     page_type = models.CharField(default='Nerotel', max_length=50)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
 
     emp_id = models.CharField(max_length=30)
     associate_name = models.CharField(max_length=50)
@@ -1013,12 +1032,14 @@ class Nerotel(models.Model):
     dispute_status = models.BooleanField(default=False)
     audit_duration = models.CharField(max_length=30)
 
+
 class SpoiledChild(models.Model):
     unique_id = models.CharField(max_length=300)
     campaign = models.CharField(max_length=150)
     campaign_id = models.IntegerField(null=True, blank=True)
     campaign_type = models.CharField(default='Spoiled Child', max_length=50)
     page_type = models.CharField(default='Spoiled', max_length=50)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
     emp_id = models.CharField(max_length=30)
     associate_name = models.CharField(max_length=50)
     zone = models.CharField(max_length=50)
@@ -1037,7 +1058,6 @@ class SpoiledChild(models.Model):
     query_type = models.CharField(max_length=100)
     ticket_id = models.CharField(max_length=100)
 
-
     # questions
     # solutions
     solution_1 = models.IntegerField()
@@ -1045,7 +1065,7 @@ class SpoiledChild(models.Model):
     solution_3 = models.IntegerField()
     solution_4 = models.IntegerField()
 
-    #Efficiency
+    # Efficiency
     efficiency_1 = models.IntegerField()
     efficiency_2 = models.IntegerField()
 
@@ -1081,6 +1101,7 @@ class Amerisave(models.Model):
     campaign_type = models.CharField(default='Amerisave', max_length=50)
     page_type = models.CharField(default='Amerisave', max_length=50)
     type = models.CharField(max_length=150, null=True, blank=True)
+    audit_id = models.CharField(max_length=100, null=True, blank=True)
     emp_id = models.CharField(max_length=30)
     associate_name = models.CharField(max_length=50)
     transfer = models.CharField(max_length=100)
