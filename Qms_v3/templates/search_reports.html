@@ -1,0 +1,101 @@
+{% extends "common_base.html" %}
+{% block main %}
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <div class="page-title">
+            <div class="title_left">
+              <h3>Search Audit</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <form action="" method="POST" enctype="multipart/form-data" class="pb-4">
+                    {% csrf_token %}
+                    <div class="row">
+                      <div class="col-md-6 form-group">
+                        <label for="audit_id">Audit Id</label>
+                        <input type="text" name="audit_id" id="audit_id" class="form-control">
+                      </div>
+                      <div class="col-md-6 form-group">
+                        <button class="btn btn-success form-control mt-4">Submit</button>
+                      </div>
+                    </div>
+                  </form>
+                  <table  id="datatablex" class="table table-striped" style="width: 100%;">
+                    <thead>
+                      <tr>
+                        <th>Employee Name</th>
+                        <th>Employee Id</th>
+                        <th>Audit Date</th>
+                        <th>Campaign</th>
+                        <th>QA</th>
+                        <th>Customer Name</th>
+                        <th>Category</th>
+                        <th>Overall Score</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <th>Employee Name</th>
+                        <th>Employee Id</th>
+                        <th>Audit Date</th>
+                        <th>Campaign</th>
+                        <th>QA</th>
+                        <th>Customer Name</th>
+                        <th>Category</th>
+                        <th>Overall Score</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                    {% for j in audit %}
+                      {% for i in j %}
+                      <tr>
+                        <td>{{i.associate_name}}</td>
+                        <td>{{i.emp_id}}</td>
+                        <td>{{i.audit_date}}</td>
+                        <td>{{i.campaign}}</td>
+                        <td>{{i.quality_analyst}}</td>
+                        <td>
+                          {% if i.customer_name %}
+                            {{i.customer_name}}
+                          {% else %}
+                            No Customer Name
+                          {% endif %}
+                        </td>
+                        <td>{{i.campaign_type}}</td>
+                        <td>{{i.overall_score}}</td>
+                        <td>
+                          {% if i.status == True %}
+                             Closed
+                          {% elif i.dispute_status == True %}
+                              Dispute
+                          {% else %}
+                              Open
+                          {% endif %}
+                        </td>
+                        <td>
+                          <form action="/report" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{i.id}}">
+                            <input type="hidden" name="type" value="{{i.page_type}}">
+                            <button class="btn btn-sm btn-primary">View</button>
+                          </form>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- /page content -->
+{% endblock %}
