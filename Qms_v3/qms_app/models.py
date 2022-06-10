@@ -28,6 +28,7 @@ class Campaign(models.Model):
     name = models.CharField(max_length=150)
     type = models.CharField(max_length=50)
     page_type = models.CharField(max_length=50)
+    threshold = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return str(self.name)

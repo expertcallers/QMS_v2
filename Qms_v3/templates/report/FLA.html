@@ -16,6 +16,10 @@
                         <div class="col-md-12" align="center">
                             <h1>Audit Report - {{form.campaign}} ({{form.campaign_type}})</h1>
                         </div>
+                        <div class="col-md-12" style="display: inline-flex;">
+                            <h1>Result: </h1>
+                            <h1 id="result"></h1><span class="pt-4">(Threshold: {{campaign.threshold}}%)</span>
+                        </div>
                     </div>
                 </div>
 
@@ -248,12 +252,14 @@
     var cl_1 = parseInt($('#cl_1').html());
     $('#cl_score').html(cl_1);
 
-    function confirmm() {
-        if (confirm(text) == true) {
-            return true
-          } else {
-            return false
-          }
-    }
+
+    var total = parseInt($('#tot_score').html());
+        if (total < {{campaign.threshold}}) {
+            $('#result').html("Fail");
+            $('#result').css("color","red");
+        } else {
+            $('#result').html("Pass");
+            $('#result').css("color","green");
+        }
 </script>
 {% endblock %}

@@ -17,7 +17,7 @@
                         </div>
                         <div class="col-md-12" style="display: inline-flex;">
                             <h1>Result: </h1>
-                            <h1 id="result"></h1>
+                            <h1 id="result"></h1><span class="pt-4">(Threshold: {{campaign.threshold}}%)</span>
                         </div>
                     </div>
                 </div>
@@ -406,5 +406,13 @@
         var b_4 = parseInt($('#b_4').html());
         $('#b_score').html(b_1+b_2+b_3+b_4);
 
+        var total = parseInt($('#tot_score').html());
+        if (total < {{campaign.threshold}}) {
+            $('#result').html("Fail");
+            $('#result').css("color","red");
+        } else {
+            $('#result').html("Pass");
+            $('#result').css("color","green");
+        }
 </script>
 {% endblock %}

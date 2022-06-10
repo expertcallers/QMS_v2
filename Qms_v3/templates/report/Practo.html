@@ -13,7 +13,11 @@
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-12" align="center">
-                                <h2>Practo Report</h2>
+                                <h1>Audit Report - {{form.campaign}} ({{form.campaign_type}})</h1>
+                            </div>
+                            <div class="col-md-12" style="display: inline-flex;">
+                                <h1>Result: </h1>
+                                <h1 id="result"></h1><span class="pt-4">(Threshold: {{campaign.threshold}}%)</span>
                             </div>
                         </div>
                     </div>
@@ -185,7 +189,6 @@
                     </div>
 
 
-
                     <div class="col-md-12 mt-3">
                         <div class="row mt-3">
                             <div class="col-md-8">
@@ -199,7 +202,7 @@
                                 </p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_1">{{form.p_1}}</h5>
+                                <h4 id="p_1">{{form.p_1}}</h4>
                             </div>
                         </div>
                         {% if form.p_1 == 0 %}
@@ -248,7 +251,7 @@
                                 <p class="smallp">PSS Should start the chat conversation within 1 minute from the automated opening message.</p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_2">{{form.p_2}}</h5>
+                                <h4 id="p_2">{{form.p_2}}</h4>
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -261,7 +264,7 @@
                                 </p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_3">{{form.p_3}}</h5>
+                                <h4 id="p_3">{{form.p_3}}</h4>
                             </div>
                         </div>
                         {% if form.p_3 == 0 %}
@@ -319,7 +322,7 @@
                                 </p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_4">{{form.p_4}}</h5>
+                                <h4 id="p_4">{{form.p_4}}</h4>
                             </div>
                         </div>
                         {% if form.p_4 == 0 %}
@@ -368,7 +371,7 @@
                                 <p class="smallp">PSS should provide the relevant responses to each queries.</p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_5">{{form.p_5}}</h5>
+                                <h4 id="p_5">{{form.p_5}}</h4>
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -377,7 +380,7 @@
                                 <p class="smallp">PSS should provide the assurance to the user on the issue resolution/query. When it's being possible to get a resolution immediately, or within certain hours (TAT)</p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_6">{{form.p_6}}</h5>
+                                <h4 id="p_6">{{form.p_6}}</h4>
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -386,7 +389,7 @@
                                 <p class="smallp">PSS should do relevant probing and probe the user correctly to identify the root cause. PSS should be attentive and avoid unnecessary probing. PSS should never assume and provide resolution and it should be confirmed with the user on the chat. PSS should perform RCA on the relevant tool to understand the discrepancies/disputes on the concern raised.</p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_7">{{form.p_7}}</h5>
+                                <h4 id="p_7">{{form.p_7}}</h4>
                             </div>
                         </div>
                         {% if form.p_7 == 0 %}
@@ -428,7 +431,7 @@
                                 </ol>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_8">{{form.p_8}}</h5>
+                                <h4 id="p_8">{{form.p_8}}</h4>
                             </div>
                         </div>
                         {% if form.p_8 == 0 %}
@@ -484,7 +487,7 @@
                                     <b>Note: </b>One instance is exception for the punctuation or spacing either. Refrain from copying the details from the slack or dashboard. PSS should be recommended to draft the text/resolution in the simple and understandable manner.</p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_9">{{form.p_9}}</h5>
+                                <h4 id="p_9">{{form.p_9}}</h4>
                             </div>
                         </div>
                         {% if form.p_9 == 0 %}
@@ -534,7 +537,7 @@
                                 <p class="smallp"><b>Eg: </b>while probing the user/When the user agreed to wait/Thanking the user for sharing the information/Customer connect. Any feel good statements - It was pleasure assisting you etc</p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_10">{{form.p_10}}</h5>
+                                <h4 id="p_10">{{form.p_10}}</h4>
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -552,7 +555,7 @@
                                 <p class="smallp"><b>Note: </b>If the user has not received an OTP, due to network or technical issue. We can share the basic order details (except - Address,cancelation,modification & Medicine details) like delivery date or status of the order.</p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_11">{{form.p_11}}</h5>
+                                <h4 id="p_11">{{form.p_11}}</h4>
                             </div>
                         </div>
                         {% if form.p_11 == 0 %}
@@ -614,7 +617,7 @@
                                 </ol>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_12">{{form.p_12}}</h5>
+                                <h4 id="p_12">{{form.p_12}}</h4>
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -623,7 +626,7 @@
                                 <p class="smallp">Sharing the information in a sequential and understandable manner. In case of multiple queries, resolution needs to be provided in a sequential manner, also In case where we need to provide Prime online or inclinic book steps it should be always followed by the doctor's or enahnced listing URL. If there is cancellation as the user wanted inclinic instead of online consultation, then after confirming for the cancellation and refund process, share the link and the steps followed by the refund details.</p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_13">{{form.p_13}}</h5>
+                                <h4 id="p_13">{{form.p_13}}</h4>
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -632,7 +635,7 @@
                                 <p class="smallp">PSS should update respective dashboard link for that particular transaction, Remedy dashboard link/Consult dashboardlink/Diagnostic dashboard link/ ARM/Payment/Plus etc in the private note. In case of any query leading to cancellation, payment dashboard link of that particular transaction needs to be documented.</p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_14">{{form.p_14}}</h5>
+                                <h4 id="p_14">{{form.p_14}}</h4>
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -641,7 +644,7 @@
                                 <p class="smallp">PSS should select the correct issue type,sub-issue,sub sub issues in every chat.(labels)</p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_15">{{form.p_15}}</h5>
+                                <h4 id="p_15">{{form.p_15}}</h4>
                             </div>
                         </div>
                         {% if form.p_15 == 0 %}
@@ -672,7 +675,7 @@
                                 <p class="smallp">Pss should provide timely responses throughout the chat (2mins) unless hold procedure being followed.</p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_16">{{form.p_16}}</h5>
+                                <h4 id="p_16">{{form.p_16}}</h4>
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -686,7 +689,7 @@
                                 </ol>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_17">{{form.p_17}}</h5>
+                                <h4 id="p_17">{{form.p_17}}</h4>
                             </div>
                         </div>
                         {% if form.p_17 == 0 %}
@@ -723,7 +726,7 @@
                                     <p class="smallp">PSS should provide the information, as mentioned in the knowledge document or as per the recent updates shared.<br>PSS should refrain from copy and pasting the information from the knowledge book.</p>
                                 </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="p_18">{{form.p_18}}</h5>
+                                <h4 id="p_18">{{form.p_18}}</h4>
                             </div>
                         </div>
                         {% if form.p_18 == 0 %}
@@ -759,7 +762,7 @@
                                 Section Score
                             </div>
                             <div class="col-md-4">
-                                <h5 id="p_score"></h5>
+                                <h4 id="p_score"></h4>
                             </div>
                         </div>
                     </div>
@@ -776,7 +779,7 @@
                                 <p class="smallp">PSS should share correct, complete and accurate information. PSS should refrain from setting any wrong expectation with the user.</p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="f_1">{{form.compliance_1}}</h5>
+                                <h4 id="f_1">{{form.compliance_1}}</h4>
                             </div>
                         </div>
                         {% if form.compliance_1 == "fatal" %}
@@ -816,7 +819,7 @@
                                 </p>
                             </div>
                             <div class="col-md-4 form-group">
-                                <h5 id="f_2">{{form.compliance_2}}</h5>
+                                <h4 id="f_2">{{form.compliance_2}}</h4>
                             </div>
                         </div>
                     </div>
@@ -866,7 +869,7 @@
                         {% endif %}
                         <div class="row mt-5 noborder">
                             <div class="col-md-6">
-                                <h5>Total Score</h5>
+                                <h4>Total Score</h4>
                             </div>
                             <div class="col-md-6">
                                 <h4 id="tot_score">{{form.overall_score}}</h4>
@@ -904,5 +907,13 @@
     var p_17 = parseInt($('#p_17').html());
     var p_18 = parseInt($('#p_18').html());
     $('#p_score').html(p_1+p_2+p_3+p_4+p_5+p_6+p_7+p_8+p_9+p_10+p_11+p_12+p_13+p_14+p_15+p_16+p_17+p_18);
+    var total = parseInt($('#tot_score').html());
+        if (total < {{campaign.threshold}}) {
+            $('#result').html("Fail");
+            $('#result').css("color","red");
+        } else {
+            $('#result').html("Pass");
+            $('#result').css("color","green");
+        }
 </script>
 {% endblock %}

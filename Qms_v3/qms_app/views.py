@@ -753,8 +753,11 @@ def qaReport(request):
             obj = i.objects.all()
             if obj.count() > 0:
                 if obj[0].page_type == type:
-                    campaign = i.objects.get(id=id)
-                    data = {"form": campaign}
+
+                    audit = i.objects.get(id=id)
+                    campaign = Campaign.objects.get(id=audit.campaign_id)
+
+                    data = {"form": audit, 'campaign':campaign}
                     for j in pages:
                         if type == j:
                             return render(request, "report/" + j + ".html", data)
@@ -1075,8 +1078,9 @@ def agentReport(request):
             obj = i.objects.all()
             if obj.count() > 0:
                 if obj[0].page_type == type:
-                    campaign = i.objects.get(id=id)
-                    data = {"form": campaign, "type": campaign.campaign_type, 'agent_list': agent_list}
+                    audit = i.objects.get(id=id)
+                    campaign = Campaign.objects.get(id=audit.campaign_id)
+                    data = {"form": audit, 'campaign':campaign, "type": audit.campaign_type, 'agent_list': agent_list}
                     for j in pages:
                         if type == j:
                             return render(request, "agent/" + j + ".html", data)
@@ -3559,6 +3563,7 @@ def AddCampaign(request):
         if request.method == 'POST':
             campaign = request.POST['cam_name']
             cam_type = request.POST['cam_type']
+            threshold = request.POST['passing']
 
             if cam_type == "Outbound":
                 page_type = "Outbound"
@@ -3575,6 +3580,7 @@ def AddCampaign(request):
                 e.name = campaign
                 e.type = cam_type
                 e.page_type = page_type
+                e.threshold = threshold
                 e.save()
                 messages.info(request, "Campaign Added Successfully !")
                 return redirect("/add-campaign")

@@ -15,6 +15,10 @@
                                 <div class="col-md-12" align="center">
                                     <h1>Audit Report - {{form.campaign}} ({{form.campaign_type}})</h1>
                                 </div>
+                                <div class="col-md-12" style="display: inline-flex;">
+                                    <h1>Result: </h1>
+                                    <h1 id="result"></h1><span class="pt-4">(Threshold: {{campaign.threshold}}%)</span>
+                                </div>
                             </div>
                         </div>
                         
@@ -655,5 +659,13 @@
     var doc_3 = parseInt($('#doc_3').html());
     var doc_4 = parseInt($('#doc_4').html());
     $('#doc_score').html((doc_1+doc_2+doc_3+doc_4)*4);
+    var total = parseInt($('#tot_score').html());
+        if (total < {{campaign.threshold}}) {
+            $('#result').html("Fail");
+            $('#result').css("color","red");
+        } else {
+            $('#result').html("Pass");
+            $('#result').css("color","green");
+        }
 </script>
 {% endblock %}
