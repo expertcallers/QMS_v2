@@ -5138,9 +5138,10 @@ def fameHouseSubmit(request):
 
         def scoreCalc(pk):
             if pk == 'NA':
+                sum_list.append(0)
                 return pk
             else:
-                sum_list.append(int(pk)*4)
+                sum_list.append(int(pk))
                 return int(pk)
 
         # Customer Response
