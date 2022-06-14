@@ -639,7 +639,7 @@
     var cr_7 = parseInt($('#cr_7').html());
     var cr_8 = parseInt($('#cr_8').html());
     var cr_9 = parseInt($('#cr_9').html());
-    $('#cr_score').html((cr_1+cr_2+cr_3+cr_4+cr_5+cr_6+cr_7+cr_8+cr_9)*4);
+    $('#cr_score').html((cr_1+cr_2+cr_3+cr_4+cr_5+cr_6+cr_7+cr_8+cr_9)*4 + '%');
     var cir_1 = parseInt($('#cir_1').html());
     var cir_2 = parseInt($('#cir_2').html());
     var cir_3 = parseInt($('#cir_3').html());
@@ -647,18 +647,18 @@
     var cir_5 = parseInt($('#cir_5').html());
     var cir_6 = parseInt($('#cir_6').html());
     var cir_7 = parseInt($('#cir_7').html());
-    $('#cir_score').html((cir_1+cir_2+cir_3+cir_4+cir_5+cir_6+cir_7)*4);
+    $('#cir_score').html((cir_1+cir_2+cir_3+cir_4+cir_5+cir_6+cir_7)*4 + '%');
     var ss_1 = parseInt($('#ss_1').html());
     var ss_2 = parseInt($('#ss_2').html());
     var ss_3 = parseInt($('#ss_3').html());
     var ss_4 = parseInt($('#ss_4').html());
     var ss_5 = parseInt($('#ss_5').html());
-    $('#ss_score').html((ss_1+ss_2+ss_3+ss_4+ss_5)*4);
+    $('#ss_score').html((ss_1+ss_2+ss_3+ss_4+ss_5)*4 + '%');
     var doc_1 = parseInt($('#doc_1').html());
     var doc_2 = parseInt($('#doc_2').html());
     var doc_3 = parseInt($('#doc_3').html());
     var doc_4 = parseInt($('#doc_4').html());
-    $('#doc_score').html((doc_1+doc_2+doc_3+doc_4)*4);
+    $('#doc_score').html((doc_1+doc_2+doc_3+doc_4)*4 + '%');
     var total = parseInt($('#tot_score').html());
         if (total < {{campaign.threshold}}) {
             $('#result').html("Fail");
