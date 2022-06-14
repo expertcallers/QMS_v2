@@ -312,6 +312,16 @@
                                     <p>{{form.comments}}</p>
                                 </div>
                             </div>
+                            {% if request.user.profile.emp_desi in mgr_list %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Audit Duration</h4>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>{{form.audit_duration}}</p>
+                                </div>
+                            </div>
+                            {% endif %}
                             {% if form.emp_comments %}
                             <div class="row">
                                 <div class="col-md-6">
