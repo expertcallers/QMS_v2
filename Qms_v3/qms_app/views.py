@@ -5140,7 +5140,7 @@ def fameHouseSubmit(request):
             if pk == 'NA':
                 return pk
             else:
-                sum_list.append(int(pk))
+                sum_list.append(int(pk)*4)
                 return int(pk)
 
         # Customer Response
