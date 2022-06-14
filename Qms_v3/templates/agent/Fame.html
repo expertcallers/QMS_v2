@@ -624,7 +624,7 @@
                                     <h5>Total Score</h5>
                                 </div>
                                 <div class="col-md-6">
-                                    <h4 id="tot_score">{{form.overall_score}}</h4>
+                                    <h4><span id="tot_score">{{form.overall_score}}</span>%</h4>
                                 </div>
                                 {% if request.user.profile.emp_desi in agent_list %}
                                 {% if form.status == False %}
@@ -665,109 +665,139 @@
 
 {% block scripts %}
 <script type="text/javascript">
+    var section1= 0
+    {% if form.cr_1 != 'NA' %}
     var cr_1 = $('#cr_1').html();
+    section1 += 1
+    {% endif %}
+    {% if form.opening_1 != 'NA' %}
     var cr_2 = $('#cr_2').html();
+    section1 += 1
+    {% endif %}
+    {% if form.opening_2 != 'NA' %}
     var cr_3 = $('#cr_3').html();
+    section1 += 1
+    {% endif %}
+    {% if form.comp_1 != 'NA' %}
     var cr_4 = $('#cr_4').html();
+    section1 += 1
+    {% endif %}
+    {% if form.comp_2 != 'NA' %}
     var cr_5 = $('#cr_5').html();
+    section1 += 1
+    {% endif %}
+    {% if form.macro_1 != 'NA' %}
     var cr_6 = $('#cr_6').html();
+    section1 += 1
+    {% endif %}
+    {% if form.macro_2 != 'NA' %}
     var cr_7 = $('#cr_7').html();
+    section1 += 1
+    {% endif %}
+    {% if form.closing_1 != 'NA' %}
     var cr_8 = $('#cr_8').html();
+    section1 += 1
+    {% endif %}
+    {% if form.closing_2 != 'NA' %}
     var cr_9 = $('#cr_9').html();
-    if (cr_1 == 'NA') {
-        cr_1 = 0;
+    section1 += 1
+    {% endif %}
+    if (section1 > 0) {
+        $('#cr_score').html(({% if form.cr_1 != 'NA' %}parseInt(cr_1){% endif %}{% if form.opening_1 != 'NA' %}+parseInt(cr_2){% endif %}{% if form.opening_2 != 'NA' %}+parseInt(cr_3){% endif %}{% if form.comp_1 != 'NA' %}+parseInt(cr_4){% endif %}{% if form.comp_2 != 'NA' %}+parseInt(cr_5){% endif %}{% if form.macro_1 != 'NA' %}+parseInt(cr_6){% endif %}{% if form.macro_2 != 'NA' %}+parseInt(cr_7){% endif %}{% if form.closing_1 != 'NA' %}+parseInt(cr_8){% endif %}{% if form.closing_2 != 'NA' %}+parseInt(cr_9){% endif %})/ section1 * 100 + '%');
+    } else {
+        $('#cr_score').html('100%');
     }
-    if (cr_2 == 'NA') {
-        cr_2 = 0;
-    }
-    if (cr_3 == 'NA') {
-        cr_3 = 0;
-    }
-    if (cr_4 == 'NA') {
-        cr_4 = 0;
-    }
-    if (cr_5 == 'NA') {
-        cr_5 = 0;
-    }
-    if (cr_6 == 'NA') {
-        cr_6 = 0;
-    }
-    if (cr_7 == 'NA') {
-        cr_7 = 0;
-    }
-    if (cr_8 == 'NA') {
-        cr_8 = 0;
-    }
-    if (cr_9 == 'NA') {
-        cr_9 = 0;
-    }
-    $('#cr_score').html((parseInt(cr_1)+parseInt(cr_2)+parseInt(cr_3)+parseInt(cr_4)+parseInt(cr_5)+parseInt(cr_6)+parseInt(cr_7)+parseInt(cr_8)+parseInt(cr_9))*4 + '%');
+    var section2 = 0
+    {% if form.cir_1 != 'NA' %}
     var cir_1 = ($('#cir_1').html());
+    section2 += 1
+    {% endif %}
+    {% if form.cir_2 != 'NA' %}
     var cir_2 = ($('#cir_2').html());
+    section2 += 1
+    {% endif %}
+    {% if form.cir_3 != 'NA' %}
     var cir_3 = ($('#cir_3').html());
+    section2 += 1
+    {% endif %}
+    {% if form.cir_4 != 'NA' %}
     var cir_4 = ($('#cir_4').html());
+    section2 += 1
+    {% endif %}
+    {% if form.cir_5 != 'NA' %}
     var cir_5 = ($('#cir_5').html());
+    section2 += 1
+    {% endif %}
+    {% if form.cir_6 != 'NA' %}
     var cir_6 = ($('#cir_6').html());
+    section2 += 1
+    {% endif %}
+    {% if form.cir_7 != 'NA' %}
     var cir_7 = ($('#cir_7').html());
-    if (cir_1 == 'NA') {
-        cir_1 = 1;
+    section2 += 1
+    {% endif %}
+    if (section2 > 0) {
+        $('#cir_score').html(({% if form.cir_1 != 'NA' %}parseInt(cir_1){% endif %}{% if form.cir_2 != 'NA' %}+parseInt(cir_2){% endif %}{% if form.cir_3 != 'NA' %}+parseInt(cir_3){% endif %}{% if form.cir_4 != 'NA' %}+parseInt(cir_4){% endif %}{% if form.cir_5 != 'NA' %}+parseInt(cir_5){% endif %}{% if form.cir_6 != 'NA' %}+parseInt(cir_6){% endif %}{% if form.cir_7 != 'NA' %}+parseInt(cir_7){% endif %})/section2 * 100 + '%');
+    } else {
+        $('#cir_score').html('100%');
     }
-    if (cir_2 == 'NA') {
-        cir_2 = 0;
-    }
-    if (cir_3 == 'NA') {
-        cir_3 = 0;
-    }
-    if (cir_4 == 'NA') {
-        cir_4 = 0;
-    }
-    if (cir_5 == 'NA') {
-        cir_5 = 0;
-    }
-    if (cir_6 == 'NA') {
-        cir_6 = 0;
-    }
-    if (cir_7 == 'NA') {
-        cir_7 = 0;
-    }
-    $('#cir_score').html((parseInt(cir_1)+parseInt(cir_2)+parseInt(cir_3)+parseInt(cir_4)+parseInt(cir_5)+parseInt(cir_6)+parseInt(cir_7))*4 + '%');
+    var section3 = 0
+    {% if form.et_1 != 'NA' %}
     var ss_1 = ($('#ss_1').html());
+    section3 += 1
+    {% endif %}
+    {% if form.et_2 != 'NA' %}
     var ss_2 = ($('#ss_2').html());
+    section3 += 1
+    {% endif %}
+    {% if form.et_3 != 'NA' %}
     var ss_3 = ($('#ss_3').html());
+    section3 += 1
+    {% endif %}
+    {% if form.et_4 != 'NA' %}
     var ss_4 = ($('#ss_4').html());
+    section3 += 1
+    {% endif %}
+    {% if form.et_5 != 'NA' %}
     var ss_5 = ($('#ss_5').html());
-    if (ss_1 == 'NA') {
-        ss_1 = 0;
+    section3 += 1
+    {% endif %}
+    if (section3 > 0) {
+        $('#ss_score').html(({% if form.et_1 != 'NA' %}parseInt(ss_1){% endif %}{% if form.et_2 != 'NA' %}+parseInt(ss_2){% endif %}{% if form.et_3 != 'NA' %}+parseInt(ss_3){% endif %}{% if form.et_4 != 'NA' %}+parseInt(ss_4){% endif %}{% if form.et_5 != 'NA' %}+parseInt(ss_5){% endif %})/section3 *100 + '%');
+    } else {
+        $('#ss_score').html('100%');
     }
-    if (ss_2 == 'NA') {
-        ss_2 = 0;
-    }
-    if (ss_3 == 'NA') {
-        ss_3 = 0;
-    }
-    if (ss_4 == 'NA') {
-        ss_4 = 0;
-    }
-    if (ss_5 == 'NA') {
-        ss_5 = 0;
-    }
-    $('#ss_score').html((parseInt(ss_1)+parseInt(ss_2)+parseInt(ss_3)+parseInt(ss_4)+parseInt(ss_5))*4 + '%');
+    var section4 = 0
+    {% if form.doc_1 != 'NA' %}
     var doc_1 = ($('#doc_1').html());
+    section4 += 1
+    {% endif %}
+    {% if form.doc_2 != 'NA' %}
     var doc_2 = ($('#doc_2').html());
+    section4 += 1
+    {% endif %}
+    {% if form.doc_3 != 'NA' %}
     var doc_3 = ($('#doc_3').html());
+    section4 += 1
+    {% endif %}
+    {% if form.doc_4 != 'NA' %}
     var doc_4 = ($('#doc_4').html());
-    if (doc_1 == 'NA') {
-        doc_1 = 1;
+    section4 += 1
+    {% endif %}
+    if (section4 > 0) {
+        $('#doc_score').html(({% if form.doc_1 != 'NA' %}parseInt(doc_1){% endif %}{% if form.doc_2 != 'NA' %}+parseInt(doc_2){% endif %}{% if form.doc_3 != 'NA' %}+parseInt(doc_3){% endif %}{% if form.doc_4 != 'NA' %}+parseInt(doc_4){% endif %})/section4 *100 + '%');
+    } else {
+        $('#doc_score').html('100%');
     }
-    if (doc_2 == 'NA') {
-        doc_2 = 1;
-    }
-    if (doc_3 == 'NA') {
-        doc_3 = 1;
-    }
-    if (doc_4 == 'NA') {
-        doc_4 = 1;
-    }
-    $('#doc_score').html((parseInt(doc_1)+parseInt(doc_2)+parseInt(doc_3)+parseInt(doc_4))*4 + '%');
+
+
+    var total = parseInt($('#tot_score').html());
+        if (total < {{campaign.threshold}}) {
+            $('#result').html("Fail");
+            $('#result').css("color","red");
+        } else {
+            $('#result').html("Pass");
+            $('#result').css("color","green");
+        }
 </script>
 {% endblock %}
