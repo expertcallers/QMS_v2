@@ -757,7 +757,7 @@ def qaReport(request):
                     audit = i.objects.get(id=id)
                     campaign = Campaign.objects.get(id=audit.campaign_id)
 
-                    data = {"form": audit, 'campaign':campaign}
+                    data = {"form": audit, 'campaign':campaign, 'mgr_list':mgr_list}
                     for j in pages:
                         if type == j:
                             return render(request, "report/" + j + ".html", data)
@@ -1080,7 +1080,8 @@ def agentReport(request):
                 if obj[0].page_type == type:
                     audit = i.objects.get(id=id)
                     campaign = Campaign.objects.get(id=audit.campaign_id)
-                    data = {"form": audit, 'campaign':campaign, "type": audit.campaign_type, 'agent_list': agent_list}
+                    data = {"form": audit, 'campaign':campaign, "type": audit.campaign_type,
+                            'agent_list': agent_list, 'mgr_list':mgr_list}
                     for j in pages:
                         if type == j:
                             return render(request, "agent/" + j + ".html", data)
