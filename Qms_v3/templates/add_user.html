@@ -20,7 +20,7 @@
                             </div>
                             <div class="col-md-3 mt-2 form-group">
                                 <label for="emp_name">Emp Name</label>
-                                <input type="text" maxlength="10" class="form-control" name="emp_name" id="emp_name" required>
+                                <input type="text" class="form-control" name="emp_name" id="emp_name" required>
                             </div>
                             <div class="col-md-3 mt-2 form-group">
                                 <label for="emp_desi">Emp Designation</label>
@@ -43,7 +43,7 @@
                                 <select name="emp_pro" id="emp_pro" class="form-control select2" required>
                                     <option value="" selected disabled>Please Select</option>
                                     {% for i in campaigns %}
-                                    <option value="{{i.name}}">{{i.name}}</option>
+                                    <option value="{{i.name}}">{{i.name}} ({{i.type}})</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -107,7 +107,5 @@ function changeDesi(e) {
     $("#emp_email").attr("required","");
   }
 }
-
-
 </script>
 {% endblock %}
