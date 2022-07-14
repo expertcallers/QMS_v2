@@ -8,7 +8,7 @@
             <div class="col-md-12">
               <div class="card">
                 <div class="card-header">
-                  <h2>Add User</h2>
+                  <h2>Add New Campaign</h2>
                 </div>
                 <div class="card-body">
                     <form action="" method="POST" enctype="multipart/form-data">
@@ -30,6 +30,18 @@
                                     <option value="Outbound">Outbound</option>
                                     <option value="Inbound">Inbound</option>
                                     <option value="Email / Chat">Email / Chat</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4 mt-2 form-group">
+                                <label for="category">Category</label>
+                                <select name="category" id="category" class="form-control select2" required>
+                                    <option value="" selected disabled>Please Select</option>
+                                    <option value="Domestic">Domestic</option>
+                                    <option value="International">International</option>
                                 </select>
                             </div>
                             <div class="col-md-4"></div>

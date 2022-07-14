@@ -6,8 +6,8 @@ from .models import *
 class OutboundSerializer(serializers.ModelSerializer):
     class Meta:
         model = Outbound
-        fields = ['campaign', 'associate_name', 'emp_id', "zone", "concept", "customer_name", "customer_contact",
-                  "call_date",
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', "zone", "concept", "customer_name",
+                  "customer_contact", "call_date",
                   'call_duration', 'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager',
                   'manager_id', 'am', 'am_id', 'week', 'oc_1', 'oc_2', 'oc_3', 'softskill_1', 'softskill_2',
                   'softskill_3',
@@ -22,7 +22,8 @@ class OutboundSerializer(serializers.ModelSerializer):
 class InboundSerializer(serializers.ModelSerializer):
     class Meta:
         model = Inbound
-        fields = ['campaign', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name', 'customer_contact',
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name',
+                  'customer_contact',
                   'call_date',
                   'call_duration', 'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager',
                   'manager_id',
@@ -38,7 +39,8 @@ class InboundSerializer(serializers.ModelSerializer):
 class EmailChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmailChat
-        fields = ['campaign', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name', 'customer_contact',
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name',
+                  'customer_contact',
                   'call_date',
                   'call_duration', 'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager',
                   'manager_id',
@@ -54,7 +56,8 @@ class EmailChatSerializer(serializers.ModelSerializer):
 class DigitalSwissGoldSerializer(serializers.ModelSerializer):
     class Meta:
         model = DigitalSwissGold
-        fields = ['campaign', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name', 'customer_contact',
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name',
+                  'customer_contact',
                   'call_date',
                   'call_duration', 'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager',
                   'manager_id',
@@ -70,7 +73,8 @@ class DigitalSwissGoldSerializer(serializers.ModelSerializer):
 class FLASerializer(serializers.ModelSerializer):
     class Meta:
         model = FLA
-        fields = ['campaign', 'associate_name', 'emp_id', 'concept', 'transaction_handles_date', 'service', 'order_id',
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', 'concept', 'transaction_handles_date',
+                  'service', 'order_id',
                   'check_list', 'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager',
                   'manager_id',
                   'am', 'am_id', 'week', 'reason_for_failure', 'areas_improvement', 'positives', 'comments', 'status',
@@ -81,7 +85,8 @@ class FLASerializer(serializers.ModelSerializer):
 class BlazingHogSerializer(serializers.ModelSerializer):
     class Meta:
         model = BlazingHog
-        fields = ['campaign', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name', 'email_chat_date',
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name',
+                  'email_chat_date',
                   'query_type',
                   'ticket_id', 'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager',
                   'manager_id',
@@ -97,7 +102,8 @@ class BlazingHogSerializer(serializers.ModelSerializer):
 class NoomPodSerializer(serializers.ModelSerializer):
     class Meta:
         model = NoomPod
-        fields = ['campaign', 'associate_name', 'emp_id', 'concept', 'evaluator_name', 'transaction_handled_date',
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', 'concept', 'evaluator_name',
+                  'transaction_handled_date',
                   'ticket_number',
                   'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager', 'manager_id',
                   'am', 'am_id', 'week', 'ce_1', 'ce_2', 'ce_3', 'ce_4', 'compliance_1', 'compliance_2', 'compliance_3',
@@ -110,7 +116,8 @@ class NoomPodSerializer(serializers.ModelSerializer):
 class NoomEvaSerializer(serializers.ModelSerializer):
     class Meta:
         model = NoomEva
-        fields = ['campaign', 'associate_name', 'emp_id', 'concept', 'evaluator_name', 'transaction_handled_date',
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', 'concept', 'evaluator_name',
+                  'transaction_handled_date',
                   'ticket_number',
                   'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager', 'manager_id',
                   'am', 'am_id', 'week', 'ce_1', 'ce_2', 'ce_3', 'ce_4', 'compliance_1', 'compliance_2', 'compliance_3',
@@ -123,7 +130,8 @@ class NoomEvaSerializer(serializers.ModelSerializer):
 class AbHindalcoSerializer(serializers.ModelSerializer):
     class Meta:
         model = AbHindalco
-        fields = ['campaign', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name', 'customer_contact',
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name',
+                  'customer_contact',
                   'call_date',
                   'call_duration', 'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager',
                   'manager_id',
@@ -139,7 +147,7 @@ class AbHindalcoSerializer(serializers.ModelSerializer):
 class FameHouseSerializer(serializers.ModelSerializer):
     class Meta:
         model = FameHouse
-        fields = ['campaign', 'associate_name', 'emp_id', 'ticket_no', 'ticket_type', 'trans_date',
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', 'ticket_no', 'ticket_type', 'trans_date',
                   'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager', 'manager_id',
                   'am', 'am_id', 'week', 'compliance_1', 'compliance_2', 'compliance_3', 'compliance_4', 'compliance_5',
                   'compliance_6', 'compliance_7', 'compliance_8', 'compliance_9', 'compliance_10', 'compliance_11',
@@ -153,7 +161,8 @@ class FameHouseSerializer(serializers.ModelSerializer):
 class PractoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Practo
-        fields = ['campaign', 'associate_name', 'emp_id', 'zone', 'concept', 'case_no', 'issue_type', 'sub_issue',
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', 'zone', 'concept', 'case_no',
+                  'issue_type', 'sub_issue',
                   'sub_sub_issue', 'chat_date', 'csat', 'product',
                   'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager', 'manager_id',
                   'am', 'am_id', 'week',
@@ -174,7 +183,8 @@ class PractoSerializer(serializers.ModelSerializer):
 class ILMakiageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ILMakiage
-        fields = ['campaign', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name', 'ticket_id',
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name',
+                  'ticket_id',
                   'email_chat_date',
                   'query_type', 'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager',
                   'manager_id',
@@ -188,7 +198,8 @@ class ILMakiageSerializer(serializers.ModelSerializer):
 class WinopolySerializer(serializers.ModelSerializer):
     class Meta:
         model = Winopoly
-        fields = ['campaign', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name', 'customer_contact',
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name',
+                  'customer_contact',
                   'call_date',
                   'call_duration', 'audit_date', 'disposition', 'quality_analyst', 'added_by', 'team_lead',
                   'team_lead_id', 'manager', 'manager_id',
@@ -203,7 +214,8 @@ class WinopolySerializer(serializers.ModelSerializer):
 class NerotelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Nerotel
-        fields = ['campaign', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name', 'customer_contact',
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name',
+                  'customer_contact',
                   'call_date',
                   'call_duration', 'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager',
                   'manager_id',
@@ -218,7 +230,8 @@ class NerotelSerializer(serializers.ModelSerializer):
 class SpoiledChildSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpoiledChild
-        fields = ['campaign', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name', 'email_chat_date',
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', "zone", 'concept', 'customer_name',
+                  'email_chat_date',
                   'query_type',
                   'ticket_id', 'audit_date', 'quality_analyst', 'added_by', 'team_lead', 'team_lead_id', 'manager',
                   'manager_id',
@@ -232,9 +245,9 @@ class SpoiledChildSerializer(serializers.ModelSerializer):
 class AmerisaveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Amerisave
-        fields = ['campaign', 'type', 'associate_name', 'emp_id', 'transfer', 'customer_id', 'lead_source', 'call_date',
-                  'audit_date', 'quality_analyst', 'team_lead', 'team_lead_id', 'manager', 'manager_id', 'am', 'am_id',
-                  'week',
+        fields = ['campaign', 'type', 'category', 'associate_name', 'emp_id', 'transfer', 'customer_id', 'lead_source',
+                  'call_date', 'audit_date', 'quality_analyst', 'team_lead', 'team_lead_id', 'manager', 'manager_id',
+                  'am', 'am_id', 'week',
                   'nce_1', 'nce_2', 'nce_3', 'nce_4',
                   'compliance_1', 'compliance_2', 'compliance_3', 'compliance_4', 'compliance_5', 'compliance_6',
                   'nce_score', 'compliance_score', 'overall_score',

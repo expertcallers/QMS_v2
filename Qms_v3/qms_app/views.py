@@ -3565,13 +3565,17 @@ def AddCampaign(request):
             campaign = request.POST['cam_name']
             cam_type = request.POST['cam_type']
             threshold = request.POST['passing']
+            category = request.POST['category']
 
             if cam_type == "Outbound":
                 page_type = "Outbound"
+                campaign_type = 'Outbound'
             elif cam_type == "Inbound":
                 page_type = "Inbound"
+                campaign_type = 'Inbound'
             else:
                 page_type = "Email"
+                campaign_type = 'Email / Chat'
             try:
                 Campaign.objects.get(name__iexact=campaign, type=cam_type)
                 messages.info(request, "Campaign With Same Name and Type is already Available!")
@@ -3580,8 +3584,10 @@ def AddCampaign(request):
                 e = Campaign()
                 e.name = campaign
                 e.type = cam_type
+                e.campaign_type = campaign_type
                 e.page_type = page_type
                 e.threshold = threshold
+                e.category = category 
                 e.save()
                 messages.info(request, "Campaign Added Successfully !")
                 return redirect("/add-campaign")
@@ -3657,6 +3663,7 @@ def outboundFormSubmit(request):
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
         emp_name = request.POST["empname"]
@@ -3726,6 +3733,7 @@ def outboundFormSubmit(request):
         auditid.save()
 
         e = Outbound()
+        e.category = category
         e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
@@ -3794,6 +3802,7 @@ def inboundFormSubmit(request):
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
         emp_name = request.POST["empname"]
@@ -3866,6 +3875,7 @@ def inboundFormSubmit(request):
         auditid.save()
 
         e = Inbound()
+        e.category = category
         e.audit_id = audit_id
         e.audit_duration = duration
         e.unique_id = unique_id
@@ -3943,6 +3953,7 @@ def emailFormSubmit(request):
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
         emp_name = request.POST["empname"]
@@ -4015,6 +4026,7 @@ def emailFormSubmit(request):
         auditid.save()
 
         e = EmailChat()
+        e.category = category
         e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
@@ -4091,6 +4103,7 @@ def DigitalSwissGoldFormSubmit(request):
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
         emp_name = request.POST["empname"]
@@ -4163,6 +4176,7 @@ def DigitalSwissGoldFormSubmit(request):
         auditid.save()
 
         e = DigitalSwissGold()
+        e.category = category
         e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
@@ -4239,6 +4253,7 @@ def FLAFormSubmit(request):
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
         emp_name = request.POST["empname"]
@@ -4285,6 +4300,7 @@ def FLAFormSubmit(request):
         auditid.save()
 
         e = FLA()
+        e.category = category
         e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
@@ -4336,6 +4352,7 @@ def blazingHogFormSubmit(request):
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
         emp_name = request.POST["empname"]
@@ -4396,6 +4413,7 @@ def blazingHogFormSubmit(request):
         auditid.save()
 
         e = BlazingHog()
+        e.category = category
         e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
@@ -4459,6 +4477,7 @@ def NoomPodFormSubmit(request):
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
         emp_name = request.POST["empname"]
@@ -4518,6 +4537,7 @@ def NoomPodFormSubmit(request):
         auditid.save()
 
         e = NoomPod()
+        e.category = category
         e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
@@ -4579,6 +4599,7 @@ def NoomEvaFormSubmit(request):
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
         emp_name = request.POST["empname"]
@@ -4638,6 +4659,7 @@ def NoomEvaFormSubmit(request):
         auditid.save()
 
         e = NoomEva()
+        e.category = category
         e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
@@ -4698,7 +4720,9 @@ def AbHindalcoFormSubmit(request):
         duration = datetime.datetime.combine(date.today(), end) - datetime.datetime.combine(date.today(), start)
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
+        type = request.POST["type"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
         emp_name = request.POST["empname"]
@@ -4765,6 +4789,8 @@ def AbHindalcoFormSubmit(request):
         auditid.save()
 
         e = AbHindalco()
+        e.category = category
+        e.type = type
         e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
@@ -4829,6 +4855,7 @@ def PractoSubmit(request):
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
 
@@ -4967,6 +4994,7 @@ def PractoSubmit(request):
             return redirect("/dashboard")
         except Practo.DoesNotExist:
             e = Practo()
+            e.category = category
             e.audit_id = audit_id
             e.unique_id = unique_id
             e.audit_duration = duration
@@ -5098,6 +5126,7 @@ def fameHouseSubmit(request):
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
 
@@ -5225,6 +5254,7 @@ def fameHouseSubmit(request):
             return redirect("/dashboard")
         except FameHouse.DoesNotExist:
             e = FameHouse()
+            e.category = category
             e.audit_id = audit_id
             e.unique_id = unique_id
             e.campaign = campaign_name
@@ -5310,6 +5340,7 @@ def ILMakiageSubmit(request):
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
 
@@ -5403,6 +5434,7 @@ def ILMakiageSubmit(request):
             return redirect("/dashboard")
         except ILMakiage.DoesNotExist:
             e = ILMakiage()
+            e.category = category
             e.audit_id = audit_id
             e.unique_id = unique_id
             e.campaign = campaign_name
@@ -5463,6 +5495,7 @@ def WinopolySubmit(request):
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
         emp_name = request.POST["empname"]
@@ -5556,6 +5589,7 @@ def WinopolySubmit(request):
             return redirect("/dashboard")
         except Winopoly.DoesNotExist:
             e = Winopoly()
+            e.category = category
             e.audit_id = audit_id
             e.unique_id = unique_id
             e.audit_duration = duration
@@ -5633,6 +5667,7 @@ def NerotelSubmit(request):
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
         emp_name = request.POST["empname"]
@@ -5707,6 +5742,7 @@ def NerotelSubmit(request):
         auditid.save()
 
         e = Nerotel()
+        e.category = category
         e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
@@ -5779,6 +5815,7 @@ def SpoiledChildSubmit(request):
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
         emp_name = request.POST["empname"]
@@ -5839,6 +5876,7 @@ def SpoiledChildSubmit(request):
         auditid.save()
 
         e = SpoiledChild()
+        e.category = category
         e.audit_id = audit_id
         e.unique_id = unique_id
         e.audit_duration = duration
@@ -5902,6 +5940,7 @@ def AmerisaveSubmit(request):
         duration = str(duration)
         campaign_id = request.POST["campaign_id"]
         campaign = Campaign.objects.get(id=campaign_id)
+        category = campaign.category
         campaign_name = campaign.name
         campaign_type = campaign.type
         emp_name = request.POST["empname"]
@@ -5973,7 +6012,7 @@ def AmerisaveSubmit(request):
             compliance_1=compliance_1, compliance_2=compliance_2, compliance_3=compliance_3,
             compliance_4=compliance_4, compliance_5=compliance_5, compliance_6=compliance_6,
             nce_score=nce_score, compliance_score=compliance_score, type=type, lead_source=lead_source,
-            customer_id=customer_id, transfer=transfer,
+            customer_id=customer_id, transfer=transfer, category=category,
 
         )
         e.save()
