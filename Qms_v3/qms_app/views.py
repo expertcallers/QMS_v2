@@ -36,12 +36,12 @@ pages = ["Outbound", "Inbound", "Email", "Digital", "FLA", "BlazingHog", "Noompo
 agent_list = ["CRO", "Patrolling officer"]
 
 # List of Managers Designations
-mgr_list = ["Manager", 'Team Leader']
+mgr_list = ["Manager", 'Team Leader', 'Assitant Manager']
 
 # List of QA Designations
 qa_list = ["QA"]
 
-qa_mgr_list = []
+qa_mgr_list = ["QA Manager"]
 
 # Calculating first and today's date
 currentMonth = datetime.datetime.now().month
@@ -753,159 +753,354 @@ def ReportTable(request, type):
 # Manager Report Page (qa-reports/<str:type>)
 @login_required
 def ManagerReportTable(request, type):
-    def auditcalculator(type):
-        audits = []
-        if type == 'all':
-            for i in campaign_list:
-                tot_obj = i.objects.all()
-                audits.append(tot_obj)
-        elif type == "fatal":
-            for i in campaign_list:
-                tot_obj = i.objects.filter(fatal=True, audit_date__range=[month_start_date, todays_date])
-                audits.append(tot_obj)
-        elif type == "all-fatal":
-            for i in campaign_list:
-                tot_obj = i.objects.filter(fatal=True)
-                audits.append(tot_obj)
-        elif type == "month":
-            for i in campaign_list:
-                tot_obj = i.objects.filter(audit_date__range=[month_start_date, todays_date])
-                audits.append(tot_obj)
-        elif type == "open":
-            for i in campaign_list:
-                tot_obj = i.objects.filter(status=False)
-                audits.append(tot_obj)
-        elif type == "month-open":
-            for i in campaign_list:
-                tot_obj = i.objects.filter(status=False, audit_date__range=[month_start_date, todays_date])
-                audits.append(tot_obj)
-        elif type == "dispute":
-            for i in campaign_list:
-                tot_obj = i.objects.filter(dispute_status=True)
-                audits.append(tot_obj)
-        elif type == "month-dispute":
-            for i in campaign_list:
-                tot_obj = i.objects.filter(dispute_status=True, audit_date__range=[month_start_date, todays_date])
-                audits.append(tot_obj)
-        elif type == "campaign-range":
-            if request.method == "POST":
-                cname = request.POST.get("campaign")
-                status = request.POST.get("status")
-                start_date = request.POST.get("start_date")
-                end_date = request.POST.get("end_date")
+    logged_emp = request.user.profile
+    def auditcalculator(type, logged_emp_id):
+        if logged_emp_id == None:
+            audits = []
+            if type == 'all':
                 for i in campaign_list:
-                    if start_date:
-                        if cname == "all" and status == "all":
-                            tot_obj = i.objects.filter(audit_date__range=[start_date, end_date])
-                        elif cname == "all" and status == "open":
-                            tot_obj = i.objects.filter(status=False,
-                                                       audit_date__range=[start_date, end_date])
-                        elif cname and status == "open":
-                            cam = Campaign.objects.get(id=cname)
-                            tot_obj = i.objects.filter(campaign_id=cam.id, status=False,
-                                                       audit_date__range=[start_date, end_date])
-                        elif cname == "all" and status == "fatal":
-                            tot_obj = i.objects.filter(fatal=True, audit_date__range=[start_date, end_date])
-                        elif cname and status == "fatal":
-                            cam = Campaign.objects.get(id=cname)
-                            tot_obj = i.objects.filter(campaign_id=cam.id, fatal=True,
-                                                       audit_date__range=[start_date, end_date])
-                        elif cname == "all" and status == "dispute":
-                            tot_obj = i.objects.filter( dispute_status=True, audit_date__range=[start_date, end_date])
-                        elif cname and status == "dispute":
-                            cam = Campaign.objects.get(id=cname)
-                            tot_obj = i.objects.filter(campaign_id=cam.id, dispute_status=True, audit_date__range=[start_date, end_date])
-
-                        else:
-                            cam = Campaign.objects.get(id=cname)
-                            tot_obj = i.objects.filter(campaign_id=cam.id,
-                                                       audit_date__range=[start_date, end_date])
-                        if tot_obj not in audits:
-                            audits.append(tot_obj)
-                    else:
-                        if cname == "all" and status == "all":
-                            tot_obj = i.objects.all()
-                        elif cname == "all" and status == "open":
-                            tot_obj = i.objects.filter(status=False)
-                        elif cname and status == "open":
-                            cam = Campaign.objects.get(id=cname)
-                            tot_obj = i.objects.filter(campaign_id=cam.id, status=False)
-                        elif cname == "all" and status == "fatal":
-                            tot_obj = i.objects.filter(fatal=True)
-                        elif cname and status == "fatal":
-                            cam = Campaign.objects.get(id=cname)
-                            tot_obj = i.objects.filter(campaign_id=cam.id, fatal=True)
-                        elif cname == "all" and status == "dispute":
-                            tot_obj = i.objects.filter(dispute_status=True)
-                        elif cname and status == "dispute":
-                            cam = Campaign.objects.get(id=cname)
-                            tot_obj = i.objects.filter(campaign_id=cam.id, dispute_status=True)
-                        else:
-                            cam = Campaign.objects.get(id=cname)
-                            tot_obj = i.objects.filter(campaign_id=cam.id)
-                        if tot_obj not in audits:
-                            audits.append(tot_obj)
-            else:
-                messages.info(request, "Invalid Request!")
-                return redirect("/agent-dashboard")
-
-        elif type == "emp-range":
-            if request.method == "POST":
-                emp = request.POST.get("emp_id")
-                start_date = request.POST.get("start_date")
-                end_date = request.POST.get("end_date")
-                status = request.POST.get("status")
-
+                    tot_obj = i.objects.all()
+                    audits.append(tot_obj)
+            elif type == "fatal":
                 for i in campaign_list:
-                    if start_date:
-                        if emp == "all" and status == "all":
-                            tot_obj = i.objects.filter(audit_date__range=[start_date, end_date])
-                        elif emp == "all" and status == "open":
-                            tot_obj = i.objects.filter(status=False,
-                                                       audit_date__range=[start_date, end_date])
-                        elif emp and status == "open":
-                            tot_obj = i.objects.filter(emp_id=emp, status=False,
-                                                       audit_date__range=[start_date, end_date])
-                        elif emp == "all" and status == "fatal":
-                            tot_obj = i.objects.filter(fatal=True, audit_date__range=[start_date, end_date])
-                        elif emp and status == "fatal":
-                            tot_obj = i.objects.filter(emp_id=emp, fatal=True, audit_date__range=[start_date, end_date])
-                        elif emp == "all" and status == "dispute":
-                            tot_obj = i.objects.filter(dispute_status=True, audit_date__range=[start_date, end_date])
-                        elif emp and status == "dispute":
-                            tot_obj = i.objects.filter(emp_id=emp, dispute_status=True, audit_date__range=[start_date, end_date])
+                    tot_obj = i.objects.filter(fatal=True, audit_date__range=[month_start_date, todays_date])
+                    audits.append(tot_obj)
+            elif type == "all-fatal":
+                for i in campaign_list:
+                    tot_obj = i.objects.filter(fatal=True)
+                    audits.append(tot_obj)
+            elif type == "month":
+                for i in campaign_list:
+                    tot_obj = i.objects.filter(audit_date__range=[month_start_date, todays_date])
+                    audits.append(tot_obj)
+            elif type == "open":
+                for i in campaign_list:
+                    tot_obj = i.objects.filter(status=False)
+                    audits.append(tot_obj)
+            elif type == "month-open":
+                for i in campaign_list:
+                    tot_obj = i.objects.filter(status=False, audit_date__range=[month_start_date, todays_date])
+                    audits.append(tot_obj)
+            elif type == "dispute":
+                for i in campaign_list:
+                    tot_obj = i.objects.filter(dispute_status=True)
+                    audits.append(tot_obj)
+            elif type == "month-dispute":
+                for i in campaign_list:
+                    tot_obj = i.objects.filter(dispute_status=True, audit_date__range=[month_start_date, todays_date])
+                    audits.append(tot_obj)
+            elif type == "campaign-range":
+                if request.method == "POST":
+                    cname = request.POST.get("campaign")
+                    status = request.POST.get("status")
+                    start_date = request.POST.get("start_date")
+                    end_date = request.POST.get("end_date")
+                    for i in campaign_list:
+                        if start_date:
+                            if cname == "all" and status == "all":
+                                tot_obj = i.objects.filter(audit_date__range=[start_date, end_date])
+                            elif cname == "all" and status == "open":
+                                tot_obj = i.objects.filter(status=False,
+                                                           audit_date__range=[start_date, end_date])
+                            elif cname and status == "open":
+                                cam = Campaign.objects.get(id=cname)
+                                tot_obj = i.objects.filter(campaign_id=cam.id, status=False,
+                                                           audit_date__range=[start_date, end_date])
+                            elif cname == "all" and status == "fatal":
+                                tot_obj = i.objects.filter(fatal=True, audit_date__range=[start_date, end_date])
+                            elif cname and status == "fatal":
+                                cam = Campaign.objects.get(id=cname)
+                                tot_obj = i.objects.filter(campaign_id=cam.id, fatal=True,
+                                                           audit_date__range=[start_date, end_date])
+                            elif cname == "all" and status == "dispute":
+                                tot_obj = i.objects.filter( dispute_status=True, audit_date__range=[start_date, end_date])
+                            elif cname and status == "dispute":
+                                cam = Campaign.objects.get(id=cname)
+                                tot_obj = i.objects.filter(campaign_id=cam.id, dispute_status=True, audit_date__range=[start_date, end_date])
+
+                            else:
+                                cam = Campaign.objects.get(id=cname)
+                                tot_obj = i.objects.filter(campaign_id=cam.id,
+                                                           audit_date__range=[start_date, end_date])
+                            if tot_obj not in audits:
+                                audits.append(tot_obj)
                         else:
-                            tot_obj = i.objects.filter(emp_id=emp,
-                                                       audit_date__range=[start_date, end_date])
-                        audits.append(tot_obj)
-                    else:
-                        if emp == "all" and status == "all":
-                            tot_obj = i.objects.all()
-                        elif emp == "all" and status == "open":
-                            tot_obj = i.objects.filter(status=False)
-                        elif emp and status == "open":
-                            tot_obj = i.objects.filter(emp_id=emp, status=False)
-                        elif emp == "all" and status == "fatal":
-                            tot_obj = i.objects.filter(fatal=True)
-                        elif emp and status == "fatal":
-                            tot_obj = i.objects.filter(emp_id=emp, fatal=True)
-                        elif emp == "all" and status == "dispute":
-                            tot_obj = i.objects.filter(dispute_status=True)
-                        elif emp and status == "dispute":
-                            tot_obj = i.objects.filter(emp_id=emp, dispute_status=True)
+                            if cname == "all" and status == "all":
+                                tot_obj = i.objects.all()
+                            elif cname == "all" and status == "open":
+                                tot_obj = i.objects.filter(status=False)
+                            elif cname and status == "open":
+                                cam = Campaign.objects.get(id=cname)
+                                tot_obj = i.objects.filter(campaign_id=cam.id, status=False)
+                            elif cname == "all" and status == "fatal":
+                                tot_obj = i.objects.filter(fatal=True)
+                            elif cname and status == "fatal":
+                                cam = Campaign.objects.get(id=cname)
+                                tot_obj = i.objects.filter(campaign_id=cam.id, fatal=True)
+                            elif cname == "all" and status == "dispute":
+                                tot_obj = i.objects.filter(dispute_status=True)
+                            elif cname and status == "dispute":
+                                cam = Campaign.objects.get(id=cname)
+                                tot_obj = i.objects.filter(campaign_id=cam.id, dispute_status=True)
+                            else:
+                                cam = Campaign.objects.get(id=cname)
+                                tot_obj = i.objects.filter(campaign_id=cam.id)
+                            if tot_obj not in audits:
+                                audits.append(tot_obj)
+                else:
+                    messages.info(request, "Invalid Request!")
+                    return redirect("/agent-dashboard")
+
+            elif type == "emp-range":
+                if request.method == "POST":
+                    emp = request.POST.get("emp_id")
+                    start_date = request.POST.get("start_date")
+                    end_date = request.POST.get("end_date")
+                    status = request.POST.get("status")
+
+                    for i in campaign_list:
+                        if start_date:
+                            if emp == "all" and status == "all":
+                                tot_obj = i.objects.filter(audit_date__range=[start_date, end_date])
+                            elif emp == "all" and status == "open":
+                                tot_obj = i.objects.filter(status=False,
+                                                           audit_date__range=[start_date, end_date])
+                            elif emp and status == "open":
+                                tot_obj = i.objects.filter(emp_id=emp, status=False,
+                                                           audit_date__range=[start_date, end_date])
+                            elif emp == "all" and status == "fatal":
+                                tot_obj = i.objects.filter(fatal=True, audit_date__range=[start_date, end_date])
+                            elif emp and status == "fatal":
+                                tot_obj = i.objects.filter(emp_id=emp, fatal=True, audit_date__range=[start_date, end_date])
+                            elif emp == "all" and status == "dispute":
+                                tot_obj = i.objects.filter(dispute_status=True, audit_date__range=[start_date, end_date])
+                            elif emp and status == "dispute":
+                                tot_obj = i.objects.filter(emp_id=emp, dispute_status=True, audit_date__range=[start_date, end_date])
+                            else:
+                                tot_obj = i.objects.filter(emp_id=emp,
+                                                           audit_date__range=[start_date, end_date])
+                            audits.append(tot_obj)
                         else:
-                            tot_obj = i.objects.filter(emp_id=emp)
-                        audits.append(tot_obj)
-            else:
-                messages.info(request, "Invalid Request!")
-                return redirect("/agent-dashboard")
+                            if emp == "all" and status == "all":
+                                tot_obj = i.objects.all()
+                            elif emp == "all" and status == "open":
+                                tot_obj = i.objects.filter(status=False)
+                            elif emp and status == "open":
+                                tot_obj = i.objects.filter(emp_id=emp, status=False)
+                            elif emp == "all" and status == "fatal":
+                                tot_obj = i.objects.filter(fatal=True)
+                            elif emp and status == "fatal":
+                                tot_obj = i.objects.filter(emp_id=emp, fatal=True)
+                            elif emp == "all" and status == "dispute":
+                                tot_obj = i.objects.filter(dispute_status=True)
+                            elif emp and status == "dispute":
+                                tot_obj = i.objects.filter(emp_id=emp, dispute_status=True)
+                            else:
+                                tot_obj = i.objects.filter(emp_id=emp)
+                            audits.append(tot_obj)
+                else:
+                    messages.info(request, "Invalid Request!")
+                    return redirect("/agent-dashboard")
+        elif logged_emp_id != None:
+            emps = []
+            all_profiles = Profile.objects.filter(
+                Q(emp_rm1_id=logged_emp_id) | Q(emp_rm2_id=logged_emp_id) | Q(emp_rm3_id=logged_emp_id)
+            )
+            for i in all_profiles:
+                emps.append(i.emp_id)
+            audits = []
+            if type == 'all':
+                for i in campaign_list:
+                    tot_obj = i.objects.filter(emp_id__in=emps)
+                    audits.append(tot_obj)
+            elif type == "fatal":
+                for i in campaign_list:
+                    tot_obj = i.objects.filter(fatal=True,
+                                               audit_date__range=[month_start_date, todays_date],
+                                               emp_id__in=emps)
+                    audits.append(tot_obj)
+            elif type == "all-fatal":
+                for i in campaign_list:
+                    tot_obj = i.objects.filter(fatal=True,
+                                               emp_id__in=emps)
+                    audits.append(tot_obj)
+            elif type == "month":
+                for i in campaign_list:
+                    tot_obj = i.objects.filter(audit_date__range=[month_start_date, todays_date],
+                                               emp_id__in=emps)
+                    audits.append(tot_obj)
+            elif type == "open":
+                for i in campaign_list:
+                    tot_obj = i.objects.filter(status=False,
+                                               emp_id__in=emps)
+                    audits.append(tot_obj)
+            elif type == "month-open":
+                for i in campaign_list:
+                    tot_obj = i.objects.filter(status=False, audit_date__range=[month_start_date, todays_date],
+                                               emp_id__in=emps)
+                    audits.append(tot_obj)
+            elif type == "dispute":
+                for i in campaign_list:
+                    tot_obj = i.objects.filter(dispute_status=True,
+                                               emp_id__in=emps)
+                    audits.append(tot_obj)
+            elif type == "month-dispute":
+                for i in campaign_list:
+                    tot_obj = i.objects.filter(dispute_status=True, audit_date__range=[month_start_date, todays_date],
+                                               emp_id__in=emps)
+                    audits.append(tot_obj)
+            elif type == "campaign-range":
+                if request.method == "POST":
+                    cname = request.POST.get("campaign")
+                    status = request.POST.get("status")
+                    start_date = request.POST.get("start_date")
+                    end_date = request.POST.get("end_date")
+                    for i in campaign_list:
+                        if start_date:
+                            if cname == "all" and status == "all":
+                                tot_obj = i.objects.filter(audit_date__range=[start_date, end_date],
+                                               emp_id__in=emps)
+                            elif cname == "all" and status == "open":
+                                tot_obj = i.objects.filter(status=False,
+                                                           audit_date__range=[start_date, end_date],
+                                                           emp_id__in=emps)
+                            elif cname and status == "open":
+                                cam = Campaign.objects.get(id=cname)
+                                tot_obj = i.objects.filter(campaign_id=cam.id, status=False,
+                                                           audit_date__range=[start_date, end_date],
+                                                            emp_id__in=emps)
+                            elif cname == "all" and status == "fatal":
+                                tot_obj = i.objects.filter(fatal=True, audit_date__range=[start_date, end_date],
+                                               emp_id__in=emps)
+                            elif cname and status == "fatal":
+                                cam = Campaign.objects.get(id=cname)
+                                tot_obj = i.objects.filter(campaign_id=cam.id, fatal=True,
+                                                           audit_date__range=[start_date, end_date],
+                                                            emp_id__in=emps)
+                            elif cname == "all" and status == "dispute":
+                                tot_obj = i.objects.filter(dispute_status=True, audit_date__range=[start_date, end_date],
+                                                                emp_id__in=emps)
+                            elif cname and status == "dispute":
+                                cam = Campaign.objects.get(id=cname)
+                                tot_obj = i.objects.filter(campaign_id=cam.id, dispute_status=True,
+                                                           audit_date__range=[start_date, end_date],
+                                                            emp_id__in=emps)
+
+                            else:
+                                cam = Campaign.objects.get(id=cname)
+                                tot_obj = i.objects.filter(campaign_id=cam.id,
+                                                           audit_date__range=[start_date, end_date],
+                                                            emp_id__in=emps)
+                            if tot_obj not in audits:
+                                audits.append(tot_obj)
+                        else:
+                            if cname == "all" and status == "all":
+                                tot_obj = i.objects.all()
+                            elif cname == "all" and status == "open":
+                                tot_obj = i.objects.filter(status=False,
+                                               emp_id__in=emps)
+                            elif cname and status == "open":
+                                cam = Campaign.objects.get(id=cname)
+                                tot_obj = i.objects.filter(campaign_id=cam.id, status=False,
+                                               emp_id__in=emps)
+                            elif cname == "all" and status == "fatal":
+                                tot_obj = i.objects.filter(fatal=True,
+                                               emp_id__in=emps)
+                            elif cname and status == "fatal":
+                                cam = Campaign.objects.get(id=cname,
+                                               emp_id__in=emps)
+                                tot_obj = i.objects.filter(campaign_id=cam.id, fatal=True,
+                                               emp_id__in=emps)
+                            elif cname == "all" and status == "dispute":
+                                tot_obj = i.objects.filter(dispute_status=True,
+                                               emp_id__in=emps)
+                            elif cname and status == "dispute":
+                                cam = Campaign.objects.get(id=cname)
+                                tot_obj = i.objects.filter(campaign_id=cam.id, dispute_status=True,
+                                               emp_id__in=emps)
+                            else:
+                                cam = Campaign.objects.get(id=cname)
+                                tot_obj = i.objects.filter(campaign_id=cam.id,
+                                               emp_id__in=emps)
+                            if tot_obj not in audits:
+                                audits.append(tot_obj)
+                else:
+                    messages.info(request, "Invalid Request!")
+                    return redirect("/agent-dashboard")
+            elif type == "emp-range":
+                if request.method == "POST":
+                    emp = request.POST.get("emp_id")
+                    start_date = request.POST.get("start_date")
+                    end_date = request.POST.get("end_date")
+                    status = request.POST.get("status")
+
+                    for i in campaign_list:
+                        if start_date:
+                            if emp == "all" and status == "all":
+                                tot_obj = i.objects.filter(audit_date__range=[start_date, end_date],
+                                               emp_id__in=emps)
+                            elif emp == "all" and status == "open":
+                                tot_obj = i.objects.filter(status=False,
+                                                           audit_date__range=[start_date, end_date],
+                                               emp_id__in=emps)
+                            elif emp and status == "open":
+                                tot_obj = i.objects.filter(emp_id=emp, status=False,
+                                                           audit_date__range=[start_date, end_date],
+                                               emp_id__in=emps)
+                            elif emp == "all" and status == "fatal":
+                                tot_obj = i.objects.filter(fatal=True, audit_date__range=[start_date, end_date],
+                                               emp_id__in=emps)
+                            elif emp and status == "fatal":
+                                tot_obj = i.objects.filter(emp_id=emp, fatal=True, audit_date__range=[start_date, end_date],
+                                               emp_id__in=emps)
+                            elif emp == "all" and status == "dispute":
+                                tot_obj = i.objects.filter(dispute_status=True, audit_date__range=[start_date, end_date],
+                                               emp_id__in=emps)
+                            elif emp and status == "dispute":
+                                tot_obj = i.objects.filter(emp_id=emp, dispute_status=True, audit_date__range=[start_date, end_date],
+                                               emp_id__in=emps)
+                            else:
+                                tot_obj = i.objects.filter(emp_id=emp,
+                                                           audit_date__range=[start_date, end_date],
+                                               emp_id__in=emps)
+                            audits.append(tot_obj)
+                        else:
+                            if emp == "all" and status == "all":
+                                tot_obj = i.objects.all()
+                            elif emp == "all" and status == "open":
+                                tot_obj = i.objects.filter(status=False,
+                                               emp_id__in=emps)
+                            elif emp and status == "open":
+                                tot_obj = i.objects.filter(emp_id=emp, status=False,
+                                               emp_id__in=emps)
+                            elif emp == "all" and status == "fatal":
+                                tot_obj = i.objects.filter(fatal=True,
+                                               emp_id__in=emps)
+                            elif emp and status == "fatal":
+                                tot_obj = i.objects.filter(emp_id=emp, fatal=True,
+                                               emp_id__in=emps)
+                            elif emp == "all" and status == "dispute":
+                                tot_obj = i.objects.filter(dispute_status=True,
+                                               emp_id__in=emps)
+                            elif emp and status == "dispute":
+                                tot_obj = i.objects.filter(emp_id=emp, dispute_status=True,
+                                               emp_id__in=emps)
+                            else:
+                                tot_obj = i.objects.filter(emp_id=emp,
+                                               emp_id__in=emps)
+                            audits.append(tot_obj)
+                else:
+                    messages.info(request, "Invalid Request!")
+                    return redirect("/agent-dashboard")
         else:
             messages.info(request, 'Invalid Request. You have been logged out :)')
             return redirect("/logout")
 
         return audits
-
-    audits = auditcalculator(type)
+    if logged_emp.emp_desi in qa_mgr_list:
+        audits = auditcalculator(type, None)
+    else:
+        audits = auditcalculator(type, logged_emp.emp_id)
     data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list": agent_list, "mgr_list": mgr_list}
     return render(request, "qa_reports.html", data)
 
@@ -1997,45 +2192,92 @@ def IndividualAgentReportTable(request, type, emp_id):
                         return redirect("/logout")
 
                 elif emp_desi in qa_list:
-                    if type == 'all':
-                        for i in campaign_list:
-                            tot_obj = i.objects.filter(added_by=emp_id)
-                            audits.append(tot_obj)
-                    elif type == "fatal":
-                        for i in campaign_list:
-                            tot_obj = i.objects.filter(added_by=emp_id, fatal=True,
-                                                       audit_date__range=[month_start_date, todays_date])
-                            audits.append(tot_obj)
-                    elif type == "all-fatal":
-                        for i in campaign_list:
-                            tot_obj = i.objects.filter(added_by=emp_id, fatal=True)
-                            audits.append(tot_obj)
-                    elif type == "month":
-                        for i in campaign_list:
-                            tot_obj = i.objects.filter(added_by=emp_id,
-                                                       audit_date__range=[month_start_date, todays_date])
-                            audits.append(tot_obj)
-                    elif type == "open":
-                        for i in campaign_list:
-                            tot_obj = i.objects.filter(added_by=emp_id, status=False)
-                            audits.append(tot_obj)
-                    elif type == "month-open":
-                        for i in campaign_list:
-                            tot_obj = i.objects.filter(added_by=emp_id, status=False,
-                                                       audit_date__range=[month_start_date, todays_date])
-                            audits.append(tot_obj)
-                    elif type == "dispute":
-                        for i in campaign_list:
-                            tot_obj = i.objects.filter(added_by=emp_id, dispute_status=True)
-                            audits.append(tot_obj)
-                    elif type == "month-dispute":
-                        for i in campaign_list:
-                            tot_obj = i.objects.filter(added_by=emp_id, dispute_status=True,
-                                                       audit_date__range=[month_start_date, todays_date])
-                            audits.append(tot_obj)
+                    if designation in qa_mgr_list:
+                        if type == 'all':
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id)
+                                audits.append(tot_obj)
+                        elif type == "fatal":
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id, fatal=True,
+                                                           audit_date__range=[month_start_date, todays_date])
+                                audits.append(tot_obj)
+                        elif type == "all-fatal":
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id, fatal=True)
+                                audits.append(tot_obj)
+                        elif type == "month":
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id,
+                                                           audit_date__range=[month_start_date, todays_date])
+                                audits.append(tot_obj)
+                        elif type == "open":
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id, status=False)
+                                audits.append(tot_obj)
+                        elif type == "month-open":
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id, status=False,
+                                                           audit_date__range=[month_start_date, todays_date])
+                                audits.append(tot_obj)
+                        elif type == "dispute":
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id, dispute_status=True)
+                                audits.append(tot_obj)
+                        elif type == "month-dispute":
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id, dispute_status=True,
+                                                           audit_date__range=[month_start_date, todays_date])
+                                audits.append(tot_obj)
+                        else:
+                            messages.info(request, 'Invalid Request.')
+                            return redirect("/logout")
                     else:
-                        messages.info(request, 'Invalid Request.')
-                        return redirect("/logout")
+                        emps = []
+                        all_profiles = Profile.objects.filter(
+                            Q(emp_rm1_id=logged_emp_id) | Q(emp_rm2_id=logged_emp_id) | Q(emp_rm3_id=logged_emp_id)
+                        )
+                        for i in all_profiles:
+                            emps.append(i.emp_id)
+                        if type == 'all':
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id, emp_id__in=emps)
+                                audits.append(tot_obj)
+                        elif type == "fatal":
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id, fatal=True,
+                                                           audit_date__range=[month_start_date, todays_date], emp_id__in=emps)
+                                audits.append(tot_obj)
+                        elif type == "all-fatal":
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id, fatal=True, emp_id__in=emps)
+                                audits.append(tot_obj)
+                        elif type == "month":
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id, emp_id__in=emps,
+                                                           audit_date__range=[month_start_date, todays_date])
+                                audits.append(tot_obj)
+                        elif type == "open":
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id, status=False, emp_id__in=emps)
+                                audits.append(tot_obj)
+                        elif type == "month-open":
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id, status=False, emp_id__in=emps,
+                                                           audit_date__range=[month_start_date, todays_date])
+                                audits.append(tot_obj)
+                        elif type == "dispute":
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id, emp_id__in=emps, dispute_status=True)
+                                audits.append(tot_obj)
+                        elif type == "month-dispute":
+                            for i in campaign_list:
+                                tot_obj = i.objects.filter(added_by=emp_id, dispute_status=True, emp_id__in=emps,
+                                                           audit_date__range=[month_start_date, todays_date])
+                                audits.append(tot_obj)
+                        else:
+                            messages.info(request, 'Invalid Request.')
+                            return redirect("/logout")
                 elif emp_desi == "Team Leader":
                     if type == 'all':
                         for i in campaign_list:
