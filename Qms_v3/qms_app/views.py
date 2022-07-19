@@ -1504,9 +1504,17 @@ def IndividualAgentReportTable(request, type, emp_id):
                             tot_obj = i.objects.filter(emp_id=emp_id, fatal=True,
                                                        audit_date__range=[month_start_date, todays_date])
                             audits.append(tot_obj)
+                    elif type == "all-fatal":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(emp_id=emp_id, fatal=True)
+                            audits.append(tot_obj)
                     elif type == "month":
                         for i in campaign_list:
                             tot_obj = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date])
+                            audits.append(tot_obj)
+                    elif type == "month-open":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(emp_id=emp_id, status=False, audit_date__range=[month_start_date, todays_date])
                             audits.append(tot_obj)
                     elif type == "open":
                         for i in campaign_list:
@@ -1516,9 +1524,15 @@ def IndividualAgentReportTable(request, type, emp_id):
                         for i in campaign_list:
                             tot_obj = i.objects.filter(emp_id=emp_id, dispute_status=True)
                             audits.append(tot_obj)
+                    elif type == "month-dispute":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(emp_id=emp_id, dispute_status=True,
+                                                       audit_date__range=[month_start_date, todays_date])
+                            audits.append(tot_obj)
                     else:
                         messages.info(request, 'Invalid Request.')
                         return redirect("/logout")
+
                 elif emp_desi in qa_list:
                     if type == 'all':
                         for i in campaign_list:
@@ -1529,6 +1543,10 @@ def IndividualAgentReportTable(request, type, emp_id):
                             tot_obj = i.objects.filter(added_by=emp_id, fatal=True,
                                                        audit_date__range=[month_start_date, todays_date])
                             audits.append(tot_obj)
+                    elif type == "all-fatal":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(added_by=emp_id, fatal=True)
+                            audits.append(tot_obj)
                     elif type == "month":
                         for i in campaign_list:
                             tot_obj = i.objects.filter(added_by=emp_id,
@@ -1538,9 +1556,19 @@ def IndividualAgentReportTable(request, type, emp_id):
                         for i in campaign_list:
                             tot_obj = i.objects.filter(added_by=emp_id, status=False)
                             audits.append(tot_obj)
+                    elif type == "month-open":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(added_by=emp_id, status=False,
+                                                       audit_date__range=[month_start_date, todays_date])
+                            audits.append(tot_obj)
                     elif type == "dispute":
                         for i in campaign_list:
                             tot_obj = i.objects.filter(added_by=emp_id, dispute_status=True)
+                            audits.append(tot_obj)
+                    elif type == "month-dispute":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(added_by=emp_id, dispute_status=True,
+                                                       audit_date__range=[month_start_date, todays_date])
                             audits.append(tot_obj)
                     else:
                         messages.info(request, 'Invalid Request.')
@@ -1555,6 +1583,10 @@ def IndividualAgentReportTable(request, type, emp_id):
                             tot_obj = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), fatal=True,
                                                        audit_date__range=[month_start_date, todays_date])
                             audits.append(tot_obj)
+                    elif type == "all-fatal":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), fatal=True)
+                            audits.append(tot_obj)
                     elif type == "month":
                         for i in campaign_list:
                             tot_obj = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id),
@@ -1564,9 +1596,19 @@ def IndividualAgentReportTable(request, type, emp_id):
                         for i in campaign_list:
                             tot_obj = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), status=False)
                             audits.append(tot_obj)
+                    elif type == "month-open":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id),
+                                                       status=False, audit_date__range=[month_start_date, todays_date])
+                            audits.append(tot_obj)
                     elif type == "dispute":
                         for i in campaign_list:
                             tot_obj = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), dispute_status=True)
+                            audits.append(tot_obj)
+                    elif type == "month-dispute":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), dispute_status=True,
+                                                       audit_date__range=[month_start_date, todays_date])
                             audits.append(tot_obj)
                     else:
                         messages.info(request, 'Invalid Request.')
@@ -1581,6 +1623,10 @@ def IndividualAgentReportTable(request, type, emp_id):
                             tot_obj = i.objects.filter(am_id=emp_id, fatal=True,
                                                        audit_date__range=[month_start_date, todays_date])
                             audits.append(tot_obj)
+                    elif type == "all-fatal":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(am_id=emp_id, fatal=True)
+                            audits.append(tot_obj)
                     elif type == "month":
                         for i in campaign_list:
                             tot_obj = i.objects.filter(am_id=emp_id, audit_date__range=[month_start_date, todays_date])
@@ -1589,9 +1635,17 @@ def IndividualAgentReportTable(request, type, emp_id):
                         for i in campaign_list:
                             tot_obj = i.objects.filter(am_id=emp_id, status=False)
                             audits.append(tot_obj)
+                    elif type == "month-open":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(am_id=emp_id, status=False, audit_date__range=[month_start_date, todays_date])
+                            audits.append(tot_obj)
                     elif type == "dispute":
                         for i in campaign_list:
                             tot_obj = i.objects.filter(am_id=emp_id, dispute_status=True)
+                            audits.append(tot_obj)
+                    elif type == "month-dispute":
+                        for i in campaign_list:
+                            tot_obj = i.objects.filter(am_id=emp_id, dispute_status=True, audit_date__range=[month_start_date, todays_date])
                             audits.append(tot_obj)
                     else:
                         messages.info(request, 'Invalid Request.')
@@ -1609,6 +1663,10 @@ def IndividualAgentReportTable(request, type, emp_id):
                         tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, fatal=True,
                                                    audit_date__range=[month_start_date, todays_date])
                         audits.append(tot_obj)
+                elif type == "all-fatal":
+                    for i in campaign_list:
+                        tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, fatal=True)
+                        audits.append(tot_obj)
                 elif type == "month":
                     for i in campaign_list:
                         tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id,
@@ -1618,9 +1676,19 @@ def IndividualAgentReportTable(request, type, emp_id):
                     for i in campaign_list:
                         tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, status=False)
                         audits.append(tot_obj)
+                elif type == "month-open":
+                    for i in campaign_list:
+                        tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, status=False,
+                                                   audit_date__range=[month_start_date, todays_date])
+                        audits.append(tot_obj)
                 elif type == "dispute":
                     for i in campaign_list:
                         tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, dispute_status=True)
+                        audits.append(tot_obj)
+                elif type == "month-dispute":
+                    for i in campaign_list:
+                        tot_obj = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, dispute_status=True,
+                                                   audit_date__range=[month_start_date, todays_date])
                         audits.append(tot_obj)
                 else:
                     messages.info(request, 'Invalid Request.')
