@@ -38,7 +38,16 @@
             </div>
           </div>
 
-          <div class="row mb-3">
+          <div class="row mb-3 pt-3 pb-3 border">
+            <div class="col-md-12 pb-2">
+              <h4>Overall:
+                    {% if overall_average ==  "No Audits This Month" %}
+                    {{overall_average}}
+                    {% else %}
+                    {{overall_average|floatformat:2}}%
+                    {% endif %}
+              </h4>
+            </div>
             <div class="col-md-12">
               <div class="card">
                 <div class="card-body">
@@ -50,18 +59,6 @@
                           <br>
                           <h1>{{all_total}}</h1>
                           <a href="/agent-report/all/{{profile.emp_id}}" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
-                            View
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-2 borderpadding">
-                      <div class="bordercard">
-                        <div class="vertical_center">
-                          <h5>This Month's Audits</h5>
-                          <br>
-                          <h1>{{month_all_total}}</h1>
-                          <a href="/agent-report/month/{{profile.emp_id}}" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
                             View
                           </a>
                         </div>
@@ -94,6 +91,95 @@
                     <div class="col-md-2 borderpadding">
                       <div class="bordercard">
                         <div class="vertical_center">
+                          <h5>All Fatal Audits</h5>
+                          <br>
+                          <h1>{{overall_fatal_audit_count}}</h1>
+                          <a href="/agent-report/fatal/{{profile.emp_id}}" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                            View
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 borderpadding">
+                      <div class="bordercard">
+                        <div class="vertical_center">
+                          <h5>All Fatals</h5>
+                          <br>
+                          <h1>{{overall_fatal_count}}</h1>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 borderpadding">
+                      <div class="bordercard">
+                        <div class="vertical_center">
+                          <h5>Coaching Closure</h5>
+                          <br>
+                          {% if coaching_closure ==  "No Audits" %}
+                          <h5>{{coaching_closure}}</h5>
+                          {% else %}
+                          <h1>{{coaching_closure|floatformat:2}}%</h1>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3 pt-3 pb-3 border">
+            <div class="col-md-12 pb-2 pt-2 mb-2 bg-white" >
+              <h2 class="box-title" style="color: #2A3F54; font-weight: 600;">This Month's:
+                    {% if average ==  "No Audits This Month" %}
+                    {{average}}
+                    {% else %}
+                    {{average|floatformat:2}}%
+                    {% endif %}
+              </h2>
+            </div>
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-2 borderpadding">
+                      <div class="bordercard">
+                        <div class="vertical_center">
+                          <h5>This Month's Audits</h5>
+                          <br>
+                          <h1>{{month_all_total}}</h1>
+                          <a href="/agent-report/month/{{profile.emp_id}}" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                            View
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 borderpadding">
+                      <div class="bordercard">
+                        <div class="vertical_center">
+                          <h5>Open Audits</h5>
+                          <br>
+                          <h1>{{month_open_total}}</h1>
+                          <a href="/agent-report/open/{{profile.emp_id}}" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                            View
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 borderpadding">
+                      <div class="bordercard">
+                        <div class="vertical_center">
+                          <h5>Dispute Audits</h5>
+                          <br>
+                          <h1>{{month_dispute_total}}</h1>
+                          <a href="/agent-report/dispute/{{profile.emp_id}}" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                            View
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-2 borderpadding">
+                      <div class="bordercard">
+                        <div class="vertical_center">
                           <h5>This Month's Fatal Audits</h5>
                           <h1>{{fatal_total}}</h1>
                           <a href="/agent-report/fatal/{{profile.emp_id}}" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
@@ -114,25 +200,12 @@
                     <div class="col-md-2 borderpadding">
                       <div class="bordercard">
                         <div class="vertical_center">
-                          <h5>This Month's Score</h5>
-                          <br>
-                          {% if average ==  "No Audits This Month" %}
-                          <h5>{{average}}</h5>
-                          {% else %}
-                          <h1>{{average|floatformat:2}}%</h1>
-                          {% endif %}
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-2 borderpadding">
-                      <div class="bordercard">
-                        <div class="vertical_center">
                           <h5>Coaching Closure</h5>
                           <br>
-                          {% if coaching_closure ==  "No Audits" %}
-                          <h5>{{coaching_closure}}</h5>
+                          {% if month_coaching_closure ==  "No Audits" %}
+                          <h5>{{month_coaching_closure}}</h5>
                           {% else %}
-                          <h1>{{coaching_closure|floatformat:2}}%</h1>
+                          <h1>{{month_coaching_closure|floatformat:2}}%</h1>
                           {% endif %}
                         </div>
                       </div>

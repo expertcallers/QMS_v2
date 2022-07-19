@@ -445,6 +445,10 @@ def ReportTable(request, type):
                 tot_obj = i.objects.filter(added_by=emp_id, fatal=True,
                                            audit_date__range=[month_start_date, todays_date])
                 audits.append(tot_obj)
+        elif type == "all-fatal":
+            for i in campaign_list:
+                tot_obj = i.objects.filter(added_by=emp_id, fatal=True)
+                audits.append(tot_obj)
         elif type == "month":
             for i in campaign_list:
                 tot_obj = i.objects.filter(added_by=emp_id, audit_date__range=[month_start_date, todays_date])
@@ -453,9 +457,17 @@ def ReportTable(request, type):
             for i in campaign_list:
                 tot_obj = i.objects.filter(added_by=emp_id, status=False)
                 audits.append(tot_obj)
+        elif type == "month-open":
+            for i in campaign_list:
+                tot_obj = i.objects.filter(added_by=emp_id, status=False, audit_date__range=[month_start_date, todays_date])
+                audits.append(tot_obj)
         elif type == "dispute":
             for i in campaign_list:
                 tot_obj = i.objects.filter(added_by=emp_id, dispute_status=True)
+                audits.append(tot_obj)
+        elif type == "month-dispute":
+            for i in campaign_list:
+                tot_obj = i.objects.filter(added_by=emp_id, dispute_status=True, audit_date__range=[month_start_date, todays_date])
                 audits.append(tot_obj)
         elif type == "campaign-range":
             if request.method == "POST":
@@ -592,6 +604,10 @@ def ManagerReportTable(request, type):
             for i in campaign_list:
                 tot_obj = i.objects.filter(fatal=True, audit_date__range=[month_start_date, todays_date])
                 audits.append(tot_obj)
+        elif type == "all-fatal":
+            for i in campaign_list:
+                tot_obj = i.objects.filter(fatal=True)
+                audits.append(tot_obj)
         elif type == "month":
             for i in campaign_list:
                 tot_obj = i.objects.filter(audit_date__range=[month_start_date, todays_date])
@@ -600,9 +616,17 @@ def ManagerReportTable(request, type):
             for i in campaign_list:
                 tot_obj = i.objects.filter(status=False)
                 audits.append(tot_obj)
+        elif type == "month-open":
+            for i in campaign_list:
+                tot_obj = i.objects.filter(status=False, audit_date__range=[month_start_date, todays_date])
+                audits.append(tot_obj)
         elif type == "dispute":
             for i in campaign_list:
                 tot_obj = i.objects.filter(dispute_status=True)
+                audits.append(tot_obj)
+        elif type == "month-dispute":
+            for i in campaign_list:
+                tot_obj = i.objects.filter(dispute_status=True, audit_date__range=[month_start_date, todays_date])
                 audits.append(tot_obj)
         elif type == "campaign-range":
             if request.method == "POST":
@@ -726,6 +750,7 @@ def ManagerReportTable(request, type):
     data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list": agent_list, "mgr_list": mgr_list}
     return render(request, "qa_reports.html", data)
 
+
 @login_required
 def MonthReportTable(request, type):
     current_month = []
@@ -833,7 +858,7 @@ def Individual_agent(emp_id, logged_emp_id):
         # overall_score
         all_camapign_score = 0
         for i in campaign_list:
-            score = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date])
+            score = i.objects.filter(emp_id=emp_id)
             for j in score:
                 all_camapign_score += j.overall_score
         if all_total == 0:
@@ -971,7 +996,7 @@ def Individual_agent(emp_id, logged_emp_id):
         # overall_score
         all_camapign_score = 0
         for i in campaign_list:
-            score = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date], added_by=logged_emp_id)
+            score = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id)
             for j in score:
                 all_camapign_score += j.overall_score
         if all_total == 0:
@@ -1111,7 +1136,7 @@ def Individual_tl_am_om(emp_id):
     # overall_score
     all_camapign_score = 0
     for i in campaign_list:
-        score = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), audit_date__range=[month_start_date, todays_date])
+        score = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id))
         for j in score:
             all_camapign_score += j.overall_score
     if all_total == 0:
@@ -1253,7 +1278,7 @@ def Individual_qa(emp_id):
     # overall_score
     all_camapign_score = 0
     for i in campaign_list:
-        score = i.objects.filter(added_by=emp_id, audit_date__range=[month_start_date, todays_date])
+        score = i.objects.filter(added_by=emp_id)
         for j in score:
             all_camapign_score += j.overall_score
     if all_total == 0:
@@ -1411,6 +1436,10 @@ def agentReportTable(request, type):
             for i in campaign_list:
                 tot_obj = i.objects.filter(emp_id=emp_id)
                 audits.append(tot_obj)
+        elif type == "all-fatal":
+            for i in campaign_list:
+                tot_obj = i.objects.filter(emp_id=emp_id, fatal=True)
+                audits.append(tot_obj)
         elif type == "fatal":
             for i in campaign_list:
                 tot_obj = i.objects.filter(emp_id=emp_id, fatal=True, audit_date__range=[month_start_date, todays_date])
@@ -1423,9 +1452,17 @@ def agentReportTable(request, type):
             for i in campaign_list:
                 tot_obj = i.objects.filter(emp_id=emp_id, status=False)
                 audits.append(tot_obj)
+        elif type == "month-open":
+            for i in campaign_list:
+                tot_obj = i.objects.filter(emp_id=emp_id, status=False, audit_date__range=[month_start_date, todays_date])
+                audits.append(tot_obj)
         elif type == "dispute":
             for i in campaign_list:
                 tot_obj = i.objects.filter(emp_id=emp_id, dispute_status=True)
+                audits.append(tot_obj)
+        elif type == "month-dispute":
+            for i in campaign_list:
+                tot_obj = i.objects.filter(emp_id=emp_id, dispute_status=True, audit_date__range=[month_start_date, todays_date])
                 audits.append(tot_obj)
         elif type == "range":
             if request.method == "POST":
@@ -1718,7 +1755,11 @@ def IndividualReportView(request):
             "audit": tot, "month_all_total": month_all_total, "open_total": open_total, "dispute_total": dispute_total,
             "average": score_average, "fatal": fatal_count,
             "all_total": all_total, "fatal_total": fatal_total, "coaching_closure": coaching_closure,
-            "profile": profile, "audits": new_audits, "desig": emp_desi
+            "profile": profile, "audits": new_audits, "desig": emp_desi,
+
+            'overall_average': overall_score_average, 'overall_fatal_count': overall_fatal_count,
+            'overall_fatal_audit_count': overall_fatal_total, 'month_open_total': month_open_total,
+            'month_dispute_total': month_dispute_total, 'month_coaching_closure': month_coaching_closure,
         }
         return render(request, "individual_reports.html", data)
     else:
