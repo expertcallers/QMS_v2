@@ -1,0 +1,205 @@
+{% extends "common_base.html" %}
+{% block main %}
+<style>
+    #report {
+        font-size: 18px;
+    }
+</style>
+        <!-- page content -->
+        <div class="right_col" role="main" id="report">
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-12" align="center">
+                                    <h1>Audit Form - {{campaign.name}} ({{campaign.type}})</h1>
+                                </div>
+                            </div>
+                        </div>
+                        <form action="/outbound-submit" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-3 form-group">
+                                        <label for="empname">Associate Name</label>
+                                        <input type="text" class="form-control" name="empname" id="empname" readonly value="{{profile.emp_name}}">
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="empid">Employee ID</label>
+                                        <input type="number" class="form-control" id="empid" name="empid" readonly value="{{profile.emp_id}}">
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="zone">Zone</label>
+                                        <input type="text" class="form-control" id="zone" name="zone" required>
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <label for="concept">Concept</label>
+                                        <input type="text" class="form-control" id="concept" name="concept" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2 form-group">
+                                        <label for="auditdate">Audit Date</label>
+                                        <input type="text" class="form-control" value="{{today}}" readonly>
+                                        <input type="hidden" value="{{today}}" id="auditdate" name="auditdate">
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="qa">Quality Analyst</label>
+                                        <input type="text" class="form-control" id="qa" name="qa" value="{{request.user.profile.emp_name}}" readonly>
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="tl">Team Lead</label>
+                                        <input type="text" class="form-control" id="tl" name="tl" readonly value="{{profile.emp_rm1}}">
+                                        <input type="hidden" name="tl_id" value="{{profile.emp_rm1_id}}">
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="manager">Manager</label>
+                                        <input type="text" class="form-control" id="manager" name="manager" readonly value="{{profile.emp_rm3}}">
+                                        <input type="hidden" name="manager_id" value="{{profile.emp_rm3_id}}">
+                                    </div>
+                                    <div class="col-md-2 form-group">
+                                        <label for="am">AM</label>
+                                        <input type="text" class="form-control" id="am" name="am" readonly value="{{profile.emp_rm2}}">
+                                        <input type="hidden" name="am_id" value="{{profile.emp_rm2_id}}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mt-2 pt-3 pb-3 border-top">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <div class="col-md-2 form-group">
+                                                <label for="chat1">Chat 1</label>
+                                                <input type="text" id="chat1" name="chat1" class="form-control" required>
+                                            </div>
+                                            <div class="col-md-2 form-group">
+                                                <label for="chat2">Chat 2</label>
+                                                <input type="text" id="chat2" name="chat2" class="form-control" required>
+                                            </div>
+                                            <div class="col-md-2 form-group">
+                                                <label for="chat3">Chat 3</label>
+                                                <input type="text" id="chat3" name="chat3" class="form-control" required>
+                                            </div>
+                                            <div class="col-md-2 form-group">
+                                                <label for="chat4">Chat 4</label>
+                                                <input type="text" id="chat4" name="chat4" class="form-control" required>
+                                            </div>
+                                            <div class="col-md-2 form-group">
+                                                <label for="chat5">Chat 5</label>
+                                                <input type="text" id="chat5" name="chat5" class="form-control" required>
+                                            </div>
+                                            <div class="col-md-2 form-group">
+                                                <label for="chat6">Chat 6</label>
+                                                <input type="text" id="chat6" name="chat6" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h4>Greetings</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 mt-2 pt-3 pb-3 border-top">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <p>Was there a greeting?</p>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="row">
+                                            <div class="col-md-2 form-group">
+                                                <select id="greet_1" name="greet_1" class="form-control changecolor" required>
+                                                    <option value="" selected disabled>-- Please Select --</option>
+                                                    <option value="y">Excelling</option>
+                                                    <option value="p">Partial</option>
+                                                    <option value="n">Failing</option>
+                                                    <option value="na">NA</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2 form-group">
+                                                <label for="chat2">Chat 2</label>
+                                                <input type="text" id="chat2" name="chat2" class="form-control" required>
+                                            </div>
+                                            <div class="col-md-2 form-group">
+                                                <label for="chat3">Chat 3</label>
+                                                <input type="text" id="chat3" name="chat3" class="form-control" required>
+                                            </div>
+                                            <div class="col-md-2 form-group">
+                                                <label for="chat4">Chat 4</label>
+                                                <input type="text" id="chat4" name="chat4" class="form-control" required>
+                                            </div>
+                                            <div class="col-md-2 form-group">
+                                                <label for="chat5">Chat 5</label>
+                                                <input type="text" id="chat5" name="chat5" class="form-control" required>
+                                            </div>
+                                            <div class="col-md-2 form-group">
+                                                <label for="chat6">Chat 6</label>
+                                                <input type="text" id="chat6" name="chat6" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12 mt-5" align="center">
+                                        <button type="button" class="btn btn-lg btn-info" onclick="full_score(this)" data-toggle="modal" data-target="#viewscore">View Score</button>
+                                        <button class="btn btn-lg btn-success" onclick="return confirmm();" type="submit">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" name="campaign_id" value="{{campaign.id}}">
+                            <input type="hidden" name="start_time" value="{{start_time}}">
+                        </form>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="viewscore" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Full Score</h5><p class="mt-2"> (Please select all the options to see score)</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div align="center">
+                    <h1 id="myscore"></h1>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+ {% endblock %}
+
+
+{% block scripts %}
+    <script>
+        $mydate = $("#auditdate").val();
+        $("#auditdate").val(moment($mydate).format("YYYY-MM-DD"));
+    </script>
+<script type="text/javascript">
+    $('.changecolor').change(function() {
+        if (this.value == 'y') {
+            this.css("background-color", "green")
+        }
+    });
+</script>
+            {% endblock %}

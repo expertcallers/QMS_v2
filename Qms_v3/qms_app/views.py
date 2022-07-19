@@ -1,16 +1,23 @@
 import datetime
+import math
+import random
+
+import pytz
+from django.core.mail import EmailMessage
 from datetime import date
 
+import pendulum as pendulum
 import xlwt
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.hashers import make_password
-from django.db.models import Avg
+from django.db.models import Avg, Q
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from drf_multiple_model.views import FlatMultipleModelAPIView
+from django.template.loader import get_template
 
 from .serializers import *
 
@@ -23,7 +30,7 @@ campaign_list = [Outbound, Inbound, EmailChat,
 
 # page names must be equal to campaign page type
 pages = ["Outbound", "Inbound", "Email", "Digital", "FLA", "BlazingHog", "Noompod", "Noomeva", "Abhindalco", "Practo",
-         "Fame", "ILM", "Winopoly", "Nerotel", "Spoiled", 'Amerisave']
+         "Fame", "ILM", "Winopoly", "Nerotel", "Spoiled", 'Amerisave', 'Gubagoo']
 
 # List of Agents Designations
 agent_list = ["CRO", "Patrolling officer"]
@@ -40,6 +47,11 @@ currentYear = datetime.datetime.now().year
 month_start_date = datetime.datetime(currentYear, currentMonth, 1)
 todays_date = date.today()
 
+
+def GetWeek():
+    dt = pendulum.parse(str(date.today()))
+    week = dt.week_of_month
+    return str(week)
 
 def index(request):
     if request.user.is_authenticated:
@@ -62,15 +74,87 @@ def Login(request):
             # user_login
             login(request, user)
             pc = request.user.profile.pc
+            email_verify = request.user.profile.email_verify
             if pc == False:
                 return redirect("/change-password")
+            elif email_verify == False:
+                return redirect("/add-email")
             else:
                 return redirect("/dashboard")
         else:
             messages.info(request, 'Invalid user !')
             return redirect("/logout")
     else:
-        pass
+        return redirect("/")
+
+
+@login_required
+def AddEmail(request):
+    designation = request.user.profile.emp_desi
+    if designation not in agent_list:
+        if request.method == "POST":
+            emp_id = request.POST["emp_id"]
+            email = request.POST["email"]
+            profile = Profile.objects.all()
+            digits = "0123456789"
+            OTP = ""
+            for i in range(6):
+                OTP += digits[math.floor(random.random() * 10)]
+            try:
+                Profile.objects.get(emp_id=emp_id, emp_email=email)
+                messages.info(request,"OTP is sent to your email ID Entered. Please Verify it. Avoid Clicking multiple times.")
+                return redirect("/verify-email")
+            except Profile.DoesNotExist:
+                for i in profile:
+                    if i.emp_email == email:
+                        m = "The Email ID Entered is already in use by someone else. Please use another Email."
+                        messages.info(request, m)
+                        return redirect("/add-email")
+                e = Profile.objects.get(emp_id=emp_id)
+                e.emp_email = email
+                e.email_otp = OTP
+                e.save()
+                subject = "Your OTP for QMS"
+                email_template = "<h1>Your OTP for QMS is <b>" + str(OTP) + "</b></h1><br><br>"
+                to = [email]
+                email_msg = EmailMessage(subject,
+                                         email_template, 'development@expertcallers.com',
+                                         to,
+                                         reply_to=['development@expertcallers.com'])
+                email_msg.content_subtype = 'html'
+                email_msg.send(fail_silently=False)
+                messages.info(request, "OTP is sent to your email ID Entered. Please Verify it. Please Check Spam Folder Too!!")
+                return redirect("/verify-email")
+        else:
+            messages.info(request, 'Please add your Email ID')
+            return render(request, "add-email.html")
+    else:
+        return redirect('/dashboard')
+
+
+@login_required
+def VerifyEmail(request):
+    designation = request.user.profile.emp_desi
+    emp_id = request.user.profile.emp_id
+    e = Profile.objects.get(emp_id=emp_id)
+    if designation not in agent_list:
+        if request.method == "POST":
+            otp = request.POST["otp"]
+            if e.email_otp == otp:
+                e.email_verify = True
+                e.save()
+                messages.info(request, "Email Verified Successfully!")
+                return redirect("/dashboard")
+            else:
+                messages.info(request, "Invalid OTP please enter Correct OTP")
+                return redirect("/verify-email")
+        else:
+            data = {"profile": e}
+            return render(request, "verify-email.html",data)
+    else:
+        return redirect("/dashboard")
+
+
 
 
 @login_required
@@ -90,7 +174,7 @@ def change_password(request):  # Test1
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'settings.html', {'form': form})
+    return render(request, 'settings.html', {'form': form, 'agent': agent_list})
 
 
 @login_required
@@ -112,95 +196,15 @@ def DashboardRedirect(request):
 def managerDashboard(request):
     user = request.user
     if user.profile.emp_desi in mgr_list:
+
         campaigns = Campaign.objects.all()
         profile = Profile.objects.filter(emp_desi__in=agent_list)
         qa_profile = Profile.objects.filter(emp_desi__in=qa_list)
         tl_profile = Profile.objects.filter(emp_desi="Team Leader")
         am_profile = Profile.objects.filter(emp_desi="Assistant Manager")
-        # All Audits
-        all_total_count = []
-        for i in campaign_list:
-            campaign = i.objects.all().count()
-            all_total_count.append(campaign)
-        all_total = 0
-        for i in all_total_count:
-            all_total += i
 
-        # All Audits Current Month
+        all_total, fatal_count, open_total, dispute_total, fatal_total, coaching_closure, new_audits, tot, month_all_total, score_average, overall_score_average, overall_fatal_count, overall_fatal_total, month_open_total, month_dispute_total, month_coaching_closure = Individual_tl_am_om(user.profile.emp_id)
 
-        # All Audits Current Month Count
-        month_all_count = []
-        for i in campaign_list:
-            camapign = i.objects.filter(audit_date__range=[month_start_date, todays_date]).count()
-            month_all_count.append(camapign)
-        month_all_total = 0
-        for i in month_all_count:
-            month_all_total += i
-
-        # Month's Average Score
-        camapign_score = 0
-        for i in campaign_list:
-            score = i.objects.filter(audit_date__range=[month_start_date, todays_date])
-            for j in score:
-                camapign_score += j.overall_score
-        if month_all_total == 0:
-            score_average = "No Audits This Month"
-        else:
-            score_average = (camapign_score) / month_all_total
-
-        # Month's Fatal Count
-        fatal_count = 0
-        for i in campaign_list:
-            fatal = i.objects.filter(audit_date__range=[month_start_date, todays_date])
-            for j in fatal:
-                fatal_count += j.fatal_count
-
-        # Open Audits
-        open_count = []
-        for i in campaign_list:
-            campaign = i.objects.filter(status=False).count()
-            open_count.append(campaign)
-        open_total = 0
-        for i in open_count:
-            open_total += i
-
-        # Dispute Audits
-        dispute_count = []
-        for i in campaign_list:
-            campaign = i.objects.filter(dispute_status=True).count()
-            dispute_count.append(campaign)
-        dispute_total = 0
-        for i in dispute_count:
-            dispute_total += i
-
-        # Fatal Audits
-        fatal_audit_count = []
-        for i in campaign_list:
-            campaign = i.objects.filter(fatal=True,
-                                        audit_date__range=[month_start_date, todays_date]).count()
-            fatal_audit_count.append(campaign)
-        fatal_total = 0
-        for i in fatal_audit_count:
-            fatal_total += i
-
-        # Coaching Closure
-        closure_count_list = []
-        for i in campaign_list:
-            campaign = i.objects.filter(status=True).count()
-            closure_count_list.append(campaign)
-        closure_count = 0
-        for i in closure_count_list:
-            closure_count += i
-
-        if all_total == 0:
-            coaching_closure = "No Audits"
-        else:
-            coaching_closure = (closure_count / all_total) * 100
-
-        tot = []
-        for i in campaign_list:
-            campaign = i.objects.filter(status=False)
-            tot.append(campaign)
 
         audits = []
         for j in profile:
@@ -335,7 +339,12 @@ def managerDashboard(request):
                 "average": score_average, "fatal": fatal_count,
                 "all_total": all_total, "fatal_total": fatal_total, "coaching_closure": coaching_closure,
                 "audits": new_audits, "qa_audits": new_qa_audits, "tl_audits": new_tl_audits,
-                "am_audits": new_am_audits}
+                "am_audits": new_am_audits,
+
+                'overall_average': overall_score_average, 'overall_fatal_count': overall_fatal_count,
+                'overall_fatal_audit_count': overall_fatal_total, 'month_open_total': month_open_total,
+                'month_dispute_total': month_dispute_total, 'month_coaching_closure': month_coaching_closure,
+                }
 
         return render(request, "manager_dashboard.html", data)
     else:
@@ -356,92 +365,10 @@ def qaDashboard(request):
         email_campaign = CampaignMapping.objects.filter(qa_id=emp_id, campaign__type='Email / Chat')
         other_campaign = CampaignMapping.objects.filter(qa_id=emp_id).exclude(
             campaign__type__in=['Outbound', 'Inbound', 'Email / Chat'])
-        profile = Profile.objects.filter(emp_desi__in=agent_list)
+        profile = Profile.objects.filter(emp_desi__in=agent_list, agent_status='Active')
 
-        # All Audits
-        all_total_count = []
-        for i in campaign_list:
-            campaign = i.objects.filter(added_by=emp_id).count()
-            all_total_count.append(campaign)
-        all_total = 0
-        for i in all_total_count:
-            all_total += i
-
-        # All Audits Current Month
-
-        # All Audits Current Month Count
-        month_all_count = []
-        for i in campaign_list:
-            camapign = i.objects.filter(added_by=emp_id, audit_date__range=[month_start_date, todays_date]).count()
-            month_all_count.append(camapign)
-        month_all_total = 0
-        for i in month_all_count:
-            month_all_total += i
-
-        # Month's Average Score
-        camapign_score = 0
-        for i in campaign_list:
-            score = i.objects.filter(added_by=emp_id, audit_date__range=[month_start_date, todays_date])
-            for j in score:
-                camapign_score += j.overall_score
-        if month_all_total == 0:
-            score_average = "No Audits This Month"
-        else:
-            score_average = (camapign_score) / month_all_total
-
-        # Month's Fatal Count
-        fatal_count = 0
-        for i in campaign_list:
-            fatal = i.objects.filter(added_by=emp_id, audit_date__range=[month_start_date, todays_date])
-            for j in fatal:
-                fatal_count += j.fatal_count
-
-        # Open Audits
-        open_count = []
-        for i in campaign_list:
-            campaign = i.objects.filter(added_by=emp_id, status=False).count()
-            open_count.append(campaign)
-        open_total = 0
-        for i in open_count:
-            open_total += i
-
-        # Dispute Audits
-        dispute_count = []
-        for i in campaign_list:
-            campaign = i.objects.filter(added_by=emp_id, dispute_status=True).count()
-            dispute_count.append(campaign)
-        dispute_total = 0
-        for i in dispute_count:
-            dispute_total += i
-
-        # Fatal Audits
-        fatal_audit_count = []
-        for i in campaign_list:
-            campaign = i.objects.filter(added_by=emp_id, fatal=True,
-                                        audit_date__range=[month_start_date, todays_date]).count()
-            fatal_audit_count.append(campaign)
-        fatal_total = 0
-        for i in fatal_audit_count:
-            fatal_total += i
-
-        # Coaching Closure
-        closure_count_list = []
-        for i in campaign_list:
-            campaign = i.objects.filter(added_by=emp_id, status=True).count()
-            closure_count_list.append(campaign)
-        closure_count = 0
-        for i in closure_count_list:
-            closure_count += i
-
-        if all_total == 0:
-            coaching_closure = "No Audits"
-        else:
-            coaching_closure = (closure_count / all_total) * 100
-
-        tot = []
-        for i in campaign_list:
-            campaign = i.objects.filter(added_by=emp_id, status=False)
-            tot.append(campaign)
+        all_total, fatal_count, open_total, dispute_total, fatal_total, coaching_closure, new_audits, tot, month_all_total, score_average, overall_score_average, overall_fatal_count, overall_fatal_total, month_open_total, month_dispute_total, month_coaching_closure = Individual_qa(
+            emp_id)
 
         audits = []
         for j in profile:
@@ -451,9 +378,7 @@ def qaDashboard(request):
             report_all_total_count = []
             for i in campaign_list:
                 campaign = i.objects.filter(added_by=emp_id, emp_id=j.emp_id)
-                campaign_count = i.objects.filter(added_by=emp_id, emp_id=j.emp_id).count()
                 if campaign.count() > 0:
-                    all_total_count.append(campaign_count)
                     score_list = []
                     for k in campaign:
                         score_list.append(k.overall_score)
@@ -472,6 +397,7 @@ def qaDashboard(request):
                 report_all_total += f
             audits.append(d)
 
+
         new_audits = []
         for i in audits:
             if i["score"] != "No Audits":
@@ -482,7 +408,12 @@ def qaDashboard(request):
                 "month_all_total": month_all_total, "open_total": open_total, "dispute_total": dispute_total,
                 "average": score_average, "fatal": fatal_count,
                 "all_total": all_total, "fatal_total": fatal_total, "coaching_closure": coaching_closure,
-                "audits": new_audits}
+                "audits": new_audits,
+
+                'overall_average': overall_score_average, 'overall_fatal_count': overall_fatal_count,
+                'overall_fatal_audit_count': overall_fatal_total, 'month_open_total': month_open_total,
+                'month_dispute_total': month_dispute_total, 'month_coaching_closure': month_coaching_closure,
+                }
 
         return render(request, "qa_dashboard.html", data)
     else:
@@ -539,6 +470,16 @@ def ReportTable(request, type):
                         elif cname == "all" and status == "open":
                             tot_obj = i.objects.filter(added_by=emp_id, status=False,
                                                        audit_date__range=[start_date, end_date])
+                        elif cname == "all" and status == "fatal":
+                            tot_obj = i.objects.filter(added_by=emp_id, fatal=True, audit_date__range=[start_date, end_date])
+                        elif cname and status == "fatal":
+                            cam = Campaign.objects.get(id=cname)
+                            tot_obj = i.objects.filter(added_by=emp_id, campaign_id=cam.id, fatal=True, audit_date__range=[start_date, end_date])
+                        elif cname == "all" and status == "dispute":
+                            tot_obj = i.objects.filter(added_by=emp_id, dispute_status=True, audit_date__range=[start_date, end_date])
+                        elif cname and status == "dispute":
+                            cam = Campaign.objects.get(id=cname)
+                            tot_obj = i.objects.filter(added_by=emp_id, campaign_id=cam.id, dispute_status=True, audit_date__range=[start_date, end_date])
                         elif cname and status == "open":
                             cam = Campaign.objects.get(id=cname)
                             tot_obj = i.objects.filter(added_by=emp_id, campaign_id=cam.id, status=False,
@@ -553,6 +494,16 @@ def ReportTable(request, type):
                             tot_obj = i.objects.filter(added_by=emp_id)
                         elif cname == "all" and status == "open":
                             tot_obj = i.objects.filter(added_by=emp_id, status=False)
+                        elif cname == "all" and status == "fatal":
+                            tot_obj = i.objects.filter(added_by=emp_id, fatal=True)
+                        elif cname and status == "fatal":
+                            cam = Campaign.objects.get(id=cname)
+                            tot_obj = i.objects.filter(added_by=emp_id, campaign_id=cam.id, fatal=True)
+                        elif cname == "all" and status == "dispute":
+                            tot_obj = i.objects.filter(added_by=emp_id, dispute_status=True)
+                        elif cname and status == "dispute":
+                            cam = Campaign.objects.get(id=cname)
+                            tot_obj = i.objects.filter(added_by=emp_id, campaign_id=cam.id, dispute_status=True)
                         elif cname and status == "open":
                             cam = Campaign.objects.get(id=cname)
                             tot_obj = i.objects.filter(added_by=emp_id, campaign_id=cam.id, status=False)
@@ -581,6 +532,17 @@ def ReportTable(request, type):
                         elif emp and status == "open":
                             tot_obj = i.objects.filter(added_by=emp_id, emp_id=emp, status=False,
                                                        audit_date__range=[start_date, end_date])
+                        elif emp == "all" and status == "fatal":
+                            tot_obj = i.objects.filter(added_by=emp_id, fatal=True, audit_date__range=[start_date, end_date])
+                        elif emp and status == "fatal":
+                            tot_obj = i.objects.filter(added_by=emp_id, emp_id=emp, fatal=True, audit_date__range=[start_date, end_date])
+                        elif emp == "all" and status == "dispute":
+                            tot_obj = i.objects.filter(added_by=emp_id, dispute_status=True,
+                                                       audit_date__range=[start_date, end_date])
+                        elif emp and status == "dispute":
+                            tot_obj = i.objects.filter(added_by=emp_id, emp_id=emp, dispute_status=True,
+                                                       audit_date__range=[start_date, end_date])
+
                         else:
                             tot_obj = i.objects.filter(emp_id=emp, added_by=emp_id,
                                                        audit_date__range=[start_date, end_date])
@@ -592,6 +554,14 @@ def ReportTable(request, type):
                             tot_obj = i.objects.filter(added_by=emp_id, status=False)
                         elif emp and status == "open":
                             tot_obj = i.objects.filter(added_by=emp_id, emp_id=emp, status=False)
+                        elif emp == "all" and status == "fatal":
+                            tot_obj = i.objects.filter(added_by=emp_id, fatal=True)
+                        elif emp and status == "fatal":
+                            tot_obj = i.objects.filter(added_by=emp_id, emp_id=emp, fatal=True)
+                        elif emp == "all" and status == "dispute":
+                            tot_obj = i.objects.filter(added_by=emp_id, dispute_status=True)
+                        elif emp and status == "dispute":
+                            tot_obj = i.objects.filter(added_by=emp_id, emp_id=emp, dispute_status=True)
                         else:
                             tot_obj = i.objects.filter(emp_id=emp, added_by=emp_id)
                         audits.append(tot_obj)
@@ -651,6 +621,18 @@ def ManagerReportTable(request, type):
                             cam = Campaign.objects.get(id=cname)
                             tot_obj = i.objects.filter(campaign_id=cam.id, status=False,
                                                        audit_date__range=[start_date, end_date])
+                        elif cname == "all" and status == "fatal":
+                            tot_obj = i.objects.filter(fatal=True, audit_date__range=[start_date, end_date])
+                        elif cname and status == "fatal":
+                            cam = Campaign.objects.get(id=cname)
+                            tot_obj = i.objects.filter(campaign_id=cam.id, fatal=True,
+                                                       audit_date__range=[start_date, end_date])
+                        elif cname == "all" and status == "dispute":
+                            tot_obj = i.objects.filter( dispute_status=True, audit_date__range=[start_date, end_date])
+                        elif cname and status == "dispute":
+                            cam = Campaign.objects.get(id=cname)
+                            tot_obj = i.objects.filter(campaign_id=cam.id, dispute_status=True, audit_date__range=[start_date, end_date])
+
                         else:
                             cam = Campaign.objects.get(id=cname)
                             tot_obj = i.objects.filter(campaign_id=cam.id,
@@ -665,6 +647,16 @@ def ManagerReportTable(request, type):
                         elif cname and status == "open":
                             cam = Campaign.objects.get(id=cname)
                             tot_obj = i.objects.filter(campaign_id=cam.id, status=False)
+                        elif cname == "all" and status == "fatal":
+                            tot_obj = i.objects.filter(fatal=True)
+                        elif cname and status == "fatal":
+                            cam = Campaign.objects.get(id=cname)
+                            tot_obj = i.objects.filter(campaign_id=cam.id, fatal=True)
+                        elif cname == "all" and status == "dispute":
+                            tot_obj = i.objects.filter(dispute_status=True)
+                        elif cname and status == "dispute":
+                            cam = Campaign.objects.get(id=cname)
+                            tot_obj = i.objects.filter(campaign_id=cam.id, dispute_status=True)
                         else:
                             cam = Campaign.objects.get(id=cname)
                             tot_obj = i.objects.filter(campaign_id=cam.id)
@@ -691,6 +683,14 @@ def ManagerReportTable(request, type):
                         elif emp and status == "open":
                             tot_obj = i.objects.filter(emp_id=emp, status=False,
                                                        audit_date__range=[start_date, end_date])
+                        elif emp == "all" and status == "fatal":
+                            tot_obj = i.objects.filter(fatal=True, audit_date__range=[start_date, end_date])
+                        elif emp and status == "fatal":
+                            tot_obj = i.objects.filter(emp_id=emp, fatal=True, audit_date__range=[start_date, end_date])
+                        elif emp == "all" and status == "dispute":
+                            tot_obj = i.objects.filter(dispute_status=True, audit_date__range=[start_date, end_date])
+                        elif emp and status == "dispute":
+                            tot_obj = i.objects.filter(emp_id=emp, dispute_status=True, audit_date__range=[start_date, end_date])
                         else:
                             tot_obj = i.objects.filter(emp_id=emp,
                                                        audit_date__range=[start_date, end_date])
@@ -702,6 +702,14 @@ def ManagerReportTable(request, type):
                             tot_obj = i.objects.filter(status=False)
                         elif emp and status == "open":
                             tot_obj = i.objects.filter(emp_id=emp, status=False)
+                        elif emp == "all" and status == "fatal":
+                            tot_obj = i.objects.filter(fatal=True)
+                        elif emp and status == "fatal":
+                            tot_obj = i.objects.filter(emp_id=emp, fatal=True)
+                        elif emp == "all" and status == "dispute":
+                            tot_obj = i.objects.filter(dispute_status=True)
+                        elif emp and status == "dispute":
+                            tot_obj = i.objects.filter(emp_id=emp, dispute_status=True)
                         else:
                             tot_obj = i.objects.filter(emp_id=emp)
                         audits.append(tot_obj)
@@ -716,6 +724,25 @@ def ManagerReportTable(request, type):
 
     audits = auditcalculator(type)
     data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list": agent_list, "mgr_list": mgr_list}
+    return render(request, "qa_reports.html", data)
+
+@login_required
+def MonthReportTable(request, type):
+    current_month = []
+    emp_id = request.user.profile.emp_id
+    if type == 'current-open':
+        for i in campaign_list:
+            audits = i.objects.filter(added_by=emp_id, status=False, audit_date__range=[month_start_date, todays_date])
+            current_month.append(audits)
+    elif type == 'current-dispute':
+        for i in campaign_list:
+            audits = i.objects.filter(added_by=emp_id, dispute_status=True, audit_date__range=[month_start_date, todays_date])
+            current_month.append(audits)
+    elif type == 'all-fatal':
+        for i in campaign_list:
+            audits = i.objects.filter(added_by=emp_id, fatal=True)
+            current_month.append(audits)
+    data = {"audit": current_month, "type": type}
     return render(request, "qa_reports.html", data)
 
 
@@ -748,7 +775,6 @@ def qaReport(request):
     if request.method == "POST":
         id = request.POST["id"]
         type = request.POST["type"]
-
         for i in campaign_list:
             obj = i.objects.all()
             if obj.count() > 0:
@@ -765,41 +791,347 @@ def qaReport(request):
                     pass
             else:
                 pass
-
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
         return redirect("/logout")
 
 
-# Agent Dashbaoard (agent-dashboard)
 @login_required
-def agentDashbaoard(request):
-    emp_id = request.user.profile.emp_id
+def EmailReport(request, id, type):
+    desi = request.user.profile.emp_desi
+    if desi in mgr_list or desi in qa_list:
+        for i in campaign_list:
+            obj = i.objects.all()
+            if obj.count() > 0:
+                if obj[0].page_type == type:
 
+                    audit = i.objects.get(id=id)
+                    campaign = Campaign.objects.get(id=audit.campaign_id)
+
+                    data = {"form": audit, 'campaign': campaign, 'mgr_list': mgr_list}
+                    for j in pages:
+                        if type == j:
+                            return render(request, "report/" + j + ".html", data)
+                else:
+                    pass
+            else:
+                pass
+    else:
+        messages.warning(request, 'Invalid request. You have been Logged out!')
+        return redirect("/logout")
+
+
+def Individual_agent(emp_id, logged_emp_id):
+    if logged_emp_id == None:
+        # All Audits
+        all_total_count = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id).count()
+            all_total_count.append(campaign)
+        all_total = sum(all_total_count)
+
+        # overall_score
+        all_camapign_score = 0
+        for i in campaign_list:
+            score = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date])
+            for j in score:
+                all_camapign_score += j.overall_score
+        if all_total == 0:
+            overall_score_average = "No Audits"
+        else:
+            overall_score_average = (all_camapign_score) / all_total
+
+        # All Audits Current Month
+
+        # All Audits Current Month Count
+        month_all_count = []
+        for i in campaign_list:
+            camapign = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date]).count()
+            month_all_count.append(camapign)
+        month_all_total = sum(month_all_count)
+
+        # Month's Average Score
+        camapign_score = 0
+        for i in campaign_list:
+            score = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date])
+            for j in score:
+                camapign_score += j.overall_score
+        if month_all_total == 0:
+            score_average = "No Audits This Month"
+        else:
+            score_average = (camapign_score) / month_all_total
+
+        # Month's Fatal Count
+        fatal_count = 0
+        for i in campaign_list:
+            fatal = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date])
+            for j in fatal:
+                fatal_count += j.fatal_count
+
+        # Overall Fatal count
+        overall_fatal_count = 0
+        for i in campaign_list:
+            fatal = i.objects.filter(emp_id=emp_id)
+            for j in fatal:
+                overall_fatal_count += j.fatal_count
+
+        # Open Audits
+        open_count = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, status=False).count()
+            open_count.append(campaign)
+        open_total = sum(open_count)
+
+        # This Month Open Audits
+        month_open_count = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, status=False,
+                                        audit_date__range=[month_start_date, todays_date]).count()
+            month_open_count.append(campaign)
+        month_open_total = sum(month_open_count)
+
+        # Dispute Audits
+        dispute_count = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, dispute_status=True).count()
+            dispute_count.append(campaign)
+        dispute_total = sum(dispute_count)
+
+        # This Month Dispute Audits
+        month_dispute_count = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, dispute_status=True,
+                                        audit_date__range=[month_start_date, todays_date]).count()
+            month_dispute_count.append(campaign)
+        month_dispute_total = sum(month_dispute_count)
+
+        # Fatal Audits
+        fatal_audit_count = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, fatal=True,
+                                        audit_date__range=[month_start_date, todays_date]).count()
+            fatal_audit_count.append(campaign)
+        fatal_total = sum(fatal_audit_count)
+
+        # Overall Fatal Audits
+        overall_fatal_audit_count = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, fatal=True).count()
+            overall_fatal_audit_count.append(campaign)
+        overall_fatal_total = sum(overall_fatal_audit_count)
+
+        # Coaching Closure
+        closure_count_list = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, status=True).count()
+            closure_count_list.append(campaign)
+        closure_count = sum(closure_count_list)
+
+        if all_total == 0:
+            coaching_closure = "No Audits"
+        else:
+            coaching_closure = (closure_count / all_total) * 100
+
+        # month Coaching Closure
+        month_closure_count_list = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, status=True,
+                                        audit_date__range=[month_start_date, todays_date]).count()
+            month_closure_count_list.append(campaign)
+        month_closure_count = sum(month_closure_count_list)
+
+        if month_all_total == 0:
+            month_coaching_closure = "No Audits"
+        else:
+            month_coaching_closure = (month_closure_count / month_all_total) * 100
+
+        tot = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, status=False)
+            tot.append(campaign)
+
+        audits = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id).values("campaign").annotate(
+                score=Avg('overall_score'))
+            audits.append(campaign)
+        new_audits = []
+        for i in audits:
+            if i:
+                new_audits.append(i)
+
+    else:
+        # All Audits
+        all_total_count = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id).count()
+            all_total_count.append(campaign)
+        all_total = sum(all_total_count)
+
+        # overall_score
+        all_camapign_score = 0
+        for i in campaign_list:
+            score = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date], added_by=logged_emp_id)
+            for j in score:
+                all_camapign_score += j.overall_score
+        if all_total == 0:
+            overall_score_average = "No Audits"
+        else:
+            overall_score_average = (all_camapign_score) / all_total
+
+        # All Audits Current Month
+
+        # All Audits Current Month Count
+        month_all_count = []
+        for i in campaign_list:
+            camapign = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date], added_by=logged_emp_id).count()
+            month_all_count.append(camapign)
+        month_all_total = sum(month_all_count)
+
+        # Month's Average Score
+        camapign_score = 0
+        for i in campaign_list:
+            score = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date], added_by=logged_emp_id)
+            for j in score:
+                camapign_score += j.overall_score
+        if month_all_total == 0:
+            score_average = "No Audits This Month"
+        else:
+            score_average = (camapign_score) / month_all_total
+
+        # Month's Fatal Count
+        fatal_count = 0
+        for i in campaign_list:
+            fatal = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date], added_by=logged_emp_id)
+            for j in fatal:
+                fatal_count += j.fatal_count
+
+        # Overall Fatal count
+        overall_fatal_count = 0
+        for i in campaign_list:
+            fatal = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id)
+            for j in fatal:
+                overall_fatal_count += j.fatal_count
+
+        # Open Audits
+        open_count = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, status=False, added_by=logged_emp_id).count()
+            open_count.append(campaign)
+        open_total = sum(open_count)
+
+        # This Month Open Audits
+        month_open_count = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, status=False,
+                                        audit_date__range=[month_start_date, todays_date], added_by=logged_emp_id).count()
+            month_open_count.append(campaign)
+        month_open_total = sum(month_open_count)
+
+        # Dispute Audits
+        dispute_count = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, dispute_status=True, added_by=logged_emp_id).count()
+            dispute_count.append(campaign)
+        dispute_total = sum(dispute_count)
+
+        # This Month Dispute Audits
+        month_dispute_count = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, dispute_status=True, added_by=logged_emp_id,
+                                        audit_date__range=[month_start_date, todays_date]).count()
+            month_dispute_count.append(campaign)
+        month_dispute_total = sum(month_dispute_count)
+
+        # Fatal Audits
+        fatal_audit_count = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, fatal=True, added_by=logged_emp_id,
+                                        audit_date__range=[month_start_date, todays_date]).count()
+            fatal_audit_count.append(campaign)
+        fatal_total = sum(fatal_audit_count)
+
+        # Overall Fatal Audits
+        overall_fatal_audit_count = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, fatal=True).count()
+            overall_fatal_audit_count.append(campaign)
+        overall_fatal_total = sum(overall_fatal_audit_count)
+
+        # Coaching Closure
+        closure_count_list = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, status=True).count()
+            closure_count_list.append(campaign)
+        closure_count = sum(closure_count_list)
+
+        if all_total == 0:
+            coaching_closure = "No Audits"
+        else:
+            coaching_closure = (closure_count / all_total) * 100
+
+        # month Coaching Closure
+        month_closure_count_list = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, status=True,
+                                        audit_date__range=[month_start_date, todays_date]).count()
+            month_closure_count_list.append(campaign)
+        month_closure_count = sum(month_closure_count_list)
+
+        if month_all_total == 0:
+            month_coaching_closure = "No Audits"
+        else:
+            month_coaching_closure = (month_closure_count / month_all_total) * 100
+
+        tot = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, status=False)
+            tot.append(campaign)
+
+        audits = []
+        for i in campaign_list:
+            campaign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id).values("campaign").annotate(
+                score=Avg('overall_score'))
+            audits.append(campaign)
+        new_audits = []
+        for i in audits:
+            if i:
+                new_audits.append(i)
+
+    return all_total, fatal_count, open_total, dispute_total, fatal_total, coaching_closure, new_audits, tot, month_all_total, score_average, overall_score_average, overall_fatal_count, overall_fatal_total, month_open_total, month_dispute_total, month_coaching_closure
+
+def Individual_tl_am_om(emp_id):
     # All Audits
     all_total_count = []
     for i in campaign_list:
-        campaign = i.objects.filter(emp_id=emp_id).count()
+        campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id)).count()
         all_total_count.append(campaign)
-    all_total = 0
-    for i in all_total_count:
-        all_total += i
+    all_total = sum(all_total_count)
+
+    # overall_score
+    all_camapign_score = 0
+    for i in campaign_list:
+        score = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), audit_date__range=[month_start_date, todays_date])
+        for j in score:
+            all_camapign_score += j.overall_score
+    if all_total == 0:
+        overall_score_average = "No Audits"
+    else:
+        overall_score_average = (all_camapign_score) / all_total
 
     # All Audits Current Month
 
     # All Audits Current Month Count
     month_all_count = []
     for i in campaign_list:
-        camapign = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date]).count()
+        camapign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), audit_date__range=[month_start_date, todays_date]).count()
         month_all_count.append(camapign)
-    month_all_total = 0
-    for i in month_all_count:
-        month_all_total += i
+    month_all_total = sum(month_all_count)
 
     # Month's Average Score
     camapign_score = 0
     for i in campaign_list:
-        score = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date])
+        score = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), audit_date__range=[month_start_date, todays_date])
         for j in score:
             camapign_score += j.overall_score
     if month_all_total == 0:
@@ -810,61 +1142,260 @@ def agentDashbaoard(request):
     # Month's Fatal Count
     fatal_count = 0
     for i in campaign_list:
-        fatal = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date])
+        fatal = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), audit_date__range=[month_start_date, todays_date])
         for j in fatal:
             fatal_count += j.fatal_count
+
+    # Overall Fatal count
+    overall_fatal_count = 0
+    for i in campaign_list:
+        fatal = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id))
+        for j in fatal:
+            overall_fatal_count += j.fatal_count
 
     # Open Audits
     open_count = []
     for i in campaign_list:
-        campaign = i.objects.filter(emp_id=emp_id, status=False).count()
+        campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), status=False).count()
         open_count.append(campaign)
-    open_total = 0
-    for i in open_count:
-        open_total += i
+    open_total = sum(open_count)
+
+    # This Month Open Audits
+    month_open_count = []
+    for i in campaign_list:
+        campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), status=False,
+                                    audit_date__range=[month_start_date, todays_date]).count()
+        month_open_count.append(campaign)
+    month_open_total = sum(month_open_count)
 
     # Dispute Audits
     dispute_count = []
     for i in campaign_list:
-        campaign = i.objects.filter(emp_id=emp_id, dispute_status=True).count()
+        campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), dispute_status=True).count()
         dispute_count.append(campaign)
-    dispute_total = 0
-    for i in dispute_count:
-        dispute_total += i
+    dispute_total = sum(dispute_count)
+
+    # This Month Dispute Audits
+    month_dispute_count = []
+    for i in campaign_list:
+        campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), dispute_status=True,
+                                    audit_date__range=[month_start_date, todays_date]).count()
+        month_dispute_count.append(campaign)
+    month_dispute_total = sum(month_dispute_count)
 
     # Fatal Audits
     fatal_audit_count = []
     for i in campaign_list:
-        campaign = i.objects.filter(emp_id=emp_id, fatal=True,
+        campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), fatal=True,
                                     audit_date__range=[month_start_date, todays_date]).count()
         fatal_audit_count.append(campaign)
-    fatal_total = 0
-    for i in fatal_audit_count:
-        fatal_total += i
+    fatal_total = sum(fatal_audit_count)
+
+    # Overall Fatal Audits
+    overall_fatal_audit_count = []
+    for i in campaign_list:
+        campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), fatal=True).count()
+        overall_fatal_audit_count.append(campaign)
+    overall_fatal_total = sum(overall_fatal_audit_count)
 
     # Coaching Closure
     closure_count_list = []
     for i in campaign_list:
-        campaign = i.objects.filter(emp_id=emp_id, status=True).count()
+        campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), status=True).count()
         closure_count_list.append(campaign)
-    closure_count = 0
-    for i in closure_count_list:
-        closure_count += i
+    closure_count = sum(closure_count_list)
 
     if all_total == 0:
         coaching_closure = "No Audits"
     else:
         coaching_closure = (closure_count / all_total) * 100
 
+    # month Coaching Closure
+    month_closure_count_list = []
+    for i in campaign_list:
+        campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), status=True,
+                                    audit_date__range=[month_start_date, todays_date]).count()
+        month_closure_count_list.append(campaign)
+    month_closure_count = sum(month_closure_count_list)
+
+    if month_all_total == 0:
+        month_coaching_closure = "No Audits"
+    else:
+        month_coaching_closure = (month_closure_count / month_all_total) * 100
+
     tot = []
     for i in campaign_list:
-        campaign = i.objects.filter(emp_id=emp_id, status=False)
+        campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), status=False)
         tot.append(campaign)
 
+    audits = []
+    for i in campaign_list:
+        campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id)).values("campaign").annotate(
+            score=Avg('overall_score'))
+        audits.append(campaign)
+    new_audits = []
+    for i in audits:
+        if i:
+            new_audits.append(i)
+
+    return all_total, fatal_count, open_total, dispute_total, fatal_total, coaching_closure, new_audits, tot, month_all_total, score_average, overall_score_average, overall_fatal_count, overall_fatal_total, month_open_total, month_dispute_total, month_coaching_closure
+
+
+def Individual_qa(emp_id):
+
+    # All Audits
+    all_total_count = []
+    for i in campaign_list:
+        campaign = i.objects.filter(added_by=emp_id).count()
+        all_total_count.append(campaign)
+    all_total = sum(all_total_count)
+
+    # overall_score
+    all_camapign_score = 0
+    for i in campaign_list:
+        score = i.objects.filter(added_by=emp_id, audit_date__range=[month_start_date, todays_date])
+        for j in score:
+            all_camapign_score += j.overall_score
+    if all_total == 0:
+        overall_score_average = "No Audits"
+    else:
+        overall_score_average = (all_camapign_score) / all_total
+
+    # All Audits Current Month
+
+    # All Audits Current Month Count
+    month_all_count = []
+    for i in campaign_list:
+        camapign = i.objects.filter(added_by=emp_id, audit_date__range=[month_start_date, todays_date]).count()
+        month_all_count.append(camapign)
+    month_all_total = sum(month_all_count)
+
+    # Month's Average Score
+    camapign_score = 0
+    for i in campaign_list:
+        score = i.objects.filter(added_by=emp_id, audit_date__range=[month_start_date, todays_date])
+        for j in score:
+            camapign_score += j.overall_score
+    if month_all_total == 0:
+        score_average = "No Audits This Month"
+    else:
+        score_average = (camapign_score) / month_all_total
+
+    # Month's Fatal Count
+    fatal_count = 0
+    for i in campaign_list:
+        fatal = i.objects.filter(added_by=emp_id, audit_date__range=[month_start_date, todays_date])
+        for j in fatal:
+            fatal_count += j.fatal_count
+
+    # Overall Fatal count
+    overall_fatal_count = 0
+    for i in campaign_list:
+        fatal = i.objects.filter(added_by=emp_id)
+        for j in fatal:
+            overall_fatal_count += j.fatal_count
+
+    # Open Audits
+    open_count = []
+    for i in campaign_list:
+        campaign = i.objects.filter(added_by=emp_id, status=False).count()
+        open_count.append(campaign)
+    open_total = sum(open_count)
+
+    # This Month Open Audits
+    month_open_count = []
+    for i in campaign_list:
+        campaign = i.objects.filter(added_by=emp_id, status=False,
+                                    audit_date__range=[month_start_date, todays_date]).count()
+        month_open_count.append(campaign)
+    month_open_total = sum(month_open_count)
+
+    # Dispute Audits
+    dispute_count = []
+    for i in campaign_list:
+        campaign = i.objects.filter(added_by=emp_id, dispute_status=True).count()
+        dispute_count.append(campaign)
+    dispute_total = sum(dispute_count)
+
+    # This Month Dispute Audits
+    month_dispute_count = []
+    for i in campaign_list:
+        campaign = i.objects.filter(added_by=emp_id, dispute_status=True,
+                                    audit_date__range=[month_start_date, todays_date]).count()
+        month_dispute_count.append(campaign)
+    month_dispute_total = sum(month_dispute_count)
+
+    # Fatal Audits
+    fatal_audit_count = []
+    for i in campaign_list:
+        campaign = i.objects.filter(added_by=emp_id, fatal=True,
+                                    audit_date__range=[month_start_date, todays_date]).count()
+        fatal_audit_count.append(campaign)
+    fatal_total = sum(fatal_audit_count)
+
+    # Overall Fatal Audits
+    overall_fatal_audit_count = []
+    for i in campaign_list:
+        campaign = i.objects.filter(added_by=emp_id, fatal=True).count()
+        overall_fatal_audit_count.append(campaign)
+    overall_fatal_total = sum(overall_fatal_audit_count)
+
+    # Coaching Closure
+    closure_count_list = []
+    for i in campaign_list:
+        campaign = i.objects.filter(added_by=emp_id, status=True).count()
+        closure_count_list.append(campaign)
+    closure_count = sum(closure_count_list)
+
+    if all_total == 0:
+        coaching_closure = "No Audits"
+    else:
+        coaching_closure = (closure_count / all_total) * 100
+
+    # month Coaching Closure
+    month_closure_count_list = []
+    for i in campaign_list:
+        campaign = i.objects.filter(added_by=emp_id, status=True,
+                                    audit_date__range=[month_start_date, todays_date]).count()
+        month_closure_count_list.append(campaign)
+    month_closure_count = sum(month_closure_count_list)
+
+    if month_all_total == 0:
+        month_coaching_closure = "No Audits"
+    else:
+        month_coaching_closure = (month_closure_count / month_all_total) * 100
+
+    tot = []
+    for i in campaign_list:
+        campaign = i.objects.filter(added_by=emp_id, status=False)
+        tot.append(campaign)
+
+    audits = []
+    for i in campaign_list:
+        campaign = i.objects.filter(added_by=emp_id).values("campaign").annotate(
+            score=Avg('overall_score'))
+        audits.append(campaign)
+    new_audits = []
+    for i in audits:
+        if i:
+            new_audits.append(i)
+
+    return all_total, fatal_count, open_total, dispute_total, fatal_total, coaching_closure, new_audits, tot, month_all_total, score_average, overall_score_average, overall_fatal_count, overall_fatal_total, month_open_total, month_dispute_total, month_coaching_closure
+
+# Agent Dashbaoard (agent-dashboard)
+@login_required
+def agentDashbaoard(request):
+    emp_id = request.user.profile.emp_id
+    all_total, fatal_count, open_total, dispute_total, fatal_total, coaching_closure, new_audits, tot, month_all_total, score_average, overall_score_average, overall_fatal_count, overall_fatal_total, month_open_total, month_dispute_total, month_coaching_closure = Individual_agent(emp_id, None)
+
     data = {
-        "audit": tot, "month_all_total": month_all_total, "open_total": open_total, "dispute_total": dispute_total,
+        "month_all_total": month_all_total, "open_total": open_total, "dispute_total": dispute_total,
         "average": score_average, "fatal": fatal_count,
-        "all_total": all_total, "fatal_total": fatal_total, "coaching_closure": coaching_closure
+        "all_total": all_total, "fatal_total": fatal_total, "coaching_closure": coaching_closure,
+
+        'overall_average': overall_score_average, 'overall_fatal_count': overall_fatal_count,
+        'overall_fatal_audit_count': overall_fatal_total, 'month_open_total': month_open_total,
+        'month_dispute_total': month_dispute_total, 'month_coaching_closure': month_coaching_closure,
     }
     return render(request, "agent_dashboard.html", data)
 
@@ -980,25 +1511,25 @@ def IndividualAgentReportTable(request, type, emp_id):
                 elif emp_desi == "Team Leader":
                     if type == 'all':
                         for i in campaign_list:
-                            tot_obj = i.objects.filter(team_lead_id=emp_id)
+                            tot_obj = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id))
                             audits.append(tot_obj)
                     elif type == "fatal":
                         for i in campaign_list:
-                            tot_obj = i.objects.filter(team_lead_id=emp_id, fatal=True,
+                            tot_obj = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), fatal=True,
                                                        audit_date__range=[month_start_date, todays_date])
                             audits.append(tot_obj)
                     elif type == "month":
                         for i in campaign_list:
-                            tot_obj = i.objects.filter(team_lead_id=emp_id,
+                            tot_obj = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id),
                                                        audit_date__range=[month_start_date, todays_date])
                             audits.append(tot_obj)
                     elif type == "open":
                         for i in campaign_list:
-                            tot_obj = i.objects.filter(team_lead_id=emp_id, status=False)
+                            tot_obj = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), status=False)
                             audits.append(tot_obj)
                     elif type == "dispute":
                         for i in campaign_list:
-                            tot_obj = i.objects.filter(team_lead_id=emp_id, dispute_status=True)
+                            tot_obj = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), dispute_status=True)
                             audits.append(tot_obj)
                     else:
                         messages.info(request, 'Invalid Request.')
@@ -1126,12 +1657,33 @@ def agentRespond(request):
             e.emp_comments = emp_com_reject
             e.status = False
             e.dispute_status = True
+            subject = 'QMS - Coaching Dispute'
+            html_path = 'email.html'
+            data = {'audit_id': e.audit_id, "audit_date": e.audit_date, "emp_comment": e.emp_comments,
+                    "qa": e.quality_analyst, "campaign": e.campaign, 'emp_name': e.associate_name,
+                    "id": e.id, 'type': e.type, 'page_type': e.page_type,
+                    }
+            email_template = get_template(html_path).render(data)
+            qa = Profile.objects.get(emp_id=e.added_by)
+            qa_tl = Profile.objects.get(emp_id=qa.emp_rm1_id).emp_email
+            qa_am = Profile.objects.get(emp_id=qa.emp_rm2_id).emp_email
+            qa_manager = Profile.objects.get(emp_id=qa.emp_rm3_id).emp_email
+            rm1_email = Profile.objects.get(emp_id=e.created_by_rm1_id).emp_email
+            to = [rm1_email, qa.emp_email, qa_manager, qa_tl, qa_am]
+            email_msg = EmailMessage(subject,
+                                     email_template, 'development@expertcallers.com',
+                                     to,
+                                     reply_to=['development@expertcallers.com'])
+            email_msg.content_subtype = 'html'
+            email_msg.send(fail_silently=False)
         e.save()
         messages.warning(request, 'Your response have been captured successfully!')
         return redirect("/agent-dashboard")
     else:
         messages.warning(request, 'Invalid request. You have been Logged out!')
         return redirect("/logout")
+
+
 
 
 @login_required
@@ -1142,497 +1694,25 @@ def IndividualReportView(request):
         emp_id = request.POST["emp_id"]
         emp_desi = Profile.objects.get(emp_id=emp_id).emp_desi
         profile = Profile.objects.get(emp_id=emp_id)
-
         if designation in mgr_list:
             if emp_desi in agent_list:
-                # All Audits
-                all_total_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(emp_id=emp_id).count()
-                    all_total_count.append(campaign)
-                all_total = 0
-                for i in all_total_count:
-                    all_total += i
-
-                # All Audits Current Month
-
-                # All Audits Current Month Count
-                month_all_count = []
-                for i in campaign_list:
-                    camapign = i.objects.filter(emp_id=emp_id,
-                                                audit_date__range=[month_start_date, todays_date]).count()
-                    month_all_count.append(camapign)
-                month_all_total = 0
-                for i in month_all_count:
-                    month_all_total += i
-
-                # Month's Average Score
-                camapign_score = 0
-                for i in campaign_list:
-                    score = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date])
-                    for j in score:
-                        camapign_score += j.overall_score
-                if month_all_total == 0:
-                    score_average = "No Audits This Month"
-                else:
-                    score_average = (camapign_score) / month_all_total
-
-                # Month's Fatal Count
-                fatal_count = 0
-                for i in campaign_list:
-                    fatal = i.objects.filter(emp_id=emp_id, audit_date__range=[month_start_date, todays_date])
-                    for j in fatal:
-                        fatal_count += j.fatal_count
-
-                # Open Audits
-                open_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(emp_id=emp_id, status=False).count()
-                    open_count.append(campaign)
-                open_total = 0
-                for i in open_count:
-                    open_total += i
-
-                # Dispute Audits
-                dispute_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(emp_id=emp_id, dispute_status=True).count()
-                    dispute_count.append(campaign)
-                dispute_total = 0
-                for i in dispute_count:
-                    dispute_total += i
-
-                # Fatal Audits
-                fatal_audit_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(emp_id=emp_id, fatal=True,
-                                                audit_date__range=[month_start_date, todays_date]).count()
-                    fatal_audit_count.append(campaign)
-                fatal_total = 0
-                for i in fatal_audit_count:
-                    fatal_total += i
-
-                # Coaching Closure
-                closure_count_list = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(emp_id=emp_id, status=True).count()
-                    closure_count_list.append(campaign)
-                closure_count = 0
-                for i in closure_count_list:
-                    closure_count += i
-
-                if all_total == 0:
-                    coaching_closure = "No Audits"
-                else:
-                    coaching_closure = (closure_count / all_total) * 100
-
-                tot = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(emp_id=emp_id, status=False)
-                    tot.append(campaign)
-
-                audits = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(emp_id=emp_id).values("campaign").annotate(
-                        score=Avg('overall_score'))
-                    audits.append(campaign)
-                new_audits = []
-                for i in audits:
-                    if i:
-                        new_audits.append(i)
-
+                all_total, fatal_count, open_total, dispute_total, fatal_total, coaching_closure, new_audits, tot, month_all_total, score_average, overall_score_average, overall_fatal_count, overall_fatal_total, month_open_total, month_dispute_total, month_coaching_closure = Individual_agent(
+                    emp_id, None)
             elif emp_desi == "Team Leader":
-                # All Audits
-                all_total_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(team_lead_id=emp_id).count()
-                    all_total_count.append(campaign)
-                all_total = 0
-                for i in all_total_count:
-                    all_total += i
-
-                # All Audits Current Month
-
-                # All Audits Current Month Count
-                month_all_count = []
-                for i in campaign_list:
-                    camapign = i.objects.filter(team_lead_id=emp_id,
-                                                audit_date__range=[month_start_date, todays_date]).count()
-                    month_all_count.append(camapign)
-                month_all_total = 0
-                for i in month_all_count:
-                    month_all_total += i
-
-                # Month's Average Score
-                camapign_score = 0
-                for i in campaign_list:
-                    score = i.objects.filter(team_lead_id=emp_id, audit_date__range=[month_start_date, todays_date])
-                    for j in score:
-                        camapign_score += j.overall_score
-                if month_all_total == 0:
-                    score_average = "No Audits This Month"
-                else:
-                    score_average = (camapign_score) / month_all_total
-
-                # Month's Fatal Count
-                fatal_count = 0
-                for i in campaign_list:
-                    fatal = i.objects.filter(team_lead_id=emp_id, audit_date__range=[month_start_date, todays_date])
-                    for j in fatal:
-                        fatal_count += j.fatal_count
-
-                # Open Audits
-                open_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(team_lead_id=emp_id, status=False).count()
-                    open_count.append(campaign)
-                open_total = 0
-                for i in open_count:
-                    open_total += i
-
-                # Dispute Audits
-                dispute_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(team_lead_id=emp_id, dispute_status=True).count()
-                    dispute_count.append(campaign)
-                dispute_total = 0
-                for i in dispute_count:
-                    dispute_total += i
-
-                # Fatal Audits
-                fatal_audit_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(team_lead_id=emp_id, fatal=True,
-                                                audit_date__range=[month_start_date, todays_date]).count()
-                    fatal_audit_count.append(campaign)
-                fatal_total = 0
-                for i in fatal_audit_count:
-                    fatal_total += i
-
-                # Coaching Closure
-                closure_count_list = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(team_lead_id=emp_id, status=True).count()
-                    closure_count_list.append(campaign)
-                closure_count = 0
-                for i in closure_count_list:
-                    closure_count += i
-
-                if all_total == 0:
-                    coaching_closure = "No Audits"
-                else:
-                    coaching_closure = (closure_count / all_total) * 100
-
-                tot = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(team_lead_id=emp_id, status=False)
-                    tot.append(campaign)
-
-                audits = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(team_lead_id=emp_id).values("campaign").annotate(
-                        score=Avg('overall_score'))
-                    audits.append(campaign)
-                new_audits = []
-                for i in audits:
-                    if i:
-                        new_audits.append(i)
-
+                all_total, fatal_count, open_total, dispute_total, fatal_total, coaching_closure, new_audits, tot, month_all_total, score_average, overall_score_average, overall_fatal_count, overall_fatal_total, month_open_total, month_dispute_total, month_coaching_closure = Individual_tl_am_om(
+                    emp_id)
             elif emp_desi in qa_list:
-                # All Audits
-                all_total_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(added_by=emp_id).count()
-                    all_total_count.append(campaign)
-                all_total = 0
-                for i in all_total_count:
-                    all_total += i
-
-                # All Audits Current Month
-
-                # All Audits Current Month Count
-                month_all_count = []
-                for i in campaign_list:
-                    camapign = i.objects.filter(added_by=emp_id,
-                                                audit_date__range=[month_start_date, todays_date]).count()
-                    month_all_count.append(camapign)
-                month_all_total = 0
-                for i in month_all_count:
-                    month_all_total += i
-
-                # Month's Average Score
-                camapign_score = 0
-                for i in campaign_list:
-                    score = i.objects.filter(added_by=emp_id, audit_date__range=[month_start_date, todays_date])
-                    for j in score:
-                        camapign_score += j.overall_score
-                if month_all_total == 0:
-                    score_average = "No Audits This Month"
-                else:
-                    score_average = (camapign_score) / month_all_total
-
-                # Month's Fatal Count
-                fatal_count = 0
-                for i in campaign_list:
-                    fatal = i.objects.filter(added_by=emp_id, audit_date__range=[month_start_date, todays_date])
-                    for j in fatal:
-                        fatal_count += j.fatal_count
-
-                # Open Audits
-                open_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(added_by=emp_id, status=False).count()
-                    open_count.append(campaign)
-                open_total = 0
-                for i in open_count:
-                    open_total += i
-
-                # Dispute Audits
-                dispute_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(added_by=emp_id, dispute_status=True).count()
-                    dispute_count.append(campaign)
-                dispute_total = 0
-                for i in dispute_count:
-                    dispute_total += i
-
-                # Fatal Audits
-                fatal_audit_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(added_by=emp_id, fatal=True,
-                                                audit_date__range=[month_start_date, todays_date]).count()
-                    fatal_audit_count.append(campaign)
-                fatal_total = 0
-                for i in fatal_audit_count:
-                    fatal_total += i
-
-                # Coaching Closure
-                closure_count_list = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(added_by=emp_id, status=True).count()
-                    closure_count_list.append(campaign)
-                closure_count = 0
-                for i in closure_count_list:
-                    closure_count += i
-
-                if all_total == 0:
-                    coaching_closure = "No Audits"
-                else:
-                    coaching_closure = (closure_count / all_total) * 100
-
-                tot = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(added_by=emp_id, status=False)
-                    tot.append(campaign)
-
-                audits = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(added_by=emp_id).values("campaign").annotate(
-                        score=Avg('overall_score'))
-                    audits.append(campaign)
-                new_audits = []
-                for i in audits:
-                    if i:
-                        new_audits.append(i)
-
+                all_total, fatal_count, open_total, dispute_total, fatal_total, coaching_closure, new_audits, tot, month_all_total, score_average, overall_score_average, overall_fatal_count, overall_fatal_total, month_open_total, month_dispute_total, month_coaching_closure = Individual_qa(
+                    emp_id)
             elif emp_desi == "Assistant Manager":
-                # All Audits
-                all_total_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(am_id=emp_id).count()
-                    all_total_count.append(campaign)
-                all_total = 0
-                for i in all_total_count:
-                    all_total += i
-
-                # All Audits Current Month
-
-                # All Audits Current Month Count
-                month_all_count = []
-                for i in campaign_list:
-                    camapign = i.objects.filter(am_id=emp_id, audit_date__range=[month_start_date, todays_date]).count()
-                    month_all_count.append(camapign)
-                month_all_total = 0
-                for i in month_all_count:
-                    month_all_total += i
-
-                # Month's Average Score
-                camapign_score = 0
-                for i in campaign_list:
-                    score = i.objects.filter(am_id=emp_id, audit_date__range=[month_start_date, todays_date])
-                    for j in score:
-                        camapign_score += j.overall_score
-                if month_all_total == 0:
-                    score_average = "No Audits This Month"
-                else:
-                    score_average = (camapign_score) / month_all_total
-
-                # Month's Fatal Count
-                fatal_count = 0
-                for i in campaign_list:
-                    fatal = i.objects.filter(am_id=emp_id, audit_date__range=[month_start_date, todays_date])
-                    for j in fatal:
-                        fatal_count += j.fatal_count
-
-                # Open Audits
-                open_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(am_id=emp_id, status=False).count()
-                    open_count.append(campaign)
-                open_total = 0
-                for i in open_count:
-                    open_total += i
-
-                # Dispute Audits
-                dispute_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(am_id=emp_id, dispute_status=True).count()
-                    dispute_count.append(campaign)
-                dispute_total = 0
-                for i in dispute_count:
-                    dispute_total += i
-
-                # Fatal Audits
-                fatal_audit_count = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(am_id=emp_id, fatal=True,
-                                                audit_date__range=[month_start_date, todays_date]).count()
-                    fatal_audit_count.append(campaign)
-                fatal_total = 0
-                for i in fatal_audit_count:
-                    fatal_total += i
-
-                # Coaching Closure
-                closure_count_list = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(am_id=emp_id, status=True).count()
-                    closure_count_list.append(campaign)
-                closure_count = 0
-                for i in closure_count_list:
-                    closure_count += i
-
-                if all_total == 0:
-                    coaching_closure = "No Audits"
-                else:
-                    coaching_closure = (closure_count / all_total) * 100
-
-                tot = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(am_id=emp_id, status=False)
-                    tot.append(campaign)
-
-                audits = []
-                for i in campaign_list:
-                    campaign = i.objects.filter(am_id=emp_id).values("campaign").annotate(
-                        score=Avg('overall_score'))
-                    audits.append(campaign)
-                new_audits = []
-                for i in audits:
-                    if i:
-                        new_audits.append(i)
-
+                all_total, fatal_count, open_total, dispute_total, fatal_total, coaching_closure, new_audits, tot, month_all_total, score_average, overall_score_average, overall_fatal_count, overall_fatal_total, month_open_total, month_dispute_total, month_coaching_closure = Individual_tl_am_om(
+                    emp_id)
             else:
                 messages.warning(request, 'Invalid request. You have been Logged out!')
                 return redirect("/logout")
-
         else:
-            # All Audits
-            all_total_count = []
-            for i in campaign_list:
-                campaign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id).count()
-                all_total_count.append(campaign)
-            all_total = 0
-            for i in all_total_count:
-                all_total += i
-
-            # All Audits Current Month
-
-            # All Audits Current Month Count
-            month_all_count = []
-            for i in campaign_list:
-                camapign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id,
-                                            audit_date__range=[month_start_date, todays_date]).count()
-                month_all_count.append(camapign)
-            month_all_total = 0
-            for i in month_all_count:
-                month_all_total += i
-
-            # Month's Average Score
-            camapign_score = 0
-            for i in campaign_list:
-                score = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id,
-                                         audit_date__range=[month_start_date, todays_date])
-                for j in score:
-                    camapign_score += j.overall_score
-            if month_all_total == 0:
-                score_average = "No Audits This Month"
-            else:
-                score_average = (camapign_score) / month_all_total
-
-            # Month's Fatal Count
-            fatal_count = 0
-            for i in campaign_list:
-                fatal = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id,
-                                         audit_date__range=[month_start_date, todays_date])
-                for j in fatal:
-                    fatal_count += j.fatal_count
-
-            # Open Audits
-            open_count = []
-            for i in campaign_list:
-                campaign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, status=False).count()
-                open_count.append(campaign)
-            open_total = 0
-            for i in open_count:
-                open_total += i
-
-            # Dispute Audits
-            dispute_count = []
-            for i in campaign_list:
-                campaign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, dispute_status=True).count()
-                dispute_count.append(campaign)
-            dispute_total = 0
-            for i in dispute_count:
-                dispute_total += i
-
-            # Fatal Audits
-            fatal_audit_count = []
-            for i in campaign_list:
-                campaign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, fatal=True,
-                                            audit_date__range=[month_start_date, todays_date]).count()
-                fatal_audit_count.append(campaign)
-            fatal_total = 0
-            for i in fatal_audit_count:
-                fatal_total += i
-
-            # Coaching Closure
-            closure_count_list = []
-            for i in campaign_list:
-                campaign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, status=True).count()
-                closure_count_list.append(campaign)
-            closure_count = 0
-            for i in closure_count_list:
-                closure_count += i
-
-            if all_total == 0:
-                coaching_closure = "No Audits"
-            else:
-                coaching_closure = (closure_count / all_total) * 100
-
-            tot = []
-            for i in campaign_list:
-                campaign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id, status=False)
-                tot.append(campaign)
-
-            audits = []
-            for i in campaign_list:
-                campaign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id).values("campaign").annotate(
-                    score=Avg('overall_score'))
-                audits.append(campaign)
-            new_audits = []
-            for i in audits:
-                if i:
-                    new_audits.append(i)
+            all_total, fatal_count, open_total, dispute_total, fatal_total, coaching_closure, new_audits, tot, month_all_total, score_average, overall_score_average, overall_fatal_count, overall_fatal_total, month_open_total, month_dispute_total, month_coaching_closure = Individual_agent(
+                emp_id, logged_emp_id)
 
         data = {
             "audit": tot, "month_all_total": month_all_total, "open_total": open_total, "dispute_total": dispute_total,
@@ -1704,36 +1784,84 @@ def change_password_new(request):
         return render(request, 'change-password.html', {'form': form, "agent": agent_list})
 
 
-@login_required
-def AddEmail(request):
-    designation = request.user.profile.emp_desi
-    if request.method == "POST":
-        emp_id = request.POST["emp_id"]
-        email = request.POST["email"]
-        e = Profile.objects.get(emp_id=emp_id)
-        e.emp_email = email
-        e.save()
-        messages.info(request, "Email Added Successfully !")
-        return redirect("/dashboard")
-    else:
-        messages.info(request, 'Please add your Email ID')
-        return render(request, "add-email.html")
+# @login_required
+# def AddEmail(request):
+#     designation = request.user.profile.emp_desi
+#     if request.method == "POST":
+#         emp_id = request.POST["emp_id"]
+#         email = request.POST["email"]
+#         e = Profile.objects.get(emp_id=emp_id)
+#         e.emp_email = email
+#         e.save()
+#         messages.info(request, "Email Added Successfully !")
+#         return redirect("/dashboard")
+#     else:
+#         messages.info(request, 'Please add your Email ID')
+#         return render(request, "add-email.html")
 
 
 @login_required
 def EditEmail(request):
-    designation = request.user.profile.emp_desi
+    user = request.user.profile
     if request.method == "POST":
         emp_id = request.POST["emp_id"]
         email = request.POST["new_email"]
-        e = Profile.objects.get(emp_id=emp_id)
-        e.emp_email = email
-        e.save()
-        messages.info(request, "Email Changed Successfully !")
-        return redirect("/dashboard")
+        profile = Profile.objects.all()
+        if user.emp_email == email:
+            m = "The New Email is same as Previous Email, hence Email not changed :)"
+            messages.info(request,m)
+            return redirect("/settings")
+        for i in profile:
+            if i.emp_email == email:
+                m = "The Email ID Entered is already in use by someone else. Please use another Email."
+                messages.info(request, m)
+                return redirect("/settings")
+        else:
+            digits = "0123456789"
+            OTP = ""
+            for i in range(6):
+                OTP += digits[math.floor(random.random() * 10)]
+            try:
+                Profile.objects.get(emp_id=emp_id,emp_email=email)
+                m = "OTP is sent to your email ID Entered. Please Verify it. Avoid Clicking multiple times."
+                messages.info(request,m)
+                return redirect("/verify-email")
+            except Profile.DoesNotExist:
+                e = Profile.objects.get(emp_id=emp_id)
+                e.emp_email = email
+                e.email_otp = OTP
+                e.email_verify = False
+                e.otp_time = datetime.datetime.now()
+                e.save()
+                subject = "Your OTP for QMS"
+                email_template = "<h1>Your OTP for QMS is <b>" + str(OTP) + "</b></h1><br><br>"
+                to = [email]
+                email_msg = EmailMessage(subject,
+                                         email_template, 'development@expertcallers.com',
+                                         to,
+                                         reply_to=['development@expertcallers.com'])
+                email_msg.content_subtype = 'html'
+                email_msg.send(fail_silently=False)
+                messages.info(request, "OTP is sent to your email ID Entered. Please Verify it.")
+                return redirect("/verify-email")
     else:
         messages.info(request, "Invalid Request. You have been logged out :)")
-        return redirect("/logout")
+        return redirect("/")
+
+# @login_required
+# def EditEmail(request):
+#     designation = request.user.profile.emp_desi
+#     if request.method == "POST":
+#         emp_id = request.POST["emp_id"]
+#         email = request.POST["new_email"]
+#         e = Profile.objects.get(emp_id=emp_id)
+#         e.emp_email = email
+#         e.save()
+#         messages.info(request, "Email Changed Successfully !")
+#         return redirect("/dashboard")
+#     else:
+#         messages.info(request, "Invalid Request. You have been logged out :)")
+#         return redirect("/logout")
 
 
 @login_required
@@ -3685,7 +3813,7 @@ def outboundFormSubmit(request):
         manager_id = request.POST["manager_id"]
         am = request.POST["am"]
         am_id = request.POST["am_id"]
-        week = request.POST["week"]
+        week = 'Week ' + GetWeek()
 
         opening_ques_1 = int(request.POST["oc_1"])
         opening_ques_2 = int(request.POST["oc_2"])
@@ -3824,7 +3952,7 @@ def inboundFormSubmit(request):
         manager_id = request.POST["manager_id"]
         am = request.POST["am"]
         am_id = request.POST["am_id"]
-        week = request.POST["week"]
+        week = 'Week ' + GetWeek()
 
         ce_1 = int(request.POST["ce_1"])
         ce_2 = int(request.POST["ce_2"])
@@ -3975,7 +4103,7 @@ def emailFormSubmit(request):
         manager_id = request.POST["manager_id"]
         am = request.POST["am"]
         am_id = request.POST["am_id"]
-        week = request.POST["week"]
+        week = 'Week ' + GetWeek()
 
         ce_1 = int(request.POST["ce_1"])
         ce_2 = int(request.POST["ce_2"])
@@ -4125,7 +4253,7 @@ def DigitalSwissGoldFormSubmit(request):
         manager_id = request.POST["manager_id"]
         am = request.POST["am"]
         am_id = request.POST["am_id"]
-        week = request.POST["week"]
+        week = 'Week ' + GetWeek()
 
         ce_1 = int(request.POST["ce_1"])
         ce_2 = int(request.POST["ce_2"])
@@ -4268,7 +4396,7 @@ def FLAFormSubmit(request):
         manager_id = request.POST["manager_id"]
         am = request.POST["am"]
         am_id = request.POST["am_id"]
-        week = request.POST["week"]
+        week = 'Week ' + GetWeek()
         service = request.POST["service"]
         order_id = request.POST["order_id"]
 
@@ -4370,7 +4498,7 @@ def blazingHogFormSubmit(request):
         manager_id = request.POST["manager_id"]
         am = request.POST["am"]
         am_id = request.POST["am_id"]
-        week = request.POST["week"]
+        week = 'Week ' + GetWeek()
         query_type = request.POST["query_type"]
         ticket_id = request.POST["ticketnumber"]
 
@@ -4493,7 +4621,7 @@ def NoomPodFormSubmit(request):
         manager_id = request.POST["manager_id"]
         am = request.POST["am"]
         am_id = request.POST["am_id"]
-        week = request.POST["week"]
+        week = 'Week ' + GetWeek()
         evaluator_name = request.POST["evaluator"]
         ticket_number = request.POST["ticketnumber"]
 
@@ -4615,7 +4743,7 @@ def NoomEvaFormSubmit(request):
         manager_id = request.POST["manager_id"]
         am = request.POST["am"]
         am_id = request.POST["am_id"]
-        week = request.POST["week"]
+        week = 'Week ' + GetWeek()
         evaluator_name = request.POST["evaluator"]
         ticket_number = request.POST["ticketnumber"]
 
@@ -4745,7 +4873,7 @@ def AbHindalcoFormSubmit(request):
         manager_id = request.POST["manager_id"]
         am = request.POST["am"]
         am_id = request.POST["am_id"]
-        week = request.POST["week"]
+        week = 'Week ' + GetWeek()
 
         opening_ques_1 = int(request.POST["oc_1"])
         opening_ques_2 = int(request.POST["oc_2"])
@@ -4879,7 +5007,7 @@ def PractoSubmit(request):
         manager_id = request.POST["manager_id"]
         am = request.POST["am"]
         am_id = request.POST["am_id"]
-        week = request.POST["week"]
+        week = 'Week ' + GetWeek()
 
         p_1 = int(request.POST['p1'])  # Chat Closing
         p1_s1 = request.POST.get("chat_1")
@@ -5145,7 +5273,7 @@ def fameHouseSubmit(request):
         manager_id = request.POST["manager_id"]
         am = request.POST["am"]
         am_id = request.POST["am_id"]
-        week = request.POST["week"]
+        week = 'Week ' + GetWeek()
 
         # Immediate fails:
         compliance_1 = int(request.POST['compliance_1'])
@@ -5359,7 +5487,7 @@ def ILMakiageSubmit(request):
         team_lead_id = request.POST['tl_id']
         am = request.POST['am']
         am_id = request.POST['am_id']
-        week = request.POST['week']
+        week = 'Week ' + GetWeek()
         manager = request.POST['manager']
         manager_id = request.POST['manager_id']
 
@@ -5518,7 +5646,7 @@ def WinopolySubmit(request):
         manager_id = request.POST["manager_id"]
         am = request.POST["am"]
         am_id = request.POST["am_id"]
-        week = request.POST["week"]
+        week = 'Week ' + GetWeek()
 
         # Opening
         comp_1 = int(request.POST['comp_1'])
@@ -5689,7 +5817,7 @@ def NerotelSubmit(request):
         manager_id = request.POST["manager_id"]
         am = request.POST["am"]
         am_id = request.POST["am_id"]
-        week = request.POST["week"]
+        week = 'Week ' + GetWeek()
 
         # Engagement
         eng_1 = int(request.POST["e_1"])
@@ -5833,7 +5961,7 @@ def SpoiledChildSubmit(request):
         manager_id = request.POST["manager_id"]
         am = request.POST["am"]
         am_id = request.POST["am_id"]
-        week = request.POST["week"]
+        week = 'Week ' + GetWeek()
         query_type = request.POST["query_type"]
         ticket_id = request.POST["ticketnumber"]
 
@@ -5959,7 +6087,7 @@ def AmerisaveSubmit(request):
         manager_id = request.POST["manager_id"]
         am = request.POST["am"]
         am_id = request.POST["am_id"]
-        week = request.POST["week"]
+        week = 'Week ' + GetWeek()
 
         nce_1 = int(request.POST["nce_1"])
         nce_2 = request.POST["nce_2"]

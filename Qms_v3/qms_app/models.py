@@ -16,9 +16,11 @@ class Profile(models.Model):
     emp_rm2_id = models.CharField(max_length=30)
     emp_rm3 = models.CharField(max_length=100)
     emp_rm3_id = models.CharField(max_length=30)
-    agent_status = models.CharField(max_length=30)
+    agent_status = models.CharField(max_length=100, default='Active')
     emp_email = models.EmailField(null=True, blank=True)
     pc = models.BooleanField(default=False)
+    email_otp = models.CharField(max_length=30, null=True, blank=True)
+    email_verify = models.BooleanField(default=False)
 
     def __str__(self):
         return self.emp_name

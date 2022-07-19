@@ -94,7 +94,7 @@
                   <div class="inside inside_email">
                     <form action="/form" method="post" enctype="multipart/form-data">
                       {% csrf_token %}
-                      <h2 align="center"><i class="fas fa-envelope"></i> Email</h2>
+                      <h2 align="center"><i class="fas fa-envelope"></i> Email / Chat</h2>
                       <label for="campaign_email">Campaign</label>
                       <select id="campaign_email" name="campaign" class="form-control select2" required>
                         <option value="" selected disabled>Please Select</option>
@@ -139,8 +139,18 @@
               </div>
             </div>
           </div>
-          <div class="row mb-3">
-            <div class="col-md-3">
+
+          <div class="row mb-3 pt-3 pb-3 border">
+            <div class="col-md-12 pb-2">
+              <h4>Overall:
+                    {% if overall_average ==  "No Audits This Month" %}
+                    {{overall_average}}
+                    {% else %}
+                    {{overall_average|floatformat:2}}%
+                    {% endif %}
+              </h4>
+            </div>
+            <div class="col-md-2">
               <div class="card-base">
                 <div class="card-icon">
                   <span class="imagecard widgetCardIcon">
@@ -149,7 +159,7 @@
                   <div class="card-data widgetCardData">
                     <h2 class="box-title mt-5" style="color: #2A3F54;">All Audits</h2>
                     <h1>{{all_total}}</h1>
-                    <a href="/qa-reports/all" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                    <a href="/emp-report/all" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
                       View
                     </a>
                   </div>
@@ -157,24 +167,7 @@
                 <div class="space"></div>
               </div>
             </div>
-            <div class="col-md-3">
-              <div class="card-base">
-                <div class="card-icon">
-                  <span class="imagecard widgetCardIcon">
-                    <i class="fa fa-calendar"></i>
-                  </span>
-                  <div class="card-data widgetCardData">
-                    <h2 class="box-title mt-5" style="color: #2A3F54;">This Month's Audits</h2>
-                    <h1>{{month_all_total}}</h1>
-                    <a href="/qa-reports/month" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
-                      View
-                    </a>
-                  </div>
-                </div>
-                <div class="space"></div>
-              </div>
-            </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
               <div class="card-base">
                 <div class="card-icon">
                   <span class="imagecard widgetCardIcon">
@@ -183,7 +176,7 @@
                   <div class="card-data widgetCardData">
                     <h2 class="box-title mt-5" style="color: #2A3F54;">Open Audits</h2>
                     <h1>{{open_total}}</h1>
-                    <a href="/qa-reports/open" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                    <a href="/emp-report/open" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
                       View
                     </a>
                   </div>
@@ -191,7 +184,7 @@
                 <div class="space"></div>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
               <div class="card-base">
                 <div class="card-icon">
                   <span class="imagecard widgetCardIcon">
@@ -200,7 +193,58 @@
                   <div class="card-data widgetCardData">
                     <h2 class="box-title mt-5" style="color: #2A3F54;">Dispute Audits</h2>
                     <h1>{{dispute_total}}</h1>
-                    <a href="/qa-reports/dispute" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                    <a href="/emp-report/dispute" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                      View
+                    </a>
+                  </div>
+                </div>
+                <div class="space"></div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="card-base">
+                <div class="card-icon">
+                  <span class="imagecard widgetCardIcon">
+                    <i class="fa fa-lightbulb-o"></i>
+                  </span>
+                  <div class="card-data widgetCardData">
+                    <h2 class="box-title mt-5" style="color: #2A3F54;">Coaching Closure</h2>
+                    <br>
+                    {% if coaching_closure ==  "No Audits" %}
+                    <h5>{{coaching_closure}}</h5>
+                    {% else %}
+                    <h1>{{coaching_closure|floatformat:2}}%</h1>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="space"></div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="card-base">
+                <div class="card-icon">
+                  <span class="imagecard widgetCardIcon">
+                    <i class="fa fa-exclamation-triangle"></i>
+                  </span>
+                  <div class="card-data widgetCardData">
+                    <h2 class="box-title mt-5" style="color: #2A3F54;">All Fatals</h2>
+                    <br>
+                    <h1>{{overall_fatal_count}}</h1>
+                  </div>
+                </div>
+                <div class="space"></div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="card-base">
+                <div class="card-icon">
+                  <span class="imagecard widgetCardIcon">
+                    <i class="fa fa-exclamation-circle"></i>
+                  </span>
+                  <div class="card-data widgetCardData">
+                    <h2 class="box-title mt-5" style="color: #2A3F54;">All Fatal Audits</h2>
+                    <h1>{{overall_fatal_audit_count}}</h1>
+                    <a href="/emp-report/fatal" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
                       View
                     </a>
                   </div>
@@ -209,17 +253,26 @@
               </div>
             </div>
           </div>
-          <div class="row mb-3">
-            <div class="col-md-3">
+          <div class="row mb-3 pt-3 pb-3 border">
+            <div class="col-md-12 pb-2 pt-2 mb-2 bg-white" >
+              <h2 class="box-title" style="color: #2A3F54; font-weight: 600;">This Month's:
+                    {% if average ==  "No Audits This Month" %}
+                    {{average}}
+                    {% else %}
+                    {{average|floatformat:2}}%
+                    {% endif %}
+              </h2>
+            </div>
+            <div class="col-md-2">
               <div class="card-base">
                 <div class="card-icon">
                   <span class="imagecard widgetCardIcon">
-                    <i class="fa fa-exclamation-circle"></i>
+                    <i class="fa fa-calendar"></i>
                   </span>
                   <div class="card-data widgetCardData">
-                    <h2 class="box-title mt-5" style="color: #2A3F54;">This Month's Fatal Audits</h2>
-                    <h1>{{fatal_total}}</h1>
-                    <a href="/qa-reports/fatal" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                    <h2 class="box-title mt-5" style="color: #2A3F54;">This Month's Audits</h2>
+                    <h1>{{month_all_total}}</h1>
+                    <a href="/emp-report/month" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
                       View
                     </a>
                   </div>
@@ -227,7 +280,60 @@
                 <div class="space"></div>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
+              <div class="card-base">
+                <div class="card-icon">
+                  <span class="imagecard widgetCardIcon">
+                    <i class="fa fa-pencil"></i>
+                  </span>
+                  <div class="card-data widgetCardData">
+                    <h2 class="box-title mt-5" style="color: #2A3F54;">Open Audits</h2>
+                    <h1>{{month_open_total}}</h1>
+                    <a href="/emp-report/open" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                      View
+                    </a>
+                  </div>
+                </div>
+                <div class="space"></div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="card-base">
+                <div class="card-icon">
+                  <span class="imagecard widgetCardIcon">
+                    <i class="fa fa-times"></i>
+                  </span>
+                  <div class="card-data widgetCardData">
+                    <h2 class="box-title mt-5" style="color: #2A3F54;">Dispute Audits</h2>
+                    <h1>{{month_dispute_total}}</h1>
+                    <a href="/emp-report/dispute" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                      View
+                    </a>
+                  </div>
+                </div>
+                <div class="space"></div>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="card-base">
+                <div class="card-icon">
+                  <span class="imagecard widgetCardIcon">
+                    <i class="fa fa-lightbulb-o"></i>
+                  </span>
+                  <div class="card-data widgetCardData">
+                    <h2 class="box-title mt-5" style="color: #2A3F54;">Coaching Closure</h2>
+                    <br>
+                    {% if month_coaching_closure ==  "No Audits" %}
+                    <h5>{{month_coaching_closure}}</h5>
+                    {% else %}
+                    <h1>{{month_coaching_closure|floatformat:2}}%</h1>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="space"></div>
+              </div>
+            </div>
+            <div class="col-md-2">
               <div class="card-base">
                 <div class="card-icon">
                   <span class="imagecard widgetCardIcon">
@@ -242,39 +348,18 @@
                 <div class="space"></div>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
               <div class="card-base">
                 <div class="card-icon">
                   <span class="imagecard widgetCardIcon">
-                    <i class="fa fa-tasks"></i>
+                    <i class="fa fa-exclamation-circle"></i>
                   </span>
                   <div class="card-data widgetCardData">
-                    <h2 class="box-title mt-5" style="color: #2A3F54;">This Month's Score</h2>
-                    <br>
-                    {% if average ==  "No Audits This Month" %}
-                    <h5>{{average}}</h5>
-                    {% else %}
-                    <h1>{{average|floatformat:2}}%</h1>
-                    {% endif %}
-                  </div>
-                </div>
-                <div class="space"></div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="card-base">
-                <div class="card-icon">
-                  <span class="imagecard widgetCardIcon">
-                    <i class="fa fa-lightbulb-o"></i>
-                  </span>
-                  <div class="card-data widgetCardData">
-                    <h2 class="box-title mt-5" style="color: #2A3F54;">Coaching Closure</h2>
-                    <br>
-                    {% if coaching_closure ==  "No Audits" %}
-                    <h5>{{coaching_closure}}</h5>
-                    {% else %}
-                    <h1>{{coaching_closure|floatformat:2}}%</h1>
-                    {% endif %}
+                    <h2 class="box-title mt-5" style="color: #2A3F54;">This Month's Fatal Audits</h2>
+                    <h1>{{fatal_total}}</h1>
+                    <a href="/emp-report/fatal" class="anchor btn btn-default" style="background: #1ABB9C; color: #fff;">
+                      View
+                    </a>
                   </div>
                 </div>
                 <div class="space"></div>
@@ -312,6 +397,8 @@
                                 <option value="" selected disabled>Please Select</option>
                                 <option value="all">All</option>
                                 <option value="open">Open Status</option>
+                                <option value="fatal">Fatal Audits</option>
+                                <option value="dispute">Dispute Status</option>
                               </select>
                             </div>
                           </div>
@@ -373,6 +460,8 @@
                                 <option value="" selected disabled>Please Select</option>
                                 <option value="all">All</option>
                                 <option value="open">Open Status</option>
+                                <option value="fatal">Fatal Audits</option>
+                                <option value="dispute">Dispute Status</option>
                               </select>
                             </div>
                           </div>
@@ -444,7 +533,7 @@
                         </div>
                       </div>
                       <div class="col-md-12">
-                        <button class="btn btn-success form-control">Submit</button>
+                        <button class="btn btn-success form-control">Download</button>
                       </div>
                     </form>
                   </div>

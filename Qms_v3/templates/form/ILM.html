@@ -60,16 +60,6 @@
                                         <input type="text" class="form-control" id="ticketnumber" name="ticketnumber" required="">
                                     </div>
                                     <div class="col-md-3 form-group">
-                                        <label for="week">Week</label>
-                                        <select class="form-control" name="week" id="week" required="">
-                                            <option value="week1">Week1</option>
-                                            <option value="week2">Week2</option>
-                                            <option value="week3">Week3</option>
-                                            <option value="week4">Week4</option>
-                                            <option value="week5">Week5</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3 form-group">
                                         <input type="hidden" class="form-control" name="campaign1" value="Amerisave">
                                         <label for="zone">Zone</label>
                                         <input type="text" class="form-control" id="zone" name="zone" required>
@@ -342,8 +332,12 @@
         }else{
             e_2 = parseInt(e_2);
         }
-        for (var i = 0; i <= n; i++) {
-            fullscore.innerHTML = (((s_1+s_2+s_3+s_4+e_1+e_2+compliance_1+compliance_2+compliance_3)/a)*100).toFixed(2)+"%";
+        if ((compliance_3 == 0 ) || ( compliance_2 == 0 ) || ( compliance_1 == 0 )){
+            fullscore.innerHTML = 0;
+        } else {
+            for (var i = 0; i <= n; i++) {
+                fullscore.innerHTML = (((s_1+s_2+s_3+s_4+e_1+e_2+compliance_1+compliance_2+compliance_3)/a)*100).toFixed(2)+"%";
+            }
         }
     }
 

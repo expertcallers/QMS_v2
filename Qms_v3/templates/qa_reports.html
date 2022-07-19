@@ -4,7 +4,13 @@
         <div class="right_col" role="main">
           <div class="page-title">
             <div class="title_left">
-              {% if type == "all" %}
+              {% if type == "current-open" %}
+              <h3>Current month's Open audits</h3>
+              {% elif type == "current-dispute" %}
+              <h3>Current month's Dispute audits</h3>
+              {% elif type == "all-fatal" %}
+              <h3>All Fatal Audits</h3>
+              {% elif type == "all" %}
               <h3>All Audits</h3>
               {% elif type == "month" %}
               <h3>This Month's Audits</h3>

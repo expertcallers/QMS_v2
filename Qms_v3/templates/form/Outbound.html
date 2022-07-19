@@ -85,16 +85,6 @@
                                         <input type="text" class="form-control" id="am" name="am" readonly value="{{profile.emp_rm2}}">
                                         <input type="hidden" name="am_id" value="{{profile.emp_rm2_id}}">
                                     </div>
-                                    <div class="col-md-2 form-group">
-                                        <label for="week">Week</label>
-                                        <select class="form-control" name="week" id="week" required="">
-                                            <option value="week1">Week1</option>
-                                            <option value="week2">Week2</option>
-                                            <option value="week3">Week3</option>
-                                            <option value="week4">Week4</option>
-                                            <option value="week5">Week5</option>
-                                        </select>
-                                    </div>
                                 </div>
                             </div>
 
@@ -365,6 +355,12 @@
     var score1;
     var score2;
     var score3;
+    var fatal1;
+    var fatal2;
+    var fatal3;
+    var fatal4;
+    var fatal5;
+    var fatal6;
 
     $(function() {
         $('#cfeedback').on('keypress', function(e) {
@@ -422,6 +418,12 @@
         var compliance_4 = parseInt(document.querySelector('input[name="compliance_4"]:checked').value);
         var compliance_5 = parseInt(document.querySelector('input[name="compliance_5"]:checked').value);
         var compliance_6 = parseInt(document.querySelector('input[name="compliance_6"]:checked').value);
+        fatal1 = compliance_1;
+        fatal2 = compliance_2;
+        fatal3 = compliance_3;
+        fatal4 = compliance_4;
+        fatal5 = compliance_5;
+        fatal6 = compliance_6;
         for (var i = 0; i <= n; i++) {
             compliance_score.value = compliance_1+compliance_2+compliance_3+compliance_4+compliance_5+compliance_6;
             
@@ -439,14 +441,14 @@
     function full_score(e) {
         n=n+1;
         var fullscore = document.getElementById('myscore');
-        // if ((fatal2 == 0 ) || ( fatal1 == 0 ) || ( fatal3 == 0 ) || ( fatal4 == 0)){
-        //     fullscore.innerHTML = 0;
-        // }
-        // else {
+        if ((fatal2 == 0 ) || ( fatal1 == 0 ) || ( fatal3 == 0 ) || ( fatal4 == 0) || ( fatal5 == 0) || ( fatal6 == 0)){
+            fullscore.innerHTML = 0;
+        }
+        else {
             for (var i = 0; i <= n; i++) {
                 fullscore.innerHTML = score1+score2+score3;
             }
-        // }
+        }
     }
 
 </script>

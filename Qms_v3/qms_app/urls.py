@@ -14,7 +14,9 @@ urlpatterns = [
     path('form', formView),
     path('qa-reports/<str:type>', ReportTable),
     path('manager-reports/<str:type>', ManagerReportTable),
+    path('qa-month-reports/<str:type>', MonthReportTable),
     path('report', qaReport),
+    path('report/<int:id>/<str:type>', EmailReport),
     path('agent-dashboard', agentDashbaoard),
     path('emp-report/<str:type>', agentReportTable),
     path('agent-report/<str:type>/<str:emp_id>', IndividualAgentReportTable),
@@ -44,6 +46,8 @@ urlpatterns = [
 
     path('password-reset', PasswordReset),
     path('add-email', AddEmail),
+    path('verify-email', VerifyEmail),
+    path('edit-email', EditEmail),
     path('add-user', AddUser),
     path('add-campaign', AddCampaign),
     path('add-qa-mapping', AddQaMapping),
