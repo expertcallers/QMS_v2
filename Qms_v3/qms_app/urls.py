@@ -10,6 +10,7 @@ urlpatterns = [
     path('dashboard', DashboardRedirect),
     path('qa-dashboard', qaDashboard),
     path('manager-dashboard', managerDashboard),
+    path('qa-manager-dashboard', QAmanagerDashboard),
     path('get-emp', getEmp),
     path('form', formView),
     path('qa-reports/<str:type>', ReportTable),
