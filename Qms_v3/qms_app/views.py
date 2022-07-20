@@ -1002,7 +1002,7 @@ def ManagerReportTable(request, type):
                                 audits.append(tot_obj)
                         else:
                             if cname == "all" and status == "all":
-                                tot_obj = i.objects.all()
+                                tot_obj = i.objects.filter(emp_id__in=emps)
                             elif cname == "all" and status == "open":
                                 tot_obj = i.objects.filter(status=False,
                                                emp_id__in=emps)
