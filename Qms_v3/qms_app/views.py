@@ -365,7 +365,7 @@ def managerDashboard(request):
     user = request.user
     if user.profile.emp_desi in mgr_list:
         campaigns = Campaign.objects.all()
-        profile = Profile.objects.filter(emp_desi__in=agent_list)
+        profile = Profile.objects.filter(Q(emp_rm1_id=user.profile.emp_id) | Q(emp_rm1_id=user.profile.emp_id) | Q(emp_rm1_id=user.profile.emp_id), emp_desi__in=agent_list)
         qa_profile = Profile.objects.filter(emp_desi__in=qa_list)
         tl_profile = Profile.objects.filter(Q(emp_rm1_id=user.profile.emp_id) | Q(emp_rm1_id=user.profile.emp_id) | Q(emp_rm1_id=user.profile.emp_id), emp_desi="Team Leader")
         am_profile = Profile.objects.filter(Q(emp_rm1_id=user.profile.emp_id) | Q(emp_rm1_id=user.profile.emp_id) | Q(emp_rm1_id=user.profile.emp_id), emp_desi="Assistant Manager")
