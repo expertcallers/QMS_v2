@@ -1484,14 +1484,14 @@ def Individual_tl_am_om(emp_id, logged_emp_id):
         # All Audits
         all_total_count = []
         for i in campaign_list:
-            campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id)).count()
+            campaign = i.objects.all().count()
             all_total_count.append(campaign)
         all_total = sum(all_total_count)
 
         # overall_score
         all_camapign_score = 0
         for i in campaign_list:
-            score = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id))
+            score = i.objects.all()
             for j in score:
                 all_camapign_score += j.overall_score
         if all_total == 0:
@@ -1504,14 +1504,14 @@ def Individual_tl_am_om(emp_id, logged_emp_id):
         # All Audits Current Month Count
         month_all_count = []
         for i in campaign_list:
-            camapign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), audit_date__range=[month_start_date, todays_date]).count()
+            camapign = i.objects.filter(audit_date__range=[month_start_date, todays_date]).count()
             month_all_count.append(camapign)
         month_all_total = sum(month_all_count)
 
         # Month's Average Score
         camapign_score = 0
         for i in campaign_list:
-            score = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), audit_date__range=[month_start_date, todays_date])
+            score = i.objects.filter(audit_date__range=[month_start_date, todays_date])
             for j in score:
                 camapign_score += j.overall_score
         if month_all_total == 0:
@@ -1522,28 +1522,28 @@ def Individual_tl_am_om(emp_id, logged_emp_id):
         # Month's Fatal Count
         fatal_count = 0
         for i in campaign_list:
-            fatal = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), audit_date__range=[month_start_date, todays_date])
+            fatal = i.objects.filter(audit_date__range=[month_start_date, todays_date])
             for j in fatal:
                 fatal_count += j.fatal_count
 
         # Overall Fatal count
         overall_fatal_count = 0
         for i in campaign_list:
-            fatal = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id))
+            fatal = i.objects.all()
             for j in fatal:
                 overall_fatal_count += j.fatal_count
 
         # Open Audits
         open_count = []
         for i in campaign_list:
-            campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), status=False).count()
+            campaign = i.objects.filter(status=False).count()
             open_count.append(campaign)
         open_total = sum(open_count)
 
         # This Month Open Audits
         month_open_count = []
         for i in campaign_list:
-            campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), status=False,
+            campaign = i.objects.filter(status=False,
                                         audit_date__range=[month_start_date, todays_date]).count()
             month_open_count.append(campaign)
         month_open_total = sum(month_open_count)
@@ -1551,14 +1551,14 @@ def Individual_tl_am_om(emp_id, logged_emp_id):
         # Dispute Audits
         dispute_count = []
         for i in campaign_list:
-            campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), dispute_status=True).count()
+            campaign = i.objects.filter(dispute_status=True).count()
             dispute_count.append(campaign)
         dispute_total = sum(dispute_count)
 
         # This Month Dispute Audits
         month_dispute_count = []
         for i in campaign_list:
-            campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), dispute_status=True,
+            campaign = i.objects.filter(dispute_status=True,
                                         audit_date__range=[month_start_date, todays_date]).count()
             month_dispute_count.append(campaign)
         month_dispute_total = sum(month_dispute_count)
@@ -1566,7 +1566,7 @@ def Individual_tl_am_om(emp_id, logged_emp_id):
         # Fatal Audits
         fatal_audit_count = []
         for i in campaign_list:
-            campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), fatal=True,
+            campaign = i.objects.filter(fatal=True,
                                         audit_date__range=[month_start_date, todays_date]).count()
             fatal_audit_count.append(campaign)
         fatal_total = sum(fatal_audit_count)
@@ -1574,14 +1574,14 @@ def Individual_tl_am_om(emp_id, logged_emp_id):
         # Overall Fatal Audits
         overall_fatal_audit_count = []
         for i in campaign_list:
-            campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), fatal=True).count()
+            campaign = i.objects.filter(fatal=True).count()
             overall_fatal_audit_count.append(campaign)
         overall_fatal_total = sum(overall_fatal_audit_count)
 
         # Coaching Closure
         closure_count_list = []
         for i in campaign_list:
-            campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), status=True).count()
+            campaign = i.objects.filter(status=True).count()
             closure_count_list.append(campaign)
         closure_count = sum(closure_count_list)
 
@@ -1593,7 +1593,7 @@ def Individual_tl_am_om(emp_id, logged_emp_id):
         # month Coaching Closure
         month_closure_count_list = []
         for i in campaign_list:
-            campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), status=True,
+            campaign = i.objects.filter(status=True,
                                         audit_date__range=[month_start_date, todays_date]).count()
             month_closure_count_list.append(campaign)
         month_closure_count = sum(month_closure_count_list)
@@ -1605,12 +1605,12 @@ def Individual_tl_am_om(emp_id, logged_emp_id):
 
         tot = []
         for i in campaign_list:
-            campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), status=False)
+            campaign = i.objects.filter(status=False)
             tot.append(campaign)
 
         audits = []
         for i in campaign_list:
-            campaign = i.objects.filter(Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id)).values("campaign").annotate(
+            campaign = i.objects.all().values("campaign").annotate(
                 score=Avg('overall_score'))
             audits.append(campaign)
         new_audits = []
