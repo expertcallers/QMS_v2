@@ -10,6 +10,7 @@ class Profile(models.Model):
     emp_name = models.CharField(max_length=100)
     emp_desi = models.CharField(max_length=100)
     emp_process = models.CharField(max_length=150)
+    emp_process_id = models.CharField(max_length=20, null=True, blank=True)
     emp_rm1 = models.CharField(max_length=100)
     emp_rm1_id = models.CharField(max_length=30)
     emp_rm2 = models.CharField(max_length=100)
@@ -1197,3 +1198,19 @@ class Amerisave(models.Model):
     fatal_count = models.IntegerField(default=0)
     dispute_status = models.BooleanField(default=False)
     audit_duration = models.CharField(max_length=30)
+
+
+class EmployeesProfile(models.Model):
+    emp_id = models.CharField(max_length=30, unique=True)
+    emp_name = models.CharField(max_length=100)
+    emp_desi = models.CharField(max_length=100)
+    emp_process = models.CharField(max_length=150)
+    emp_process_id = models.CharField(max_length=20, null=True, blank=True)
+    emp_rm1 = models.CharField(max_length=100)
+    emp_rm1_id = models.CharField(max_length=30)
+    emp_rm2 = models.CharField(max_length=100)
+    emp_rm2_id = models.CharField(max_length=30)
+    emp_rm3 = models.CharField(max_length=100)
+    emp_rm3_id = models.CharField(max_length=30)
+    agent_status = models.CharField(max_length=100, default='Active')
+    emp_email = models.EmailField(null=True, blank=True)

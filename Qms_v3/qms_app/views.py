@@ -7060,3 +7060,27 @@ class TotalList(FlatMultipleModelAPIView):
         {'queryset': Amerisave.objects.all(),
          'serializer_class': AmerisaveSerializer},
     ]
+
+def createUser(request):
+    for i in EmployeesProfile.objects.all():
+        user = User.objects.filter(username=i.emp_id).first()
+        if user:
+            profile = Profile.objects.filter(emp_id=i.emp_id).first()
+            if profile:
+                pass
+            else:
+                Profile.objects.create(
+                    user=user, emp_id=i.emp_id, emp_name=i.emp_name, emp_desi=i.emp_desi, emp_process=i.emp_process,
+                    emp_process_id=i.emp_process_id, emp_rm1=i.emp_rm1, emp_rm1_id=i.emp_rm1_id,  emp_rm2=i.emp_rm2,
+                    emp_rm2_id=i.emp_rm2_id, emp_rm3=i.emp_rm3, emp_rm3_id=i.emp_rm3_id, agent_status=i.agent_status,
+                    emp_email=i.emp_email
+                )
+        else:
+            user = User.objects.create_user(username=i.emp_id, password=i.emp_id)
+            Profile.objects.create(
+                user=user, emp_id=i.emp_id, emp_name=i.emp_name, emp_desi=i.emp_desi, emp_process=i.emp_process,
+                emp_process_id=i.emp_process_id, emp_rm1=i.emp_rm1, emp_rm1_id=i.emp_rm1_id,  emp_rm2=i.emp_rm2,
+                emp_rm2_id=i.emp_rm2_id, emp_rm3=i.emp_rm3, emp_rm3_id=i.emp_rm3_id, agent_status=i.agent_status,
+                emp_email=i.emp_email
+            )
+    return redirect('/')

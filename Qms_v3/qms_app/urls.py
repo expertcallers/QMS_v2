@@ -25,6 +25,7 @@ urlpatterns = [
     path('campaign-agent-report', CampaignAgentReportView),
     path('agent-report', agentReport),
     path('agent-respond', agentRespond),
+
     path('export', exportData),
 
     # Form Submits
@@ -57,5 +58,7 @@ urlpatterns = [
     path("settings", change_password),
     path("delete-qa-mapping", deleteQaMapping),
     path("total-list", TotalList.as_view(), name="to_show_the_total_list_of_tables"),
+    path('create-users', createUser),
+
 
 ]

@@ -6,7 +6,7 @@ from import_export.admin import ImportExportModelAdmin
 
 class ProfileSearch(admin.ModelAdmin):
     search_fields = ('emp_name', 'emp_id')
-    list_display = ('emp_name', 'emp_id', 'emp_desi', 'emp_process', "emp_rm1_id", "emp_rm2_id", "emp_rm3_id")
+    list_display = ('emp_name', 'emp_id', 'emp_desi', 'emp_process', "emp_rm1", "emp_rm2", "emp_rm3")
 
 class CampaignResourse(resources.ModelResource):
     class Meta:
@@ -25,9 +25,21 @@ class Search(admin.ModelAdmin):
     search_fields = ('campaign', 'associate_name', 'emp_id')
     list_display = ('associate_name', 'campaign', 'emp_id', 'quality_analyst', 'overall_score')
 
+
+class EmployeesProfileResourse(resources.ModelResource):
+    class Meta:
+        model = EmployeesProfile
+
+class EmployeesProfileSearch(ImportExportModelAdmin):
+    search_fields = ('emp_name', 'emp_id')
+    list_display = ('emp_name', 'emp_id', 'emp_desi', 'emp_process', "emp_rm1", "emp_rm2", "emp_rm3")
+    list_filter = ['agent_status']
+    resource_class = EmployeesProfileResourse
+
 admin.site.register(Campaign, CampaignSearch)
 admin.site.register(CampaignMapping, CampaignMappingSearch)
 admin.site.register(Profile, ProfileSearch)
+admin.site.register(EmployeesProfile, EmployeesProfileSearch)
 admin.site.register(Outbound, Search)
 admin.site.register(Inbound, Search)
 admin.site.register(EmailChat, Search)
