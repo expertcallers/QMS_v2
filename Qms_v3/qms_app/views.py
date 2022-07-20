@@ -4122,7 +4122,7 @@ def exportData(request):
                     'comp_2', 'comp_3', 'comp_4', 'comp_5',
                     'tp_1', 'tp_2', 'tp_3', 'comp_6',
                     'status', 'dispute_status', 'closed_date', 'fatal', 'fatal_count', 'evaluator_comment',
-                    'coaching_comments')
+                    'coaching_comment')
 
             else:
                 rows = Winopoly.objects.filter(audit_date__range=[start_date, end_date]).values_list(
@@ -4135,7 +4135,7 @@ def exportData(request):
                     'comp_2', 'comp_3', 'comp_4', 'comp_5',
                     'tp_1', 'tp_2', 'tp_3', 'comp_6',
                     'status', 'dispute_status', 'closed_date', 'fatal', 'fatal_count', 'evaluator_comment',
-                    'coaching_comments', 'audit_duration')
+                    'coaching_comment', 'audit_duration')
 
             rows = [[x.strftime("%Y-%m-%d %H:%M") if isinstance(x, datetime.datetime) else x for x in row] for row
                     in
