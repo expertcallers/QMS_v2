@@ -33,15 +33,22 @@ pages = ["Outbound", "Inbound", "Email", "Digital", "FLA", "BlazingHog", "Noompo
          "Fame", "ILM", "Winopoly", "Nerotel", "Spoiled", 'Amerisave', 'Gubagoo']
 
 # List of Agents Designations
-agent_list = ["CRO", "Patrolling officer"]
+agent_list = ['Web Developer', 'Admin Executive', 'Business Development Executive', 'Client Relationship Officer',
+              'CRO', 'Customer Support Associate', 'Data Analyst', 'Growth Sales', 'Hardware Technician',
+              'Housekeeping', 'Junior Data Analyst', 'Junior Developer', 'MIS - Data Analyst', 'MIS Executive',
+              'Office Boy', 'Patrolling Officer', 'Receptionist', 'Security',
+              'Subject Matter Expert', 'System Admin L1', 'System Admin L2', 'System Architect', 'Trainee Developer',
+              'Intern', 'ATL', 'Transition Specialist']
 
 # List of Managers Designations
-mgr_list = ["Manager", 'Team Leader', 'Assitant Manager']
+mgr_list = ['Learning and Development Head', 'Operations Manager', 'Service Delivery Manager',
+            'Command Centre Head', 'Manager', 'Associate Director', 'Assistant Manager', 'Team Leader']
 
 # List of QA Designations
-qa_list = ["QA"]
+qa_list = ['QA', 'Quality Analyst']
 
-qa_mgr_list = ["QA Manager"]
+# List of QA Managers
+qa_mgr_list = ['Quality Head']
 
 # Calculating first and today's date
 currentMonth = datetime.datetime.now().month
