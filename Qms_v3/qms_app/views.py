@@ -2485,7 +2485,7 @@ def agentRespond(request):
             qa_tl = Profile.objects.get(emp_id=qa.emp_rm1_id).emp_email
             qa_am = Profile.objects.get(emp_id=qa.emp_rm2_id).emp_email
             qa_manager = Profile.objects.get(emp_id=qa.emp_rm3_id).emp_email
-            rm1_email = Profile.objects.get(emp_id=e.created_by_rm1_id).emp_email
+            rm1_email = Profile.objects.get(emp_id=e.team_lead_id).emp_email
             to = [rm1_email, qa.emp_email, qa_manager, qa_tl, qa_am]
             email_msg = EmailMessage(subject,
                                      email_template, 'development@expertcallers.com',
