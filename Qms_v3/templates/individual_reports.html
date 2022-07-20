@@ -245,7 +245,7 @@
                         {% for i in j %}
                           <tr>
                             <td>{{i.campaign}}</td>
-                            <td>{{i.score}}</td>
+                            <td>{{i.score|floatformat:2}}</td>
                             <td>
                               <form action="/campaign-agent-report" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
