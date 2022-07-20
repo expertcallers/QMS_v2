@@ -365,13 +365,15 @@ def managerDashboard(request):
     user = request.user
     if user.profile.emp_desi in mgr_list:
         campaigns = Campaign.objects.all()
-        profile = Profile.objects.filter(Q(emp_rm1_id=user.profile.emp_id) | Q(emp_rm1_id=user.profile.emp_id) | Q(emp_rm1_id=user.profile.emp_id), emp_desi__in=agent_list)
+        profile = Profile.objects.filter(Q(emp_rm1_id=user.profile.emp_id) | Q(emp_rm2_id=user.profile.emp_id) | Q(emp_rm3_id=user.profile.emp_id), emp_desi__in=agent_list)
         qa_profile = Profile.objects.filter(emp_desi__in=qa_list)
-        tl_profile = Profile.objects.filter(Q(emp_rm1_id=user.profile.emp_id) | Q(emp_rm1_id=user.profile.emp_id) | Q(emp_rm1_id=user.profile.emp_id), emp_desi="Team Leader")
-        am_profile = Profile.objects.filter(Q(emp_rm1_id=user.profile.emp_id) | Q(emp_rm1_id=user.profile.emp_id) | Q(emp_rm1_id=user.profile.emp_id), emp_desi="Assistant Manager")
+        tl_profile = Profile.objects.filter(Q(emp_rm1_id=user.profile.emp_id) | Q(emp_rm2_id=user.profile.emp_id) | Q(emp_rm3_id=user.profile.emp_id), emp_desi="Team Leader")
+        am_profile = Profile.objects.filter(Q(emp_rm1_id=user.profile.emp_id) | Q(emp_rm2_id=user.profile.emp_id) | Q(emp_rm3_id=user.profile.emp_id), emp_desi="Assistant Manager")
 
         all_total, fatal_count, open_total, dispute_total, fatal_total, coaching_closure, new_audits, tot, month_all_total, score_average, overall_score_average, overall_fatal_count, overall_fatal_total, month_open_total, month_dispute_total, month_coaching_closure = Individual_tl_am_om(user.profile.emp_id, user.profile.emp_id)
-
+        emps = []
+        for i in profile:
+            emps.append(i.emp_id)
         audits = []
         for j in profile:
             average_score = 0
@@ -4456,7 +4458,9 @@ def exportData(request):
 
             return response
 
-        return redirect("/dashboard")
+        else:
+            messages.info(request, "Invalid Request. Contact CC Team")
+            return redirect("/dashboard")
     else:
         messages.info(request, "Invalid Request. You have been logged out :)")
         return redirect("/logout")
