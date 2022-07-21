@@ -48,7 +48,7 @@ mgr_list = ['Learning and Development Head', 'Operations Manager', 'Service Deli
 qa_list = ['QA', 'Quality Analyst']
 
 # List of QA Managers
-qa_mgr_list = ['Quality Head']
+qa_mgr_list = ['Quality Head', 'QA Manager']
 
 # Calculating first and today's date
 currentMonth = datetime.datetime.now().month
@@ -2535,13 +2535,13 @@ def IndividualReportView(request):
                     emp_id, None)
             elif emp_desi == "Team Leader":
                 all_total, fatal_count, open_total, dispute_total, fatal_total, coaching_closure, new_audits, tot, month_all_total, score_average, overall_score_average, overall_fatal_count, overall_fatal_total, month_open_total, month_dispute_total, month_coaching_closure = Individual_tl_am_om(
-                    emp_id, None)
+                    emp_id, emp_id)
             elif emp_desi in qa_list:
                 all_total, fatal_count, open_total, dispute_total, fatal_total, coaching_closure, new_audits, tot, month_all_total, score_average, overall_score_average, overall_fatal_count, overall_fatal_total, month_open_total, month_dispute_total, month_coaching_closure = Individual_qa(
                     emp_id, None)
             elif emp_desi == "Assistant Manager":
                 all_total, fatal_count, open_total, dispute_total, fatal_total, coaching_closure, new_audits, tot, month_all_total, score_average, overall_score_average, overall_fatal_count, overall_fatal_total, month_open_total, month_dispute_total, month_coaching_closure = Individual_tl_am_om(
-                    emp_id, None)
+                    emp_id, emp_id)
             else:
                 messages.warning(request, 'Invalid request. ')
                 return redirect("/dashboard")
