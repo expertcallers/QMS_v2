@@ -2582,7 +2582,8 @@ def CampaignAgentReportView(request):
                                        campaign_id=campaign, emp_id=emp_id,)
             else:
                 obj = i.objects.filter(campaign_id=campaign, emp_id=emp_id)
-            audits.append(obj)
+            if obj:
+                audits.append(obj)
         print(audits,'audits')
         type = "campaign"
         data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list": agent_list, "mgr_list": mgr_list}

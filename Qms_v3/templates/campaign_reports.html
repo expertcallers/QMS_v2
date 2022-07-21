@@ -62,7 +62,8 @@
                       </tr>
                     </tfoot>
                     <tbody>
-                    {% for i in audit %}
+                    {% for j in audit %}
+                      {% for i in j %}
                       <tr>
                         <td>{{i.associate_name}}</td>
                         <td>{{i.emp_id}}</td>
@@ -96,6 +97,7 @@
                           </form>
                         </td>
                       </tr>
+                      {% endfor %}
                     {% endfor %}
                     </tbody>
                   </table>
