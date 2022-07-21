@@ -2574,6 +2574,7 @@ def CampaignAgentReportView(request):
         emp_desi = Profile.objects.get(emp_id=emp_id).emp_desi
         campaign = request.POST["campaign"]
         if emp_desi in agent_list:
+            campaign_audits = []
             for i in campaign_list:
                 obj = i.objects.all()
                 if obj.count() > 0:
@@ -2588,6 +2589,7 @@ def CampaignAgentReportView(request):
 
             audits = campaign_audits
         elif emp_desi in qa_list:
+            campaign_audits = []
             for i in campaign_list:
                 obj = i.objects.all()
                 if obj.count() > 0:
@@ -2600,6 +2602,7 @@ def CampaignAgentReportView(request):
                             campaign_audits = i.objects.all()
             audits = campaign_audits
         elif emp_desi == 'Team Leader':
+            campaign_audits = []
             for i in campaign_list:
                 obj = i.objects.all()
                 if obj.count() > 0:
@@ -2613,6 +2616,7 @@ def CampaignAgentReportView(request):
                             campaign_audits = i.objects.filter(team_lead_id=emp_id)
             audits = campaign_audits
         elif emp_desi == 'Assistant Manager':
+            campaign_audits = []
             for i in campaign_list:
                 obj = i.objects.all()
                 if obj.count() > 0:
@@ -2625,6 +2629,8 @@ def CampaignAgentReportView(request):
                         else:
                             campaign_audits = i.objects.filter(am_id=emp_id)
             audits = campaign_audits
+        else:
+            audits = []
         type = "campaign"
         print(audits,'audits')
         data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list": agent_list, "mgr_list": mgr_list}
