@@ -2576,9 +2576,9 @@ def CampaignAgentReportView(request):
         campaign = request.POST["campaign"]
         audits = []
         for i in campaign_list:
-            if designation in qa_list:
+            if emp_desi in qa_list:
                 obj = i.objects.filter(campaign_id=campaign, emp_id=emp_id, added_by=added)
-            elif designation in mgr_list:
+            elif emp_desi in mgr_list:
                 obj = i.objects.filter(Q(manager_id=emp_id) | Q(am_id=emp_id) | Q(team_lead_id=emp_id),
                                        campaign_id=campaign, emp_id=emp_id,)
             else:
