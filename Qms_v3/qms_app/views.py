@@ -1340,7 +1340,7 @@ def Individual_agent(emp_id, logged_emp_id):
 
         audits = []
         for i in campaign_list:
-            campaign = i.objects.filter(emp_id=emp_id).values("campaign").annotate(
+            campaign = i.objects.filter(emp_id=emp_id).values("campaign", 'campaign_id').annotate(
                 score=Avg('overall_score'))
             audits.append(campaign)
         new_audits = []
@@ -1478,7 +1478,7 @@ def Individual_agent(emp_id, logged_emp_id):
 
         audits = []
         for i in campaign_list:
-            campaign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id).values("campaign").annotate(
+            campaign = i.objects.filter(emp_id=emp_id, added_by=logged_emp_id).values("campaign", 'campaign_id').annotate(
                 score=Avg('overall_score'))
             audits.append(campaign)
         new_audits = []
@@ -1619,7 +1619,7 @@ def Individual_tl_am_om(emp_id, logged_emp_id):
 
         audits = []
         for i in campaign_list:
-            campaign = i.objects.all().values("campaign").annotate(
+            campaign = i.objects.all().values("campaign", 'campaign_id').annotate(
                 score=Avg('overall_score'))
             audits.append(campaign)
         new_audits = []
@@ -1777,8 +1777,8 @@ def Individual_tl_am_om(emp_id, logged_emp_id):
         audits = []
         for i in campaign_list:
             campaign = i.objects.filter(
-                Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), emp_id__in=emps).values("campaign").annotate(
-                score=Avg('overall_score'))
+                Q(team_lead_id=emp_id) | Q(am_id=emp_id) | Q(manager_id=emp_id), emp_id__in=emps).values(
+                "campaign", 'campaign_id').annotate(score=Avg('overall_score'))
             audits.append(campaign)
         new_audits = []
         for i in audits:
@@ -1920,7 +1920,7 @@ def Individual_qa(emp_id, logged_emp_id):
 
         audits = []
         for i in campaign_list:
-            campaign = i.objects.filter(added_by=emp_id).values("campaign").annotate(
+            campaign = i.objects.filter(added_by=emp_id).values("campaign", 'campaign_id').annotate(
                 score=Avg('overall_score'))
             audits.append(campaign)
         new_audits = []
@@ -2064,7 +2064,7 @@ def Individual_qa(emp_id, logged_emp_id):
 
         audits = []
         for i in campaign_list:
-            campaign = i.objects.filter(added_by=emp_id, emp_id__in=emps).values("campaign").annotate(
+            campaign = i.objects.filter(added_by=emp_id, emp_id__in=emps).values("campaign", 'campaign_id').annotate(
                 score=Avg('overall_score'))
             audits.append(campaign)
         new_audits = []
