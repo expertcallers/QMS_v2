@@ -6989,8 +6989,8 @@ def AmerisaveSubmit(request):
 
 @login_required
 def PasswordReset(request):
-    emp = request.user.profile.emp_id
-    if emp == '1234' or emp == '5670' or emp == '8413' or emp == '5533':
+    emp = request.user.profile.emp_desi
+    if emp in qa_mgr_list:
         if request.method == 'POST':
             emp_id = request.POST['empid']
             password = request.POST['password']
