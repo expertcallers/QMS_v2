@@ -2569,7 +2569,7 @@ def IndividualReportView(request):
 @login_required
 def CampaignAgentReportView(request):
     designation = request.user.profile.emp_desi
-    added = request.user.profile.emp_id
+    logged_emp_id = request.user.profile.emp_id
     if request.method == 'POST':
         emp_id = request.POST["emp_id"]
         emp_desi = Profile.objects.get(emp_id=emp_id).emp_desi
@@ -2581,22 +2581,29 @@ def CampaignAgentReportView(request):
                     obj = i.objects.filter(campaign_id=campaign, emp_id=emp_id)
                 elif emp_desi in qa_list:
                     obj = i.objects.filter(campaign_id=campaign, added_by=emp_id)
-
-
-
+                else:
+                    obj = i.objects.filter(Q(manager_id=emp_id) | Q(am_id=emp_id) | Q(team_lead_id=emp_id),
+                                           campaign_id=campaign)
             elif designation in mgr_list:
-                obj = i.objects.filter(Q(manager_id=emp_id) | Q(am_id=emp_id) | Q(team_lead_id=emp_id),
-                                       campaign_id=campaign, emp_id=emp_id,)
+                if emp_desi in agent_list:
+                    obj = i.objects.filter(Q(manager_id=logged_emp_id) | Q(am_id=logged_emp_id) | Q(team_lead_id=logged_emp_id),
+                                           campaign_id=campaign, emp_id=emp_id)
+                elif emp_desi in qa_list:
+                    obj = i.objects.filter(Q(manager_id=logged_emp_id) | Q(am_id=logged_emp_id) | Q(team_lead_id=logged_emp_id),
+                                           campaign_id=campaign, added_by=emp_id)
+                else:
+                    obj = i.objects.filter(Q(manager_id=logged_emp_id) | Q(am_id=logged_emp_id) | Q(team_lead_id=logged_emp_id),
+                                           Q(manager_id=emp_id) | Q(am_id=emp_id) | Q(team_lead_id=emp_id))
             else:
                 if emp_desi in agent_list:
                     obj = i.objects.filter(campaign_id=campaign, emp_id=emp_id)
                 elif emp_desi in qa_list:
                     obj = i.objects.filter(campaign_id=campaign, added_by=emp_id)
                 else:
-                    obj = i.objects.filter(Q(manager_id=emp_id) | Q(am_id=emp_id) | Q(team_lead_id=emp_id), campaign_id=campaign,)
+                    obj = i.objects.filter(Q(manager_id=emp_id) | Q(am_id=emp_id) | Q(team_lead_id=emp_id),
+                                           campaign_id=campaign,)
             if obj:
                 audits.append(obj)
-        print(audits,'audits')
         type = "campaign"
         data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list": agent_list, "mgr_list": mgr_list}
         return render(request, "campaign_reports.html", data)
