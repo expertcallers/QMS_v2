@@ -2160,7 +2160,7 @@ def IndividualAgentReportTable(request, type, emp_id):
         def auditcalculator(type):
             audits = []
             emp_desi = Profile.objects.get(emp_id=emp_id).emp_desi
-            if designation in mgr_list:
+            if designation in mgr_list or designation in qa_mgr_list:
                 if emp_desi in agent_list:
                     if type == 'all':
                         for i in campaign_list:
