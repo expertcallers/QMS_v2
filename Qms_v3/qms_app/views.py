@@ -348,7 +348,7 @@ def QAmanagerDashboard(request):
                 "average": score_average, "fatal": fatal_count,
                 "all_total": all_total, "fatal_total": fatal_total, "coaching_closure": coaching_closure,
                 "audits": new_audits, "qa_audits": new_qa_audits, "tl_audits": new_tl_audits,
-                "am_audits": new_am_audits,
+                "am_audits": new_am_audits, 'qa_mgr': qa_mgr_list,
 
                 'overall_average': overall_score_average, 'overall_fatal_count': overall_fatal_count,
                 'overall_fatal_audit_count': overall_fatal_total, 'month_open_total': month_open_total,
@@ -512,6 +512,7 @@ def managerDashboard(request):
                 'overall_average': overall_score_average, 'overall_fatal_count': overall_fatal_count,
                 'overall_fatal_audit_count': overall_fatal_total, 'month_open_total': month_open_total,
                 'month_dispute_total': month_dispute_total, 'month_coaching_closure': month_coaching_closure,
+                'qa_mgr': qa_mgr_list,
                 }
 
         return render(request, "manager_dashboard.html", data)
@@ -4460,7 +4461,7 @@ def exportData(request):
 @login_required
 def AddUser(request):
     designation = request.user.profile.emp_desi
-    if designation in mgr_list:
+    if designation in qa_mgr_list:
         if request.method == 'POST':
             emp_id = request.POST['emp_id']
             emp_name = request.POST['emp_name']
@@ -4513,8 +4514,8 @@ def AddUser(request):
             data = {"campaigns": cam, "profiles": profiles}
             return render(request, "add_user.html", data)
     else:
-        messages.info(request, "Invalid Request. You have been logged out :)")
-        return redirect("/logout")
+        messages.info(request, "Invalid Request.")
+        return redirect("/")
 
 
 @login_required
