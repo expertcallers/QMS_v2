@@ -250,7 +250,7 @@
                               <form action="/campaign-agent-report" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <input type="hidden" value="{{profile.emp_id}}" name="emp_id">
-                                <input type="hidden" value="{{i.campaign}}" name="campaign">
+                                <input type="hidden" value="{{i.campaign_id}}" name="campaign">
                                 <button class="btn-sm btn btn-info">View</button>
                               </form>
                             </td>
