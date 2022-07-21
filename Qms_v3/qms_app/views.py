@@ -2579,52 +2579,52 @@ def CampaignAgentReportView(request):
                 if obj.count() > 0:
                     if obj[0].campaign == campaign:
                         if designation in qa_list:
-                            campaign = i.objects.filter(emp_id=emp_id, added_by=added)
+                            campaign_audits = i.objects.filter(emp_id=emp_id, added_by=added)
                         elif designation in mgr_list:
-                            campaign = i.objects.filter(Q(manager_id=emp_id) | Q(am_id=emp_id) | Q(team_lead_id=emp_id),
+                            campaign_audits = i.objects.filter(Q(manager_id=emp_id) | Q(am_id=emp_id) | Q(team_lead_id=emp_id),
                                                         emp_id=emp_id)
                         else:
-                            campaign = i.objects.filter(emp_id=emp_id)
+                            campaign_audits = i.objects.filter(emp_id=emp_id)
 
-            audits = campaign
+            audits = campaign_audits
         elif emp_desi in qa_list:
             for i in campaign_list:
                 obj = i.objects.all()
                 if obj.count() > 0:
                     if obj[0].campaign == campaign:
                         if designation in qa_list:
-                            campaign = i.objects.filter(added_by=emp_id)
+                            campaign_audits = i.objects.filter(added_by=emp_id)
                         elif designation in mgr_list:
-                            campaign = i.objects.filter(Q(manager_id=emp_id) | Q(am_id=emp_id) | Q(team_lead_id=emp_id))
+                            campaign_audits = i.objects.filter(Q(manager_id=emp_id) | Q(am_id=emp_id) | Q(team_lead_id=emp_id))
                         else:
-                            campaign = i.objects.all()
-            audits = campaign
+                            campaign_audits = i.objects.all()
+            audits = campaign_audits
         elif emp_desi == 'Team Leader':
             for i in campaign_list:
                 obj = i.objects.all()
                 if obj.count() > 0:
                     if obj[0].campaign == campaign:
                         if designation in qa_list:
-                            campaign = i.objects.filter(team_lead_id=emp_id, added_by=added)
+                            campaign_audits = i.objects.filter(team_lead_id=emp_id, added_by=added)
                         elif designation in mgr_list:
-                            campaign = i.objects.filter(Q(manager_id=emp_id) | Q(am_id=emp_id) | Q(team_lead_id=emp_id),
+                            campaign_audits = i.objects.filter(Q(manager_id=emp_id) | Q(am_id=emp_id) | Q(team_lead_id=emp_id),
                                                         team_lead_id=emp_id)
                         else:
-                            campaign = i.objects.all(team_lead_id=emp_id)
-            audits = campaign
+                            campaign_audits = i.objects.filter(team_lead_id=emp_id)
+            audits = campaign_audits
         elif emp_desi == 'Assistant Manager':
             for i in campaign_list:
                 obj = i.objects.all()
                 if obj.count() > 0:
                     if obj[0].campaign == campaign:
                         if designation in qa_list:
-                            campaign = i.objects.filter(am_id=emp_id, added_by=added)
+                            campaign_audits = i.objects.filter(am_id=emp_id, added_by=added)
                         elif designation in mgr_list:
-                            campaign = i.objects.filter(Q(manager_id=emp_id) | Q(am_id=emp_id) | Q(team_lead_id=emp_id),
+                            campaign_audits = i.objects.filter(Q(manager_id=emp_id) | Q(am_id=emp_id) | Q(team_lead_id=emp_id),
                                                         am_id=emp_id)
                         else:
-                            campaign = i.objects.all(am_id=emp_id)
-            audits = campaign
+                            campaign_audits = i.objects.filter(am_id=emp_id)
+            audits = campaign_audits
         type = "campaign"
         print(audits,'audits')
         data = {"audit": audits, "type": type, "qa_list": qa_list, "agent_list": agent_list, "mgr_list": mgr_list}
